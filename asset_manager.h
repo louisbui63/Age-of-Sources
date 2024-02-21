@@ -1,8 +1,10 @@
 #pragma once
 
+#include <string.h>
+
 #include "hash_map.h"
 
-typedef struct {
-  HashMap use_cout;
+char not_strcmp(void *a, void *b);
 
-} AssetManager;
+// adapted from another project of mine
+extern HashMap ASSET_STORE;

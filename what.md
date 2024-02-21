@@ -1,0 +1,5 @@
+- Transform / Camera
+- multi-renderer (with rendering to texture)
+- animation (=> finite state machine) <- requires priority queue
+- inputs
+- custom ECS ?
