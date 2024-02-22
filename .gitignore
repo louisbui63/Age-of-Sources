@@ -1,2 +1,3 @@
-*.o
+**/*.o
 main
+test
