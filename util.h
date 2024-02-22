@@ -18,7 +18,7 @@
     }                                                                          \
   }
 
-void free_nothing(void *) {}
+void free_nothing(void *);
 
 #define max(a, b) ((a > b) ? (a) : (b))
 #define min(a, b) ((a < b) ? (a) : (b))
