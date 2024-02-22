@@ -9,6 +9,13 @@
 // insert calls delete which might shrink just before growing again. We
 // shouldn't do that
 
+void hash_map_entry_free(void *u) {
+  HashMapEntry *w = u;
+  free(w->key);
+  free(w->value);
+  free(u);
+}
+
 uint64_t hash_str(void *str) {
   // plynomial rolling hash
   // adapted from TN++ SWERC training
@@ -47,6 +54,11 @@ HashMap hash_map_create(uint64_t (*h)(void *), char (*c)(void *, void *)) {
 int grow(HashMap *h) {
   int ns = h->length * 2;
   LinkedList *nb = malloc(sizeof(LinkedList) * ns);
+  for (int i = 0; i < ns; i++) {
+    // todo : replace this with a more efficient init routine
+    LinkedList tmp = {0};
+    nb[i] = tmp;
+  }
   for (int i = 0; i < h->length; i++) {
     LinkedListLink *cur = h->bucket[i].head;
     while (cur) {
@@ -61,17 +73,21 @@ int grow(HashMap *h) {
       cur = nc;
     }
   }
+  free(h->bucket);
   h->length *= 2;
   h->bucket = nb;
   return 0;
 }
 int shrink(HashMap *h) {
-  printf("shrink\n");
   int ns = h->length / 2;
-  printf("%d\n", ns);
   if (ns < HASHMAP_DEFAULT_LENGTH)
     return 0;
   LinkedList *nb = malloc(sizeof(LinkedList) * ns);
+  for (int i = 0; i < ns; i++) {
+    // todo : replace this with a more efficient init routine
+    LinkedList tmp = {0};
+    nb[i] = tmp;
+  }
   for (int i = 0; i < h->length; i++) {
     LinkedListLink *cur = h->bucket[i].head;
     while (cur) {
@@ -86,9 +102,9 @@ int shrink(HashMap *h) {
       cur = nc;
     }
   }
+  free(h->bucket);
   h->length /= 2;
   h->bucket = nb;
-  printf("shrink_end\n");
   return 0;
 }
 
@@ -121,31 +137,37 @@ void *hash_map_get(HashMap *h, void *k) {
 }
 
 int hash_map_delete(HashMap *h, void *k) {
-  return hash_map_delete_callback(h, k, free);
+  return hash_map_delete_callback(h, k, hash_map_entry_free);
 }
 
 int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *)) {
   char deleted = 0;
   LinkedList u = h->bucket[h->hash_function(k) % h->length];
-  if (!u.head)
+  if (!u.head) {
     return 0;
+  }
   if (h->comp_function(k, ((HashMapEntry *)(u.head->data))->key)) {
     void *next = u.head->next;
-    callback(u.head);
+    callback(u.head->data);
+    free(u.head);
     h->bucket[h->hash_function(k) % h->length].head = next;
     deleted = 1;
+  } else {
+    LinkedListLink *prev = u.head;
+    LinkedListLink *cur = prev->next;
+
+    while (cur && !deleted)
+      if (h->comp_function(k, ((HashMapEntry *)(cur->data))->key)) {
+        void *next = cur->next;
+        callback(cur->data);
+        free(cur);
+        prev->next = next;
+        deleted = 1;
+      }
   }
-  LinkedListLink *prev = u.head;
-  LinkedListLink *cur = u.head->next;
 
-  while (cur && !deleted)
-    if (h->comp_function(k, ((HashMapEntry *)(cur->data))->key)) {
-      void *next = cur->next;
-      callback(cur);
-      prev->next = next;
-      deleted = 1;
-    }
-
+  if (deleted)
+    h->size--;
   if (deleted && (float)h->size / (float)h->length < HASHMAP_OCCUP_MIN) {
     return shrink(h);
   }
@@ -158,5 +180,7 @@ void hash_map_free_callback(HashMap *h, void (*callback)(void *)) {
     linked_list_free_callback(&h->bucket[i], callback);
   free(h->bucket);
 }
-void hash_map_free(HashMap *h) { hash_map_free_callback(h, free); }
+void hash_map_free(HashMap *h) {
+  hash_map_free_callback(h, hash_map_entry_free);
+}
 void hash_map_free_void(void *h) { hash_map_free(h); }

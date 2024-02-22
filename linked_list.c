@@ -50,9 +50,11 @@ int linked_list_remove_callback(LinkedList *l, int p,
     return -2;
   if (!p) {
     void *head = 0;
-    if (l->head)
+    if (l->head) {
       head = l->head->next;
-    callback(l->head);
+      callback(l->head->data);
+    }
+    free(l->head);
     l->head = head;
     return 0;
   }
@@ -66,9 +68,11 @@ int linked_list_remove_callback(LinkedList *l, int p,
     cp++;
   }
   void *next = 0;
-  if (cur->next)
+  if (cur->next) {
     next = cur->next->next;
-  callback(cur->next);
+    callback(cur->next->data);
+  }
+  free(cur->next);
   cur->next = next;
   return 0;
 }
@@ -80,6 +84,7 @@ void linked_list_free(LinkedList *l) {
   LinkedListLink *cur = l->head;
   while (cur) {
     LinkedListLink *nc = cur->next;
+    free(cur->data);
     free(cur);
     cur = nc;
   }

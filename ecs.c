@@ -71,6 +71,7 @@ void register_system_requirement(World *w, Bitflag b) {
     vec_free(v);
   }
   hash_map_insert(&w->component_map, hash_u64, eq);
+  // this doesn't insert the right thing
 }
 
 Entity *spawn_entity(World *w) {

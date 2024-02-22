@@ -11,7 +11,7 @@ int test_hash_map() {
   HashMap hm = hash_map_create(hash_str, not_strcmp);
 
   for (int i = 0; i < 32; i++) {
-    char *k = malloc(16);
+    char *k = malloc(8);
     strcpy(k, "0wu");
     uint64_t *v = malloc(sizeof(uint64_t));
     *v = i;
@@ -30,7 +30,7 @@ int test_hash_map() {
     *k += i;
     ASSERT(!hash_map_delete(&hm, k));
   }
-  int *w = hash_map_get(&hm, "Owu");
+  int *w = hash_map_get(&hm, "Owu" /*<- this isn't a typo*/);
   ASSERT(w);
   ASSERT(*w = 31);
   hash_map_free(&hm);
