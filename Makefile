@@ -1,11 +1,11 @@
-CFLAGS = -std=c2x -Wall -Wextra -pedantic -lSDL2
+CFLAGS = -std=c2x -Wall -Wextra -pedantic
 CC = clang
 
 SRC=$(subst .c,.o,$(wildcard *.c))
 TEST_SRC=$(subst .c,.o,$(wildcard tests/*.c))
 
 all: $(SRC)
-	$(CC) $(CFLAGS) -o main *.o
+	$(CC) $(CFLAGS) -lSDL2 -o main *.o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -15,3 +15,9 @@ test: $(TEST_SRC) $(SRC)
 
 clean:
 	rm -f **/*.o main test
+
+run: all
+	./main
+
+test_run: test
+	./test

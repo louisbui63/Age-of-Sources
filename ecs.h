@@ -38,4 +38,4 @@ int register_component_inner_callback(World *w, int size,
 void register_system_requirement(World *w, Bitflag b);
 Entity *spawn_entity(World *w);
 void ecs_add_component(World *w, Entity *e, int cid, void *c);
-void despawn_entity(World *w);
+void despawn_entity(World *w, Entity *e);

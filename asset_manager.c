@@ -1,10 +1,8 @@
 #include "asset_manager.h"
 
-HashMap ASSET_STORE;
+#include "util.h"
 
-char not_strcmp(void *a, void *b) {
-  return !(char)strcmp((char *)a, (char *)b);
-}
+HashMap ASSET_STORE;
 
 int init_asset_manager() {
   ASSET_STORE = hash_map_create(hash_str, not_strcmp);

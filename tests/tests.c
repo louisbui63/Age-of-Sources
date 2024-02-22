@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "hash_map.h"
 #include "linked_list.h"
 #include "vec.h"
 
@@ -15,5 +16,6 @@
 int main() {
   TEST(test_vec, "vec");
   TEST(test_linked_list, "linked_list");
+  TEST(test_hash_map, "hash_map");
   return 0;
 }

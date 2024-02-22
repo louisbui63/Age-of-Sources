@@ -115,4 +115,4 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
     vec_free(to_add);
   }
 }
-void despawn_entity(World *w);
+void despawn_entity(World *w, Entity *e) {}
