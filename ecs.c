@@ -2,8 +2,16 @@
 #include "bitflag.h"
 #include "hash_map.h"
 #include "vec.h"
+#include <string.h>
 
 char eq(void *a, void *b) { return *(uint64_t *)a == *(uint64_t *)b; }
+
+void hash_map_entry_free_vec(void *u) {
+  HashMapEntry *w = u;
+  free(w->key);
+  vec_free(w->value);
+  free(u);
+}
 
 World world_new() {
   World a = {vec_new(int), vec_new(void (*)(void *)), vec_new(ComponentWrapper),
@@ -14,7 +22,6 @@ World world_new() {
 }
 
 void world_free(World *w) {
-
   for (int i = 0; i < vec_len(w->components); i++) {
     int id = w->components[i].type_id;
     (w->component_free[id])(w->components[i].component);
@@ -26,14 +33,15 @@ void world_free(World *w) {
   for (int i = 0; i < vec_len(w->entities); i++) {
     vec_free(u[i].components);
   }
-  hash_map_free_callback(&w->component_map, vec_free);
-  hash_map_free(&w->component2entity);
+  vec_free(w->entities);
+  hash_map_free_callback(&w->entity_map, hash_map_entry_free_vec);
+  hash_map_free_callback(&w->component2entity, free);
   // hash_map_free(&w->entity2component);
 }
 
 int register_component_inner_callback(World *w, int size,
                                       void (*callback)(void *)) {
-  if (w->last_component >= sizeof(Bitflag) * 8 - 1) {
+  if (w->last_component >= sizeof(Bitflag)) {
     return -1;
   }
   vec_push(w->component_sizes, size);
@@ -42,7 +50,7 @@ int register_component_inner_callback(World *w, int size,
   *u = 1 << w->last_component;
   // HashMap *a = malloc(sizeof(HashMap));
   // *a = hash_map_create(hash_u64, eq);
-  hash_map_insert(&w->component_map, u, vec_new(uint64_t));
+  hash_map_insert(&w->entity_map, u, vec_new(uint64_t));
   w->last_component++;
 
   return 0;
@@ -70,8 +78,9 @@ void register_system_requirement(World *w, Bitflag b) {
     };
     vec_free(v);
   }
-  hash_map_insert(&w->component_map, hash_u64, eq);
-  // this doesn't insert the right thing
+  Bitflag *u = malloc(sizeof(Bitflag));
+  memcpy(u, &b, sizeof(Bitflag));
+  hash_map_insert(&w->entity_map, u, g);
 }
 
 Entity *spawn_entity(World *w) {
@@ -88,7 +97,7 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
   vec_push(w->components, cw);
   hash_map_insert(&w->component2entity, &cw.id, &e->id);
 
-  HashMap *h = &w->component_map;
+  HashMap *h = &w->entity_map;
 
   for (int i = 0; i < h->length; i++) {
     LinkedListLink *cur = h->bucket[1].head;
@@ -111,9 +120,108 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
     for (int i = 0; i < vec_len(to_add); i++) {
       Bitflag *u = malloc(sizeof(Bitflag));
       *u = to_add[i];
-      hash_map_insert(&w->component_map, u, e);
+      hash_map_insert(&w->entity_map, u, e);
     }
     vec_free(to_add);
   }
 }
-void despawn_entity(World *w, Entity *e) {}
+void despawn_entity(World *w, Entity *e) {
+  uint64_t id = e->id;
+
+  // uint64_t *cids = vec_new(uint64_t);
+  // for (int i = 0; i < vec_len(e->components); i++)
+  //   vec_push(cids, e->components[i].id);
+
+  HashMap ccor = hash_map_create(hash_u64, eq);
+
+  int *a = malloc(sizeof(int));
+  *a = -1;
+
+  for (int i = 0; i < vec_len(e->components); i++) {
+    int *c = malloc(sizeof(int));
+    *c = e->components[i].id;
+    hash_map_insert(&ccor, c, a);
+    if (e->components[i].id != vec_len(w->components)) {
+      vec_swap(&w->components, e->components[i].id, vec_len(w->components) - 1);
+      int *b = malloc(sizeof(int));
+      *b = vec_len(w->components) - 1;
+
+      hash_map_insert(&ccor, b, c);
+    }
+    (w->component_free[w->components[vec_len(w->components) - 1].type_id])(
+        w->components[vec_len(w->components) - 1].component);
+    vec_pop(w->components);
+  }
+
+  for (int i = 0; i < w->entity_map.length; i++) {
+    LinkedListLink *cur = w->entity_map.bucket[i].head;
+    LinkedListLink *prev = w->entity_map.bucket[i].head;
+    char beg = 1;
+    while (cur) {
+      LinkedListLink *next = cur->next;
+
+      HashMapEntry *entry = cur->data;
+      uint64_t *swap = hash_map_get(&ccor, entry->key);
+      if (swap) {
+        if (beg)
+          w->entity_map.bucket[i].head = next;
+        else
+          prev->next = next;
+        free(entry->key);
+        if (*swap == -1) {
+          free(entry);
+        } else {
+          uint64_t *nk = malloc(sizeof(uint64_t));
+          memcpy(nk, swap, sizeof(uint64_t));
+          entry->key = nk;
+          entry->hash = (w->entity_map.hash_function)(entry->key);
+          linked_list_insert(
+              &w->entity_map
+                   .bucket[entry->hash % (uint64_t)w->entity_map.length],
+              entry, 0);
+        }
+      }
+
+      beg = 0;
+      prev = cur;
+      cur = next;
+    }
+  }
+
+  hash_map_free(&ccor);
+
+  if (id != vec_len(w->entities) - 1)
+    vec_swap(w->entities, id, vec_len(w->entities) - 1);
+  vec_pop(w->entities);
+
+  for (int i = 0; i < w->component2entity.length; i++) {
+    LinkedListLink *cur = w->component2entity.bucket[i].head;
+    LinkedListLink *prev = w->entity_map.bucket[i].head;
+    char beg = 1;
+    while (cur) {
+      LinkedListLink *next = cur->next;
+      if (*(uint64_t *)((HashMapEntry *)cur->data)->value == id) {
+        if (beg)
+          w->component2entity.bucket[i].head = next;
+        else
+          prev->next = next;
+        HashMapEntry *entry = cur->data;
+        free(entry->key);
+        free(entry->value);
+        free(entry);
+      }
+      // hash_map_delete(&w->component2entity, ((HashMapEntry
+      // *)cur->data)->key);
+      else if (*(uint64_t *)((HashMapEntry *)cur->data)->value ==
+               vec_len(w->entities)) {
+        free(((HashMapEntry *)cur->data)->value);
+        *(uint64_t *)((HashMapEntry *)cur->data)->value = id;
+      }
+      beg = 0;
+      prev = cur;
+      cur = next;
+    }
+  }
+
+  free(e);
+}

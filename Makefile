@@ -1,4 +1,4 @@
-CFLAGS = -std=c2x -Wall -Wextra -pedantic
+CFLAGS = -std=c2x -Wall -Wextra -pedantic -O2 # -g -fsanitize=address -fno-omit-frame-pointer
 CC = clang
 
 SRC=$(subst .c,.o,$(wildcard *.c))
@@ -9,12 +9,11 @@ all: $(SRC)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
-
-test: $(TEST_SRC) $(SRC)
-	$(CC) $(CFLAGS) -o test $(subst main.o,,$(wildcard *.o)) tests/*.o
+test: $(SRC) $(TEST_SRC)
+	$(CC) $(CFLAGS) -o test $(subst main.o,,$(SRC)) $(TEST_SRC)
 
 clean:
-	rm -f **/*.o main test
+	rm -f **/*.o *.o main test
 
 run: all
 	./main

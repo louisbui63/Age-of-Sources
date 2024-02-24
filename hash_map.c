@@ -52,7 +52,7 @@ HashMap hash_map_create(uint64_t (*h)(void *), char (*c)(void *, void *)) {
 }
 
 int grow(HashMap *h) {
-  int ns = h->length * 2;
+  uint64_t ns = h->length * 2;
   LinkedList *nb = malloc(sizeof(LinkedList) * ns);
   for (int i = 0; i < ns; i++) {
     // todo : replace this with a more efficient init routine
@@ -79,7 +79,7 @@ int grow(HashMap *h) {
   return 0;
 }
 int shrink(HashMap *h) {
-  int ns = h->length / 2;
+  uint64_t ns = h->length / 2;
   if (ns < HASHMAP_DEFAULT_LENGTH)
     return 0;
   LinkedList *nb = malloc(sizeof(LinkedList) * ns);
@@ -110,8 +110,8 @@ int shrink(HashMap *h) {
 
 int hash_map_insert(HashMap *h, void *k, void *v) {
   hash_map_delete(h, k);
-  int hash = h->hash_function(k);
-  int bplace = hash % h->length;
+  uint64_t hash = h->hash_function(k);
+  uint64_t bplace = hash % h->length;
 
   HashMapEntry *et = malloc(sizeof(HashMapEntry));
   HashMapEntry temp = {k, v, hash};
@@ -128,7 +128,9 @@ int hash_map_insert(HashMap *h, void *k, void *v) {
 }
 
 void *hash_map_get(HashMap *h, void *k) {
-  LinkedList u = h->bucket[h->hash_function(k) % h->length];
+  // can be used to check if the key exists (if not, it returns the null
+  // pointer)
+  LinkedList u = h->bucket[h->hash_function(k) % (uint64_t)h->length];
   LinkedListLink *cur = u.head;
   while (cur)
     if (h->comp_function(k, ((HashMapEntry *)(cur->data))->key))
@@ -142,7 +144,7 @@ int hash_map_delete(HashMap *h, void *k) {
 
 int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *)) {
   char deleted = 0;
-  LinkedList u = h->bucket[h->hash_function(k) % h->length];
+  LinkedList u = h->bucket[h->hash_function(k) % (uint64_t)h->length];
   if (!u.head) {
     return 0;
   }
@@ -150,7 +152,7 @@ int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *)) {
     void *next = u.head->next;
     callback(u.head->data);
     free(u.head);
-    h->bucket[h->hash_function(k) % h->length].head = next;
+    h->bucket[h->hash_function(k) % (uint64_t)h->length].head = next;
     deleted = 1;
   } else {
     LinkedListLink *prev = u.head;

@@ -25,8 +25,10 @@ typedef struct {
   uint64_t (*hash_function)(void *);
   char (*comp_function)(void *, void *);
 
-  int length; // length of the bucket
-  int size;   // nb of elements in the hashmap
+  //! length of the bucket
+  int length;
+  //! nb of elements in the hashmap
+  int size;
 } HashMap;
 
 HashMap hash_map_create(uint64_t (*)(void *), char (*)(void *, void *));

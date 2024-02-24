@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdio.h>
 #define HANDLE_ERROR(err, message, callback)                                   \
   {                                                                            \
     if (err) {                                                                 \

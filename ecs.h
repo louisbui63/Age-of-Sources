@@ -19,7 +19,7 @@ typedef struct {
   void (**component_free)(void *);
   ComponentWrapper *components;
   Entity *entities;
-  HashMap /*<Bitflag, vec<uint64_t>*>*/ component_map;
+  HashMap /*<Bitflag, vec<uint64_t>*>*/ entity_map;
   HashMap /*<uint64_t, uint64_t>*/ component2entity;
   // HashMap /*<uint64_t, uint64_t>*/ entity2component;
   int last_component;
@@ -29,7 +29,8 @@ World world_new();
 
 void world_free(World *);
 
-#define register_component(w, tp) register_component_inner((w), sizeof(tp))
+#define register_component(w, tp)                                              \
+  register_component_inner_callback((w), sizeof(tp), free)
 #define register_component_callback(w, tp, callback)                           \
   register_component_inner_callback((w), sizeof(tp), (callback))
 int register_component_inner_callback(World *w, int size,
