@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "util.h"
 #define VEC_INIT_CAPACITY 16
 
 typedef void *Vec;
@@ -19,7 +20,7 @@ void *vec_push_inner(void *vec, void *obj);
 // currently this doesn't return anything and doesn't return anything
 void vec_pop(void *vec);
 
-int vec_len(void *vec);
+uint vec_len(void *vec);
 
 void vec_sort(void *vec, char (*gt)(void *, void *));
 

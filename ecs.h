@@ -2,6 +2,7 @@
 
 #include "bitflag.h"
 #include "hash_map.h"
+#include "util.h"
 
 typedef struct {
   uint64_t id;
@@ -15,14 +16,14 @@ typedef struct {
 } Entity;
 
 typedef struct {
-  int *component_sizes;
+  uint *component_sizes;
   void (**component_free)(void *);
   ComponentWrapper *components;
   Entity *entities;
   HashMap /*<Bitflag, vec<uint64_t>*>*/ entity_map;
   HashMap /*<uint64_t, uint64_t>*/ component2entity;
   // HashMap /*<uint64_t, uint64_t>*/ entity2component;
-  int last_component;
+  uint last_component;
 } World;
 
 World world_new();

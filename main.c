@@ -7,7 +7,7 @@
 
 #include "util.h"
 
-int main(int argc, char **argv) {
+int main() {
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
   SDL_Window *window =
       SDL_CreateWindow("test", 100, 100, 420, 360, SDL_WINDOW_SHOWN);

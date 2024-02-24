@@ -22,5 +22,7 @@
 void free_nothing(void *);
 char not_strcmp(void *a, void *b);
 
+typedef unsigned int uint;
+
 #define max(a, b) ((a > b) ? (a) : (b))
 #define min(a, b) ((a < b) ? (a) : (b))

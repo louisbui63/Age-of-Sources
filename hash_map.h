@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "linked_list.h"
+#include "util.h"
 
 #define HASHMAP_DEFAULT_LENGTH 32
 
@@ -26,9 +27,9 @@ typedef struct {
   char (*comp_function)(void *, void *);
 
   //! length of the bucket
-  int length;
+  uint length;
   //! nb of elements in the hashmap
-  int size;
+  uint size;
 } HashMap;
 
 HashMap hash_map_create(uint64_t (*)(void *), char (*)(void *, void *));

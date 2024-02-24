@@ -1,7 +1,5 @@
 #include "linked_list.h"
 
-#include <stdio.h>
-
 #include "../linked_list.h"
 #include "../util.h"
 

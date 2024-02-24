@@ -4,7 +4,6 @@
 #include "../util.h"
 
 #include <stdint.h>
-#include <stdio.h>
 #include <string.h>
 
 int test_hash_map() {

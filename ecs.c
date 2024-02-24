@@ -22,15 +22,15 @@ World world_new() {
 }
 
 void world_free(World *w) {
-  for (int i = 0; i < vec_len(w->components); i++) {
-    int id = w->components[i].type_id;
+  for (uint i = 0; i < vec_len(w->components); i++) {
+    uint id = w->components[i].type_id;
     (w->component_free[id])(w->components[i].component);
   }
   vec_free(w->component_sizes);
   vec_free(w->component_free);
   vec_free(w->components);
   Entity *u = w->entities;
-  for (int i = 0; i < vec_len(w->entities); i++) {
+  for (uint i = 0; i < vec_len(w->entities); i++) {
     vec_free(u[i].components);
   }
   vec_free(w->entities);
@@ -62,10 +62,10 @@ int register_component_inner(World *w, int size) {
 
 void register_system_requirement(World *w, Bitflag b) {
   uint64_t *g = vec_new(uint64_t);
-  for (int i = 0; i < vec_len(w->entities); i++) {
+  for (uint i = 0; i < vec_len(w->entities); i++) {
     uint64_t *v = vec_new(uint64_t);
     Bitflag nb = b;
-    for (int j = 0; j < vec_len(w->entities[i].components); j++) {
+    for (uint j = 0; j < vec_len(w->entities[i].components); j++) {
       ComponentWrapper c = w->entities[i].components[j];
       if (bitflag_get(nb, c.type_id)) {
         bitflag_set(nb, c.type_id, 0);
@@ -73,7 +73,7 @@ void register_system_requirement(World *w, Bitflag b) {
       }
     }
     if (!nb) {
-      for (int i = 0; i < vec_len(v); i++)
+      for (uint i = 0; i < vec_len(v); i++)
         vec_push(g, v[i]);
     };
     vec_free(v);
@@ -99,7 +99,7 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
 
   HashMap *h = &w->entity_map;
 
-  for (int i = 0; i < h->length; i++) {
+  for (uint i = 0; i < h->length; i++) {
     LinkedListLink *cur = h->bucket[1].head;
 
     Bitflag *to_add = vec_new(Bitflag);
@@ -107,7 +107,7 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
       HashMapEntry *he = cur->data;
       if (bitflag_get(*(Bitflag *)he->key, cid)) {
         Bitflag expected = bitflag_set(*(Bitflag *)he->key, cid, 0);
-        for (int j = 0; j < vec_len(e->components); j++) {
+        for (uint j = 0; j < vec_len(e->components); j++) {
           expected = bitflag_set(expected, e->components[j].type_id, 0);
         }
         if (!expected) {
@@ -117,7 +117,7 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
       void *nc = cur->next;
       cur = nc;
     }
-    for (int i = 0; i < vec_len(to_add); i++) {
+    for (uint i = 0; i < vec_len(to_add); i++) {
       Bitflag *u = malloc(sizeof(Bitflag));
       *u = to_add[i];
       hash_map_insert(&w->entity_map, u, e);
@@ -132,12 +132,12 @@ void despawn_entity(World *w, Entity *e) {
   // for (int i = 0; i < vec_len(e->components); i++)
   //   vec_push(cids, e->components[i].id);
 
-  HashMap ccor = hash_map_create(hash_u64, eq);
+  HashMap /*<uint64_t,int>*/ ccor = hash_map_create(hash_u64, eq);
 
   int *a = malloc(sizeof(int));
   *a = -1;
 
-  for (int i = 0; i < vec_len(e->components); i++) {
+  for (uint i = 0; i < vec_len(e->components); i++) {
     int *c = malloc(sizeof(int));
     *c = e->components[i].id;
     hash_map_insert(&ccor, c, a);
@@ -153,7 +153,7 @@ void despawn_entity(World *w, Entity *e) {
     vec_pop(w->components);
   }
 
-  for (int i = 0; i < w->entity_map.length; i++) {
+  for (uint i = 0; i < w->entity_map.length; i++) {
     LinkedListLink *cur = w->entity_map.bucket[i].head;
     LinkedListLink *prev = w->entity_map.bucket[i].head;
     char beg = 1;
@@ -161,7 +161,7 @@ void despawn_entity(World *w, Entity *e) {
       LinkedListLink *next = cur->next;
 
       HashMapEntry *entry = cur->data;
-      uint64_t *swap = hash_map_get(&ccor, entry->key);
+      int *swap = hash_map_get(&ccor, entry->key);
       if (swap) {
         if (beg)
           w->entity_map.bucket[i].head = next;
@@ -194,7 +194,7 @@ void despawn_entity(World *w, Entity *e) {
     vec_swap(w->entities, id, vec_len(w->entities) - 1);
   vec_pop(w->entities);
 
-  for (int i = 0; i < w->component2entity.length; i++) {
+  for (uint i = 0; i < w->component2entity.length; i++) {
     LinkedListLink *cur = w->component2entity.bucket[i].head;
     LinkedListLink *prev = w->entity_map.bucket[i].head;
     char beg = 1;

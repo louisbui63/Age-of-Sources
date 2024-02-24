@@ -1,7 +1,6 @@
 #include "hash_map.h"
 #include "linked_list.h"
-
-#include <stdio.h>
+#include "util.h"
 
 #define FNV_PRIME 0x100000001b3
 #define FNV_OFFSET_BASIS 0xcbf29ce484222325
@@ -54,12 +53,12 @@ HashMap hash_map_create(uint64_t (*h)(void *), char (*c)(void *, void *)) {
 int grow(HashMap *h) {
   uint64_t ns = h->length * 2;
   LinkedList *nb = malloc(sizeof(LinkedList) * ns);
-  for (int i = 0; i < ns; i++) {
+  for (uint i = 0; i < ns; i++) {
     // todo : replace this with a more efficient init routine
     LinkedList tmp = {0};
     nb[i] = tmp;
   }
-  for (int i = 0; i < h->length; i++) {
+  for (uint i = 0; i < h->length; i++) {
     LinkedListLink *cur = h->bucket[i].head;
     while (cur) {
       HashMapEntry *e = cur->data;
@@ -83,12 +82,12 @@ int shrink(HashMap *h) {
   if (ns < HASHMAP_DEFAULT_LENGTH)
     return 0;
   LinkedList *nb = malloc(sizeof(LinkedList) * ns);
-  for (int i = 0; i < ns; i++) {
+  for (uint i = 0; i < ns; i++) {
     // todo : replace this with a more efficient init routine
     LinkedList tmp = {0};
     nb[i] = tmp;
   }
-  for (int i = 0; i < h->length; i++) {
+  for (uint i = 0; i < h->length; i++) {
     LinkedListLink *cur = h->bucket[i].head;
     while (cur) {
       HashMapEntry *e = cur->data;
@@ -178,7 +177,7 @@ int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *)) {
 }
 
 void hash_map_free_callback(HashMap *h, void (*callback)(void *)) {
-  for (int i = 0; i < h->length; i++)
+  for (uint i = 0; i < h->length; i++)
     linked_list_free_callback(&h->bucket[i], callback);
   free(h->bucket);
 }

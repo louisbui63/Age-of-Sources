@@ -1,7 +1,5 @@
 #include "vec.h"
 
-#include <stdio.h>
-
 #include "../util.h"
 #include "../vec.h"
 
