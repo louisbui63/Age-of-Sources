@@ -15,6 +15,10 @@
   }
 
 int main() {
+  // note that test failure will probably leak memory. This isn't really a
+  // problem since the tests don't serve any real purpose other than making sure
+  // they don't fail, and there is nothing happening after them except other
+  // tests.
   TEST(test_vec, "vec");
   TEST(test_linked_list, "linked_list");
   TEST(test_hash_map, "hash_map");

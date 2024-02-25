@@ -107,8 +107,9 @@ int shrink(HashMap *h) {
   return 0;
 }
 
-int hash_map_insert(HashMap *h, void *k, void *v) {
-  hash_map_delete(h, k);
+int hash_map_insert_callback(HashMap *h, void *k, void *v,
+                             void (*callback)(void *)) {
+  hash_map_delete_callback(h, k, callback);
   uint64_t hash = h->hash_function(k);
   uint64_t bplace = hash % h->length;
 
@@ -137,13 +138,18 @@ void *hash_map_get(HashMap *h, void *k) {
   return 0;
 }
 
+int hash_map_insert(HashMap *h, void *k, void *v) {
+  return hash_map_insert_callback(h, k, v, hash_map_entry_free);
+}
+
 int hash_map_delete(HashMap *h, void *k) {
   return hash_map_delete_callback(h, k, hash_map_entry_free);
 }
 
 int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *)) {
   char deleted = 0;
-  LinkedList u = h->bucket[h->hash_function(k) % (uint64_t)h->length];
+  uint64_t td = h->hash_function(k) % (uint64_t)h->length;
+  LinkedList u = h->bucket[td];
   if (!u.head) {
     return 0;
   }

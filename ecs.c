@@ -4,20 +4,21 @@
 #include "vec.h"
 #include <string.h>
 
-char eq(void *a, void *b) { return *(uint64_t *)a == *(uint64_t *)b; }
+char eq_u64(void *a, void *b) { return *(uint64_t *)a == *(uint64_t *)b; }
 
-void hash_map_entry_free_vec(void *u) {
+void hash_map_entry_free_vecptr(void *u) {
   HashMapEntry *w = u;
   free(w->key);
-  vec_free(w->value);
+  vec_free(*(void **)w->value);
+  free(w->value);
   free(u);
 }
 
 World world_new() {
   World a = {vec_new(int), vec_new(void (*)(void *)), vec_new(ComponentWrapper),
-             vec_new(Entity), hash_map_create(hash_u64, eq),
+             vec_new(Entity), hash_map_create(hash_u64, eq_u64),
              // hash_map_create(hash_u64, eq),
-             hash_map_create(hash_u64, eq), 0};
+             hash_map_create(hash_u64, eq_u64), 0};
   return a;
 }
 
@@ -34,7 +35,7 @@ void world_free(World *w) {
     vec_free(u[i].components);
   }
   vec_free(w->entities);
-  hash_map_free_callback(&w->entity_map, hash_map_entry_free_vec);
+  hash_map_free_callback(&w->entity_map, hash_map_entry_free_vecptr);
   hash_map_free_callback(&w->component2entity, free);
   // hash_map_free(&w->entity2component);
 }
@@ -50,7 +51,9 @@ int register_component_inner_callback(World *w, int size,
   *u = 1 << w->last_component;
   // HashMap *a = malloc(sizeof(HashMap));
   // *a = hash_map_create(hash_u64, eq);
-  hash_map_insert(&w->entity_map, u, vec_new(uint64_t));
+  void **v = malloc(sizeof(uintptr_t));
+  *v = vec_new(uint64_t);
+  hash_map_insert_callback(&w->entity_map, u, v, hash_map_entry_free_vecptr);
   w->last_component++;
 
   return 0;
@@ -63,24 +66,22 @@ int register_component_inner(World *w, int size) {
 void register_system_requirement(World *w, Bitflag b) {
   uint64_t *g = vec_new(uint64_t);
   for (uint i = 0; i < vec_len(w->entities); i++) {
-    uint64_t *v = vec_new(uint64_t);
     Bitflag nb = b;
     for (uint j = 0; j < vec_len(w->entities[i].components); j++) {
       ComponentWrapper c = w->entities[i].components[j];
       if (bitflag_get(nb, c.type_id)) {
-        bitflag_set(nb, c.type_id, 0);
-        vec_push(v, c.id);
+        nb = bitflag_set(nb, c.type_id, 0);
       }
     }
     if (!nb) {
-      for (uint i = 0; i < vec_len(v); i++)
-        vec_push(g, v[i]);
+      vec_push(g, w->entities[i].id);
     };
-    vec_free(v);
   }
   Bitflag *u = malloc(sizeof(Bitflag));
   memcpy(u, &b, sizeof(Bitflag));
-  hash_map_insert(&w->entity_map, u, g);
+  void **v = malloc(sizeof(uintptr_t));
+  *v = g;
+  hash_map_insert_callback(&w->entity_map, u, v, hash_map_entry_free_vecptr);
 }
 
 Entity *spawn_entity(World *w) {
@@ -95,12 +96,13 @@ Entity *spawn_entity(World *w) {
 void ecs_add_component(World *w, Entity *e, int cid, void *c) {
   ComponentWrapper cw = {vec_len(w->components), cid, c};
   vec_push(w->components, cw);
+  vec_push(e->components, cw);
   hash_map_insert(&w->component2entity, &cw.id, &e->id);
 
   HashMap *h = &w->entity_map;
 
   for (uint i = 0; i < h->length; i++) {
-    LinkedListLink *cur = h->bucket[1].head;
+    LinkedListLink *cur = h->bucket[i].head;
 
     Bitflag *to_add = vec_new(Bitflag);
     while (cur) {
@@ -118,9 +120,11 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
       cur = nc;
     }
     for (uint i = 0; i < vec_len(to_add); i++) {
-      Bitflag *u = malloc(sizeof(Bitflag));
-      *u = to_add[i];
-      hash_map_insert(&w->entity_map, u, e);
+      // Bitflag *u = malloc(sizeof(Bitflag));
+      // *u = to_add[i];
+      uint64_t **es = hash_map_get(&w->entity_map, &to_add[i]);
+      vec_push(*es, e->id);
+      // free(u);
     }
     vec_free(to_add);
   }
@@ -132,7 +136,7 @@ void despawn_entity(World *w, Entity *e) {
   // for (int i = 0; i < vec_len(e->components); i++)
   //   vec_push(cids, e->components[i].id);
 
-  HashMap /*<uint64_t,int>*/ ccor = hash_map_create(hash_u64, eq);
+  HashMap /*<uint64_t,int>*/ ccor = hash_map_create(hash_u64, eq_u64);
 
   int *a = malloc(sizeof(int));
   *a = -1;
@@ -190,6 +194,7 @@ void despawn_entity(World *w, Entity *e) {
 
   hash_map_free(&ccor);
 
+  // UintPair out = {vec_len(w->entities) - 1, id};
   if (id != vec_len(w->entities) - 1)
     vec_swap(w->entities, id, vec_len(w->entities) - 1);
   vec_pop(w->entities);
@@ -224,4 +229,12 @@ void despawn_entity(World *w, Entity *e) {
   }
 
   free(e);
+  // return out;
+}
+Entity *get_entity(World *w, EntityRef ref) { return &w->entities[ref]; }
+EntityRef *world_query(World *w, Bitflag *b) {
+  return *(EntityRef **)hash_map_get(&w->entity_map, b);
+}
+EntityRef **world_query_mut(World *w, Bitflag *b) {
+  return (EntityRef **)hash_map_get(&w->entity_map, b);
 }

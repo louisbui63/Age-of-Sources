@@ -4,6 +4,10 @@
 #include "hash_map.h"
 #include "util.h"
 
+//! Note that this reference is only valid until the number of entities
+//! decreases
+typedef uint64_t EntityRef;
+
 typedef struct {
   uint64_t id;
   int type_id;
@@ -26,6 +30,8 @@ typedef struct {
   uint last_component;
 } World;
 
+char eq_u64(void *a, void *b);
+
 World world_new();
 
 void world_free(World *);
@@ -41,3 +47,6 @@ void register_system_requirement(World *w, Bitflag b);
 Entity *spawn_entity(World *w);
 void ecs_add_component(World *w, Entity *e, int cid, void *c);
 void despawn_entity(World *w, Entity *e);
+Entity *get_entity(World *w, EntityRef ref);
+EntityRef *world_query(World *w, Bitflag *b);
+EntityRef **world_query_mut(World *w, Bitflag *b);
