@@ -132,9 +132,11 @@ void *hash_map_get(HashMap *h, void *k) {
   // pointer)
   LinkedList u = h->bucket[h->hash_function(k) % (uint64_t)h->length];
   LinkedListLink *cur = u.head;
-  while (cur)
+  while (cur) {
     if (h->comp_function(k, ((HashMapEntry *)(cur->data))->key))
       return ((HashMapEntry *)(cur->data))->value;
+    cur = cur->next;
+  }
   return 0;
 }
 

@@ -1,4 +1,4 @@
-CFLAGS = -std=c2x -Wall -Wextra -pedantic -O2 #-g -fsanitize=address -fno-omit-frame-pointer
+CFLAGS = -std=c2x -Wall -Wextra -pedantic -O2 -g -fno-omit-frame-pointer #-fsanitize=address
 CC = clang
 
 SRC=$(subst .c,.o,$(wildcard *.c))

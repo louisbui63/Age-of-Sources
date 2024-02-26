@@ -84,6 +84,8 @@ void vec_sort(void *v, char (*gt)(void *, void *)) {
 }
 
 void vec_swap(void *v, int a, int b) {
+  if (a == b)
+    return;
   uint sz = vec_data_size(v);
   void *u = malloc(sz);
   memcpy(u, (uint8_t *)v + a * sz, sz);
