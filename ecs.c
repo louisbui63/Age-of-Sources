@@ -138,18 +138,18 @@ void despawn_entity(World *w, Entity *e) {
 
   HashMap /*<uint64_t,int>*/ ccor = hash_map_create(hash_u64, eq_u64);
 
-  int *a = malloc(sizeof(int));
-  *a = -1;
-
   for (uint i = 0; i < vec_len(e->components); i++) {
-    int *c = malloc(sizeof(int));
+    uint64_t *c = malloc(sizeof(uint64_t));
     *c = e->components[i].id;
+    int *a = malloc(sizeof(int));
+    *a = -1;
     hash_map_insert(&ccor, c, a);
-    if (e->components[i].id != vec_len(w->components)) {
-      vec_swap(&w->components, e->components[i].id, vec_len(w->components) - 1);
-      int *b = malloc(sizeof(int));
+    if (e->components[i].id != vec_len(w->components) - 1) {
+      vec_swap(w->components, e->components[i].id, vec_len(w->components) - 1);
+      uint64_t *b = malloc(sizeof(uint64_t));
       *b = vec_len(w->components) - 1;
-
+      int *c = malloc(sizeof(int));
+      *c = e->components[i].id;
       hash_map_insert(&ccor, b, c);
     }
     (w->component_free[w->components[vec_len(w->components) - 1].type_id])(

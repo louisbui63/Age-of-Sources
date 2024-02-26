@@ -16,6 +16,9 @@ typedef struct {
 
 typedef struct {
   uint64_t id;
+
+  // this should probably be replaced by a simple array that acts as a primitive
+  // hashmap
   ComponentWrapper *components;
 } Entity;
 

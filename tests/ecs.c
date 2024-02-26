@@ -20,7 +20,7 @@ int test_ecs() {
   ASSERT(!register_component(&w, int16_t));
 
   Bitflag c = 0x5;
-  Bitflag d = 0x1;
+  Bitflag d = 0x2;
 
   register_system_requirement(&w, c);
 
@@ -72,7 +72,6 @@ int test_ecs() {
   Bitflag u = 0;
   EntityRef **err = world_query_mut(&w, &d);
   ASSERT(err);
-  printf("%d\n", vec_len(*err));
   ASSERT(vec_len(*err) == 16);
   while (vec_len(*err) > 0) {
     Entity *e = get_entity(&w, *err[0]);
@@ -89,6 +88,7 @@ int test_ecs() {
   }
 
   ASSERT(u == 0xffffffff);
+  printf("uwu\n");
 
   world_free(&w);
   return 0;
