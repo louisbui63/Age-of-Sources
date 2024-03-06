@@ -19,4 +19,4 @@ run: all
 	./main
 
 test_run: test
-	./test
+	valgrind ./test
