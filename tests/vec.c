@@ -31,14 +31,16 @@ int test_vec() {
   }
   vec_free(tvcp);
   tvcp = vec_copy(tv);
-  vec_remove(tvcp, (vec_len(tvcp) - 1)/2);
+  vec_remove(tvcp, (vec_len(tvcp) - 1) / 2);
   uint delta = 0;
   for (int i = 0; i < 2 * VEC_INIT_CAPACITY - 1; i++) {
-    if (i == ((vec_len(tvcp) - 1)/2)) {delta++;}
+    if (i == ((vec_len(tvcp) - 1) / 2)) {
+      delta++;
+    }
     ASSERT(tv[i + delta] == tvcp[i]);
   }
   vec_free(tv);
   vec_free(tvcp);
-  
+
   return 0;
 }

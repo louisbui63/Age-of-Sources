@@ -94,21 +94,23 @@ void vec_swap(void *v, int a, int b) {
   free(u);
 }
 
-void vec_remove(void *vec, int a){
+void vec_remove(void *vec, int a) {
   uint size = ((uint *)vec)[-3];
   void *temp = malloc((vec_len(vec) - (a + 1)) * size);
-  memcpy(temp, (uint8_t *)vec + (a + 1) * size, (vec_len(vec) - (a + 1)) * size);
+  memcpy(temp, (uint8_t *)vec + (a + 1) * size,
+         (vec_len(vec) - (a + 1)) * size);
   memcpy((uint8_t *)vec + a * size, temp, (vec_len(vec) - (a + 1)) * size);
   vec_pop(vec);
   free(temp);
 }
 
-void *vec_copy(void *vec){
+void *vec_copy(void *vec) {
   uint size = ((uint *)vec)[-3];
   uint cap = ((uint *)vec)[-2];
   uint len = ((uint *)vec)[-1];
   void *veccp = malloc(cap * size + 3 * sizeof(uint));
-  memcpy((uint8_t *)veccp, (uint8_t *)vec - 3 * sizeof(uint),len * size + 3 * sizeof(uint));
+  memcpy((uint8_t *)veccp, (uint8_t *)vec - 3 * sizeof(uint),
+         len * size + 3 * sizeof(uint));
   veccp = (uint8_t *)veccp + 3 * sizeof(uint);
   return veccp;
 }
