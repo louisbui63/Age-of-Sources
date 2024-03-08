@@ -5,6 +5,8 @@
 #include <SDL2/SDL_video.h>
 #include <stdlib.h>
 
+#include "components.h"
+#include "ecs.h"
 #include "util.h"
 
 int main() {
@@ -31,6 +33,11 @@ int main() {
     SDL_DestroyWindow(window);
     abort();
   })
+  SDL_FreeSurface(test_bmp);
+
+  World w = world_new();
+
+  init_world(&w);
 
   // dt is the frametime from last frame
   int dt = TARGET_FRAMETIME;
@@ -38,8 +45,6 @@ int main() {
     int start_time = SDL_GetTicks();
 
     SDL_RenderClear(renderer);
-
-    SDL_RenderCopy(renderer, test_tex, 0, 0);
 
     SDL_RenderPresent(renderer);
 

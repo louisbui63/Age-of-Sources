@@ -3,9 +3,7 @@
 #include "../ecs.h"
 #include "../util.h"
 #include "../vec.h"
-#include <inttypes.h>
 #include <stdint.h>
-#include <stdio.h>
 
 typedef struct {
   int y;

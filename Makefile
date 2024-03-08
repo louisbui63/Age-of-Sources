@@ -1,5 +1,12 @@
-CFLAGS = -std=c2x -Wall -Wextra -pedantic -O2 -g -fno-omit-frame-pointer #-fsanitize=address
 CC = clang
+
+CFLAGS = -std=c2x -Wall -Wextra -pedantic -O2
+
+CFLAGS += $(shell pkg-config --cflags --libs sdl2)
+
+CFLAGS += -g -fno-omit-frame-pointer #-fsanitize=address
+
+
 
 SRC=$(subst .c,.o,$(wildcard *.c))
 TEST_SRC=$(subst .c,.o,$(wildcard tests/*.c))
