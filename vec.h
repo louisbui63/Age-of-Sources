@@ -27,3 +27,7 @@ void vec_sort(void *vec, char (*gt)(void *, void *));
 void vec_swap(void *v, int a, int b);
 
 char u64_gt(void *a, void *b);
+
+void vec_remove(void *vec, int a);
+
+void *vec_copy(void *vec);
