@@ -12,12 +12,15 @@ SRC=$(subst .c,.o,$(wildcard *.c))
 TEST_SRC=$(subst .c,.o,$(wildcard tests/*.c))
 
 all: $(SRC)
-	$(CC) $(CFLAGS) -lSDL2 -o main *.o
+	$(CC) $(CFLAGS) -o main *.o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 test: $(SRC) $(TEST_SRC)
 	$(CC) $(CFLAGS) -o test $(subst main.o,,$(SRC)) $(TEST_SRC)
+
+format:
+	./format.sh
 
 clean:
 	rm -f **/*.o *.o main test
