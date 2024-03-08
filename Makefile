@@ -19,9 +19,6 @@ all: $(SRC)
 test: $(SRC) $(TEST_SRC)
 	$(CC) $(CFLAGS) -o test $(subst main.o,,$(SRC)) $(TEST_SRC)
 
-format:
-	./format.sh
-
 clean:
 	rm -f **/*.o *.o main test
 
