@@ -4,10 +4,12 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "components.h"
 #include "ecs.h"
 #include "util.h"
+#include "input.h"
 
 int main() {
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
@@ -40,15 +42,39 @@ int main() {
   init_world(&w);
 
   // dt is the frametime from last frame
-  int dt = TARGET_FRAMETIME;
-  for (;;) {
-    int start_time = SDL_GetTicks();
+  Uint32 dt = TARGET_FRAMETIME;
+  SDL_Event event;
+  Inputs *inputs = inputs_new();
+  int running = 1;
+  for (;running;) {
+    Uint32 start_time = SDL_GetTicks();
 
+    while(SDL_PollEvent(&event)){
+      switch(event.type){
+        case SDL_KEYDOWN:
+          inputs_update_key_press(inputs,event.key.keysym.sym,true);
+          break;
+        case SDL_KEYUP:
+          inputs_update_key_press(inputs,event.key.keysym.sym,false);
+          break;
+        case SDL_MOUSEBUTTONDOWN:
+          inputs_update_mouse_button_press(inputs,event.button.button,true);
+          break;
+        case SDL_MOUSEBUTTONUP:
+          inputs_update_mouse_button_press(inputs,event.button.button,false);
+          break;
+        case SDL_QUIT:
+          running = 0;
+          break;
+      }
+    }
+    
     SDL_RenderClear(renderer);
 
     SDL_RenderPresent(renderer);
 
-    dt = max(TARGET_FRAMETIME, SDL_GetTicks() + start_time);
-    SDL_Delay(TARGET_FRAMETIME - dt);
+    dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
+    if(running && dt != TARGET_FRAMETIME) SDL_Delay(TARGET_FRAMETIME - dt);
   }
+  inputs_free(inputs);
 }
