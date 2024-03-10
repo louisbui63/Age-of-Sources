@@ -4,6 +4,7 @@
 #include "vec.h"
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 char eq_u64(void *a, void *b) { return *(uint64_t *)a == *(uint64_t *)b; }
