@@ -9,3 +9,5 @@ wiki.libsdl.orgs/SDL2
 en.cppreference.com
 
 https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
+
+https://www.libsdl.org/release/SDL-1.2.15/docs/html/

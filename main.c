@@ -3,13 +3,17 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
+#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "camera.h"
 #include "components.h"
 #include "ecs.h"
+#include "input.h"
 #include "sprite.h"
 #include "util.h"
+#include "vec.h"
 
 int main() {
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
@@ -63,18 +67,69 @@ int main() {
   ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
 
   // dt is the frametime from last frame
-  int dt = TARGET_FRAMETIME;
-  for (;;) {
-    int start_time = SDL_GetTicks64();
+  Uint32 dt = TARGET_FRAMETIME;
+  SDL_Event event;
 
+  // down keys and mouse buttons
+  Inputs *input_down = inputs_new();
+
+  int running = 1;
+  for (; running;) {
+    Uint32 start_time = SDL_GetTicks();
+
+    Inputs *input_pressed = inputs_new();
+    Inputs *input_released = inputs_new();
+
+    // SDL events
+    while (SDL_PollEvent(&event)) {
+      switch (event.type) {
+      case SDL_KEYDOWN:
+        if (!inputs_is_key_in(input_down, event.key.keysym.sym)) {
+          inputs_update_key_in(input_pressed, event.key.keysym.sym, true);
+          inputs_update_key_in(input_down, event.key.keysym.sym, true);
+        }
+        break;
+      case SDL_KEYUP:
+        inputs_update_key_in(input_down, event.key.keysym.sym, false);
+        inputs_update_key_in(input_released, event.key.keysym.sym, true);
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+        if (!inputs_is_mouse_button_in(input_down, event.button.button)) {
+          inputs_update_mouse_button_in(input_down, event.button.button, true);
+          inputs_update_mouse_button_in(input_pressed, event.button.button,
+                                        true);
+        }
+        break;
+      case SDL_MOUSEBUTTONUP:
+        inputs_update_mouse_button_in(input_down, event.button.button, false);
+        inputs_update_mouse_button_in(input_released, event.button.button,
+                                      true);
+        break;
+      case SDL_QUIT:
+        running = 0;
+        break;
+      }
+    }
+    // keyboard and mouse button events
+    inputs_run_callbacks(&w, input_pressed, KEY_PRESSED);
+    inputs_run_callbacks(&w, input_down, KEY_DOWN);
+    inputs_run_callbacks(&w, input_released, KEY_RELEASED);
+
+    // free instant inputs
+    inputs_free(input_pressed);
+    inputs_free(input_released);
+
+    // render
     SDL_RenderClear(renderer);
     render(&w, renderer, &cam);
 
     SDL_RenderPresent(renderer);
 
-    dt = max(TARGET_FRAMETIME, SDL_GetTicks64() - start_time);
-    SDL_Delay(TARGET_FRAMETIME - dt);
+    // delay before next frame
+    dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
+    if (running && dt != TARGET_FRAMETIME)
+      SDL_Delay(TARGET_FRAMETIME - dt);
   }
-
+  inputs_free(input_down);
   world_free(&w);
 }

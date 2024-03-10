@@ -3,6 +3,8 @@
 #include "../linked_list.h"
 #include "../util.h"
 
+#include <stdlib.h>
+
 int test_linked_list() {
   // thes tests might not be sufficient
   LinkedList ll = linked_list_create();

@@ -18,7 +18,7 @@ all: $(SRC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test: $(SRC) $(TEST_SRC)
-	$(CC) $(CFLAGS) -o test $(subst main.o,,$(SRC)) $(TEST_SRC)
+	$(CC) $(CFLAGS) $(LIBS) -o test $(subst main.o,,$(SRC)) $(TEST_SRC)
 
 format:
 	./format.sh
