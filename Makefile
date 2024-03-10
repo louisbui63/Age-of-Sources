@@ -23,6 +23,10 @@ test: $(SRC) $(TEST_SRC)
 format:
 	./format.sh
 
+doc:
+	doxygen Doxyfile
+	make -C ./latex
+
 clean:
 	rm -f **/*.o *.o main test
 

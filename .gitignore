@@ -4,3 +4,4 @@ test
 massif.out.*
 cachegrind.out.*
 .vscode
+latex
