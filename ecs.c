@@ -4,6 +4,7 @@
 #include "vec.h"
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 char eq_u64(void *a, void *b) { return *(uint64_t *)a == *(uint64_t *)b; }
@@ -272,4 +273,13 @@ EntityRef *world_query(World *w, Bitflag *b) {
 }
 EntityRef **world_query_mut(World *w, Bitflag *b) {
   return (EntityRef **)hash_map_get(&w->entity_map, b);
+}
+
+void *entity_get_component(Entity *e, int type) {
+  for (uint i = 0; i < vec_len(e->components); i++) {
+    ComponentWrapper cw = e->components[i];
+    if (cw.type_id == type)
+      return cw.component;
+  }
+  return 0;
 }

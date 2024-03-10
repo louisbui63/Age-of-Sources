@@ -1,6 +1,7 @@
 #include "hash_map.h"
 #include "linked_list.h"
 #include "util.h"
+#include <stdlib.h>
 
 #define FNV_PRIME 0x100000001b3
 #define FNV_OFFSET_BASIS 0xcbf29ce484222325

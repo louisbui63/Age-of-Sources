@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdlib.h>
-
 typedef struct _Lk {
   void *data;
   struct _Lk *next;
