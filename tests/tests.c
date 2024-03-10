@@ -2,6 +2,7 @@
 
 #include "ecs.h"
 #include "hash_map.h"
+#include "input.h"
 #include "linked_list.h"
 #include "vec.h"
 
@@ -23,5 +24,6 @@ int main() {
   TEST(test_linked_list, "linked_list");
   TEST(test_hash_map, "hash_map");
   TEST(test_ecs, "ecs");
+  TEST(test_input, "input");
   return 0;
 }
