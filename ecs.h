@@ -4,6 +4,7 @@
 #include "hash_map.h"
 #include "util.h"
 #include <stdint.h>
+#include <stdlib.h>
 
 //! Note that this reference is only valid until the number of entities
 //! decreases

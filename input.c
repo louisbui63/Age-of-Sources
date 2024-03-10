@@ -30,12 +30,12 @@ void inputs_update_key_in_from_scancode(Inputs *inputs, SDL_Scancode scancode,
 
 void inputs_run_callbacks(World *w, Inputs *in, KeyState ks) {
   if ((in->key_nb > 0) || in->mouse) {
-    Bitflag b = COMP_KEY_EVENT;
+    Bitflag b = COMPF_KEY_EVENT;
     EntityRef *entities = world_query(w, &b);
     for (uint i = 0; i < vec_len(entities); i++) {
       Entity *e = get_entity(w, entities[i]);
       for (uint j = 0; j < vec_len(e->components); j++) {
-        if (e->components[j].type_id == COMP_KEY_EVENT_INDEX) {
+        if (e->components[j].type_id == COMP_KEY_EVENT) {
           (*(KeyEvent *)e->components[j].component)(e, in, ks);
         }
       }
