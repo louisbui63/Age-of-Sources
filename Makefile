@@ -12,7 +12,7 @@ SRC=$(subst .c,.o,$(wildcard *.c))
 TEST_SRC=$(subst .c,.o,$(wildcard tests/*.c))
 
 all: $(SRC)
-	$(CC) $(CFLAGS) -lSDL2 -o main *.o
+	$(CC) $(CFLAGS) -o main *.o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
