@@ -2,4 +2,4 @@
 
 ## Doxygen
 
-The use of make doc requires doxygen and LateX
+The use of make doc requires doxygen, LateX and graphviz.
