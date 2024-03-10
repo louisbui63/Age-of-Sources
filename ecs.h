@@ -3,6 +3,8 @@
 #include "bitflag.h"
 #include "hash_map.h"
 #include "util.h"
+#include <stdint.h>
+#include <stdlib.h>
 
 //! Note that this reference is only valid until the number of entities
 //! decreases
@@ -53,3 +55,4 @@ void despawn_entity(World *w, Entity *e);
 Entity *get_entity(World *w, EntityRef ref);
 EntityRef *world_query(World *w, Bitflag *b);
 EntityRef **world_query_mut(World *w, Bitflag *b);
+void *entity_get_component(Entity *e, int type);

@@ -1,2 +1,12 @@
 CompileFlags:
-  Add: [-xc, -Wall, -std=c2x, -Wextra, -pedantic, -O2]
+  Add: [-Wall, -std=c2x, -Wextra, -pedantic, -O2]
+---
+If:
+  PathMatch: .*\.h
+CompileFlags:
+  Add: [-xc-header]
+---
+If:
+  PathMatch: .*\.c
+CompileFlags:
+  Add: [-xc]
