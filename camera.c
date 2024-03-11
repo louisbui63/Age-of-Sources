@@ -10,8 +10,13 @@
 #include "vec.h"
 
 Position world2screenspace(Position *p, Camera *cam) {
-  return (Position){.x = (p->x - cam->x) * 1 / cam->zoom,
-                    .y = (p->y - cam->y) * 1 / cam->zoom};
+  return (Position){.x = (p->x - cam->x) / cam->zoom,
+                    .y = (p->y - cam->y) / cam->zoom};
+}
+
+Position screen2worldspace(Position *p, Camera *cam) {
+  return (Position){.x = p->x * cam->zoom + cam->x,
+                    .y = p->y * cam->zoom + cam->y};
 }
 
 void render(World *w, SDL_Renderer *rdr, Camera *cam) {

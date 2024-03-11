@@ -9,7 +9,7 @@ CFLAGS += -g -fno-omit-frame-pointer #-fsanitize=address
 SRC=$(subst .c,.o,$(wildcard *.c))
 TEST_SRC=$(subst .c,.o,$(wildcard tests/*.c))
 
-.PHONY: all test format clean run test_run
+.PHONY: all test format clean run test_run doc
 
 all: $(SRC)
 	$(CC) $(CFLAGS) $(LIBS) -o main *.o

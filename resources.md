@@ -4,9 +4,9 @@ http://www.concentric.net/~Ttwang/tech/primehash.htm
 
 https://courses.csail.mit.edu/6.006/spring11/rec/rec07.pdf
 
-wiki.libsdl.orgs/SDL2
+https://wiki.libsdl.orgs/SDL2
 
-en.cppreference.com
+https://en.cppreference.com
 
 https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
 
