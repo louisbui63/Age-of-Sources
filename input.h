@@ -1,9 +1,8 @@
+//! @file input.h
 #pragma once
+#include "ecs.h"
 #include <SDL2/SDL.h>
 #include <stdbool.h>
-#include <stdint.h>
-
-#include "ecs.h"
 
 typedef Uint8 KeyState;
 //! the instant the key is pressed
