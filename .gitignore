@@ -3,3 +3,6 @@ main
 test
 massif.out.*
 cachegrind.out.*
+.vscode
+latex
+html

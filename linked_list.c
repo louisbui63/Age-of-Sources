@@ -1,5 +1,5 @@
 #include "linked_list.h"
-#include <stdio.h>
+#include <stdlib.h>
 
 LinkedList linked_list_create() {
   LinkedList t = {0};
