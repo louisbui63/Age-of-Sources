@@ -1,6 +1,7 @@
 //! @file ui.h
 #pragma once
 #include "sprite.h"
+#include "ecs.h"
 
 //! Entities with this component are the background of the user interface
 typedef struct {

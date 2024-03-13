@@ -9,6 +9,7 @@
 #include "input.h"
 #include "sprite.h"
 #include "util.h"
+#include "ui.h"
 
 int main() {
   init_asset_manager();
@@ -60,8 +61,17 @@ int main() {
   size->x = 0;
   size->y = 0;
 
+  Background *test_background = malloc(sizeof(Background));
+  Clickable *test_clickable = malloc(sizeof(Clickable));
+  Minimap *test_minimap = malloc(sizeof(Minimap));
+
   *test_sprite = (Sprite){.texture = test_tex, .rect = size};
+  *test_background = (Background){.sprite = test_sprite, .rect = size};
+  *test_clickable = (Clickable){.sprite = test_sprite, .rect = size};
+
   ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
+  ecs_add_component(&w, test_e, COMP_BACKGROUND, test_background);
+  ecs_add_component(&w, test_e, COMP_CLICKABLE, test_clickable);
 
   // dt is the frametime from last frame
   Uint32 dt = TARGET_FRAMETIME;
@@ -119,6 +129,7 @@ int main() {
     // render
     SDL_RenderClear(renderer);
     render(&w, renderer, &cam);
+    render_ui(&w, renderer);
 
     SDL_RenderPresent(renderer);
 

@@ -5,7 +5,6 @@
 #include <stdint.h>
 
 #include "components.h"
-#include "ecs.h"
 #include "vec.h"
 
 void render_ui(World *w, SDL_Renderer *rdr) {
@@ -18,14 +17,14 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   }
   // Implementer le support des clicks
   mask = COMPF_CLICKABLE;
-  EntityRef *er = world_query(w, &mask);
+  er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Clickable *c = entity_get_component(e, COMP_CLICKABLE);
     SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->rect);
   }
   mask = COMPF_MINIMAP;
-  EntityRef *er = world_query(w, &mask);
+  er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Minimap *m = entity_get_component(e, COMP_MINIMAP);
@@ -33,7 +32,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   }
   // To finish with SDL_TTF
   mask = COMPF_HOVERABLE;
-  EntityRef *er = world_query(w, &mask);
+  er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Hoverable *h = entity_get_component(e, COMP_HOVERABLE);
