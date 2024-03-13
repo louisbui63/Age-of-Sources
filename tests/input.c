@@ -122,6 +122,7 @@ int test_input() {
   ASSERT(global_count_mine_dont_touch == 16);
 
   inputs_free(in);
+  world_free(&w);
 
   return 0;
 }
