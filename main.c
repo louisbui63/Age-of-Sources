@@ -1,21 +1,18 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_surface.h>
-#include <SDL2/SDL_timer.h>
-#include <SDL2/SDL_video.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 
+#include "asset_manager.h"
 #include "camera.h"
 #include "components.h"
 #include "ecs.h"
 #include "input.h"
 #include "sprite.h"
 #include "util.h"
-#include "vec.h"
 
 int main() {
+  init_asset_manager();
+
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
   atexit(SDL_Quit);
 
@@ -130,6 +127,9 @@ int main() {
     if (running && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
   }
+
   inputs_free(input_down);
   world_free(&w);
+  SDL_DestroyRenderer(renderer);
+  SDL_DestroyWindow(window);
 }
