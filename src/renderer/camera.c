@@ -4,10 +4,10 @@
 #include <SDL2/SDL_render.h>
 #include <stdint.h>
 
-#include "components.h"
-#include "ecs.h"
+#include "../components.h"
+#include "../data_structures/ecs.h"
+#include "../data_structures/vec.h"
 #include "sprite.h"
-#include "vec.h"
 
 Position world2screenspace(Position *p, Camera *cam) {
   return (Position){.x = (p->x - cam->x) / cam->zoom,

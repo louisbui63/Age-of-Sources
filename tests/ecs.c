@@ -1,9 +1,10 @@
 #include "ecs.h"
 
-#include "../ecs.h"
-#include "../util.h"
-#include "../vec.h"
+#include "../src/data_structures/ecs.h"
+#include "../src/data_structures/vec.h"
+#include "../src/util.h"
 #include <stdint.h>
+#include <stdlib.h>
 
 typedef struct {
   int y;

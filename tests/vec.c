@@ -1,7 +1,7 @@
 #include "vec.h"
 
-#include "../util.h"
-#include "../vec.h"
+#include "../src/data_structures/vec.h"
+#include "../src/util.h"
 
 int test_vec() {
   int *tv = vec_new(int);
