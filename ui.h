@@ -26,4 +26,5 @@ typedef struct {
   char *text;
 } Hoverable;
 
+//! Renders any entity that has user interface related component
 void render_ui(World *w, SDL_Renderer *rdr);
