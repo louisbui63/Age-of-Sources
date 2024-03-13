@@ -5,7 +5,6 @@
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
->>>>>>> main:src/components.c
 
 int init_world(World *w) {
   register_system_requirement(w, COMPF_POSITION | COMPF_SPRITE);
