@@ -1,8 +1,8 @@
 #include <stdlib.h>
 
 #include "components.h"
+#include "data_structures/vec.h"
 #include "input.h"
-#include "vec.h"
 
 Inputs *inputs_new() {
   Inputs *in = malloc(sizeof(Inputs));

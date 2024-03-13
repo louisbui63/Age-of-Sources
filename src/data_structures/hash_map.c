@@ -1,6 +1,6 @@
 #include "hash_map.h"
+#include "../util.h"
 #include "linked_list.h"
-#include "util.h"
 #include <stdlib.h>
 
 #define FNV_PRIME 0x100000001b3

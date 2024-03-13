@@ -1,4 +1,4 @@
-#include "ecs.h"
+#include "data_structures/ecs.h"
 
 #define COMPF_POSITION (1 << 0)
 #define COMP_POSITION 0

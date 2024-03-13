@@ -4,7 +4,7 @@
 //! before the pointer that the user manipulates
 #pragma once
 
-#include "util.h"
+#include "../util.h"
 
 //! A macro that extends to a pointer to `x`, to differentiate vectors from
 //! arbitrary pointers

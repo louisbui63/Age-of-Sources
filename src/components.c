@@ -1,10 +1,15 @@
 #include "components.h"
 
-#include "camera.h"
-#include "ecs.h"
+#include "data_structures/ecs.h"
 #include "input.h"
+<<<<<<< HEAD:components.c
 #include "sprite.h"
 #include "ui.h"
+=======
+#include "renderer/camera.h"
+#include "renderer/sprite.h"
+#include "renderer/ui.h"
+>>>>>>> main:src/components.c
 
 int init_world(World *w) {
   register_system_requirement(w, COMPF_POSITION | COMPF_SPRITE);

@@ -1,5 +1,5 @@
 //! @file camera.h
-#include "ecs.h"
+#include "../data_structures/ecs.h"
 #include <SDL2/SDL_render.h>
 
 //! The main window's height

@@ -2,12 +2,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "asset_manager.h"
-#include "camera.h"
 #include "components.h"
-#include "ecs.h"
+#include "data_structures/asset_manager.h"
+#include "data_structures/ecs.h"
 #include "input.h"
-#include "sprite.h"
+#include "renderer/camera.h"
+#include "renderer/sprite.h"
 #include "util.h"
 #include "ui.h"
 
