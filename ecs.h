@@ -25,10 +25,10 @@ typedef struct {
 } Entity;
 
 typedef struct {
-  uint *component_sizes;
-  void (**component_free)(void *);
-  ComponentWrapper *components;
-  Entity *entities;
+  VEC(uint) component_sizes;
+  void(VEC() * component_free)(void *);
+  VEC(ComponentWrapper) components;
+  VEC(Entity) entities;
   HashMap /*<Bitflag, vec<uint64_t>*>*/ entity_map;
   HashMap /*<uint64_t, uint64_t>*/ component2entity;
   // HashMap /*<uint64_t, uint64_t>*/ entity2component;
@@ -53,6 +53,6 @@ Entity *spawn_entity(World *w);
 void ecs_add_component(World *w, Entity *e, int cid, void *c);
 void despawn_entity(World *w, Entity *e);
 Entity *get_entity(World *w, EntityRef ref);
-EntityRef *world_query(World *w, Bitflag *b);
-EntityRef **world_query_mut(World *w, Bitflag *b);
+VEC(EntityRef) world_query(World *w, Bitflag *b);
+VEC(EntityRef) * world_query_mut(World *w, Bitflag *b);
 void *entity_get_component(Entity *e, int type);
