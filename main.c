@@ -130,6 +130,7 @@ int main() {
 
   inputs_free(input_down);
   world_free(&w);
+  free(size);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
 }
