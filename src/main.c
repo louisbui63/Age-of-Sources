@@ -8,8 +8,8 @@
 #include "input.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
-#include "util.h"
 #include "ui.h"
+#include "util.h"
 
 int main() {
   init_asset_manager();
