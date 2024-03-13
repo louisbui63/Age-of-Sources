@@ -2,10 +2,6 @@
 
 #include "data_structures/ecs.h"
 #include "input.h"
-<<<<<<< HEAD:components.c
-#include "sprite.h"
-#include "ui.h"
-=======
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
