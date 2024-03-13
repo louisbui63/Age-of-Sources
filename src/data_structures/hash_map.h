@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
+#include "../util.h"
 #include "linked_list.h"
-#include "util.h"
 #include "vec.h"
 
 //! The initial length of the internal array of a `HashMap`

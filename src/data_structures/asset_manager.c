@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "../util.h"
 #include "hash_map.h"
-#include "util.h"
 
 HashMap ASSET_STORE;
 

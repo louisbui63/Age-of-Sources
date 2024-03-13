@@ -1,7 +1,7 @@
 #include "hash_map.h"
 
-#include "../hash_map.h"
-#include "../util.h"
+#include "../src/data_structures/hash_map.h"
+#include "../src/util.h"
 
 #include <stdint.h>
 #include <stdlib.h>

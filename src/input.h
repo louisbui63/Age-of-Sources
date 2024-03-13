@@ -1,6 +1,6 @@
 //! @file input.h
 #pragma once
-#include "ecs.h"
+#include "data_structures/ecs.h"
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
