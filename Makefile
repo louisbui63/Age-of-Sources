@@ -25,8 +25,7 @@ format:
 	./format.sh
 
 doc:
-	doxygen Doxyfile
-	make -C ./latex
+	make -C doc ./doc
 
 clean:
 	rm -rf build/*
