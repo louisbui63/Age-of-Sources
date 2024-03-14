@@ -1,0 +1,4 @@
+<map id="Background" name="Background">
+<area shape="rect" id="node1" title="Entities with this component are the background of the user interface." alt="" coords="5,95,104,121"/>
+<area shape="rect" id="node2" href="$structSprite.html" title=" " alt="" coords="25,5,85,32"/>
+</map>

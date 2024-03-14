@@ -1,0 +1,4 @@
+<map id="Clickable" name="Clickable">
+<area shape="rect" id="node1" title="Entities with this component start an action when clicked on." alt="" coords="5,95,87,121"/>
+<area shape="rect" id="node2" href="$structSprite.html" title=" " alt="" coords="16,5,76,32"/>
+</map>

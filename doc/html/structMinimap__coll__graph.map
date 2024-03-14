@@ -1,0 +1,4 @@
+<map id="Minimap" name="Minimap">
+<area shape="rect" id="node1" title="Component that corresponds to the minimap." alt="" coords="5,95,84,121"/>
+<area shape="rect" id="node2" href="$structSprite.html" title=" " alt="" coords="15,5,75,32"/>
+</map>
