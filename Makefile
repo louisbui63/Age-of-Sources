@@ -28,7 +28,7 @@ doc:
 	make -C doc ./doc
 
 htmldoc :
-	firefox http://127.0.0.1:5500/doc/html/index.html
+	firefox file://$(shell pwd)/doc/html/index.html
 
 clean:
 	rm -rf build/*
