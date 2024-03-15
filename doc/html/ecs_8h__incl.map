@@ -1,8 +1,0 @@
-<map id="ecs.h" name="ecs.h">
-<area shape="rect" id="node1" title=" " alt="" coords="89,5,145,32"/>
-<area shape="rect" id="node2" href="$bitflag_8h.html" title=" " alt="" coords="5,80,80,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="61,155,131,181"/>
-<area shape="rect" id="node4" href="$hash__map_8h.html" title=" " alt="" coords="155,80,256,107"/>
-<area shape="rect" id="node5" href="$linked__list_8h.html" title=" " alt="" coords="155,155,255,181"/>
-<area shape="rect" id="node6" href="$vec_8h.html" title=" " alt="" coords="279,155,337,181"/>
-</map>

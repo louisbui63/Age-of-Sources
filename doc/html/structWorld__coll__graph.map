@@ -1,4 +1,0 @@
-<map id="World" name="World">
-<area shape="rect" id="node1" title="The world structure used to store the different parts of the ECS." alt="" coords="17,109,76,136"/>
-<area shape="rect" id="node2" href="$structHashMap.html" title="A hash map." alt="" coords="5,5,88,32"/>
-</map>
