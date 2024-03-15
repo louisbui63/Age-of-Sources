@@ -1,4 +1,5 @@
 #include "ecs.h"
+#include "../errors.h"
 #include "bitflag.h"
 #include "hash_map.h"
 #include "vec.h"
@@ -59,7 +60,7 @@ int register_component_inner_callback(World *w, int size,
   hash_map_insert_callback(&w->entity_map, u, v, hash_map_entry_free_vecptr);
   w->last_component++;
 
-  return 0;
+  return SUCCESS;
 }
 
 int register_component_inner(World *w, int size) {

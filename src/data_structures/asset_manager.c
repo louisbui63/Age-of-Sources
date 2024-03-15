@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "../errors.h"
 #include "../util.h"
 #include "hash_map.h"
 
@@ -58,15 +59,14 @@ void *get_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
 }
 
 int drop_texture(char *t) {
-  // -1 == INVALID_TEXTURE
   void *tex = hash_map_get(&ASSET_STORE, t);
   if (!tex) {
-    return -1;
+    return INVALID_TEXTURE;
   }
   if (!--((Rc *)tex)->counter) {
     return hash_map_delete_callback(&ASSET_STORE, t, hmase_free);
   }
-  return 0;
+  return SUCCESS;
 }
 
 void init_asset_manager() {

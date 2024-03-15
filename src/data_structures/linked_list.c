@@ -1,4 +1,5 @@
 #include "linked_list.h"
+#include "../errors.h"
 #include <stdlib.h>
 
 LinkedList linked_list_create() {
@@ -6,21 +7,18 @@ LinkedList linked_list_create() {
   return t;
 }
 int linked_list_insert(LinkedList *l, void *o, int p) {
-  //  0 -> SUCCESS
-  // -1 -> MEMORY ALLOCATION ERROR
-  // -2 -> OUT OF BOUND ERROR
   if (!p) {
     void *oh = l->head;
     void *lkaddr = malloc(sizeof(LinkedListLink));
     if (!lkaddr)
-      return -1;
+      return OUT_OF_MEMORY;
     l->head = lkaddr;
     LinkedListLink lk = {o, oh};
     *l->head = lk;
-    return 0;
+    return SUCCESS;
   }
   if (!l->head) {
-    return -2;
+    return INDEX_OUT_OF_RANGE;
   }
   int cp = 0;
   LinkedListLink *cur = l->head;
@@ -28,26 +26,23 @@ int linked_list_insert(LinkedList *l, void *o, int p) {
     if (cur->next)
       cur = cur->next;
     else
-      return -2;
+      return INDEX_OUT_OF_RANGE;
     cp++;
   }
   void *next = cur->next;
   void *lkaddr = malloc(sizeof(LinkedListLink));
   if (!lkaddr)
-    return -1;
+    return OUT_OF_MEMORY;
   cur->next = lkaddr;
   LinkedListLink lk = {o, next};
   *cur->next = lk;
-  return 0;
+  return SUCCESS;
 }
 
 int linked_list_remove_callback(LinkedList *l, int p,
                                 void (*callback)(void *)) {
-  //  0 -> SUCCESS
-  // -1 -> MEMORY ALLOCATION ERROR
-  // -2 -> OUT OF BOUND ERROR
   if (!l->head)
-    return -2;
+    return INDEX_OUT_OF_RANGE;
   if (!p) {
     void *head = 0;
     if (l->head) {
@@ -56,7 +51,7 @@ int linked_list_remove_callback(LinkedList *l, int p,
     }
     free(l->head);
     l->head = head;
-    return 0;
+    return SUCCESS;
   }
   int cp = 0;
   LinkedListLink *cur = l->head;
@@ -64,7 +59,7 @@ int linked_list_remove_callback(LinkedList *l, int p,
     if (cur->next)
       cur = cur->next;
     else
-      return -2;
+      return INDEX_OUT_OF_RANGE;
     cp++;
   }
   void *next = 0;
@@ -74,7 +69,7 @@ int linked_list_remove_callback(LinkedList *l, int p,
   }
   free(cur->next);
   cur->next = next;
-  return 0;
+  return SUCCESS;
 }
 int linked_list_remove(LinkedList *l, int p) {
   return linked_list_remove_callback(l, p, free);
