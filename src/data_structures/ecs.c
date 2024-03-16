@@ -4,7 +4,6 @@
 #include "hash_map.h"
 #include "vec.h"
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -19,29 +18,38 @@ void hash_map_entry_free_vecptr(void *u) {
 }
 
 World world_new() {
-  World a = {vec_new(int), vec_new(void (*)(void *)), vec_new(ComponentWrapper),
-             vec_new(Entity), hash_map_create(hash_u64, eq_u64),
-             // hash_map_create(hash_u64, eq),
-             hash_map_create(hash_u64, eq_u64), 0};
+  World a = {vec_new(int),
+             vec_new(void (*)(void *)),
+             vec_new(ComponentWrapper),
+             vec_new(Entity),
+             hash_map_create(hash_u64, eq_u64),
+             hash_map_create(hash_u64, eq_u64),
+             0,
+             vec_new(uint64_t),
+             vec_new(uint64_t)};
   return a;
 }
 
 void world_free(World *w) {
   for (uint i = 0; i < vec_len(w->components); i++) {
-    uint id = w->components[i].type_id;
-    (w->component_free[id])(w->components[i].component);
+    if (w->components[i].component) {
+      uint id = w->components[i].type_id;
+      (w->component_free[id])(w->components[i].component);
+    }
   }
   vec_free(w->component_sizes);
   vec_free(w->component_free);
   vec_free(w->components);
   Entity *u = w->entities;
   for (uint i = 0; i < vec_len(w->entities); i++) {
-    vec_free(u[i].components);
+    if (u[i].components)
+      vec_free(u[i].components);
   }
   vec_free(w->entities);
   hash_map_free_callback(&w->entity_map, hash_map_entry_free_vecptr);
   hash_map_free(&w->component2entity);
-  // hash_map_free(&w->entity2component);
+  vec_free(w->entity_sparsity);
+  vec_free(w->component_sparsity);
 }
 
 int register_component_inner_callback(World *w, int size,
@@ -53,12 +61,15 @@ int register_component_inner_callback(World *w, int size,
   vec_push(w->component_free, callback);
   Bitflag *u = malloc(sizeof(Bitflag));
   *u = 1 << w->last_component;
-  // HashMap *a = malloc(sizeof(HashMap));
-  // *a = hash_map_create(hash_u64, eq);
   void **v = malloc(sizeof(uintptr_t));
   *v = vec_new(uint64_t);
   hash_map_insert_callback(&w->entity_map, u, v, hash_map_entry_free_vecptr);
   w->last_component++;
+
+  uint64_t x = UINT64_MAX;
+  for (uint i = 0; i < vec_len(w->entities); i++) {
+    vec_push(w->entities[i].components, x);
+  }
 
   return SUCCESS;
 }
@@ -71,10 +82,12 @@ void register_system_requirement(World *w, Bitflag b) {
   uint64_t *g = vec_new(uint64_t);
   for (uint i = 0; i < vec_len(w->entities); i++) {
     Bitflag nb = b;
-    for (uint j = 0; j < vec_len(w->entities[i].components); j++) {
-      ComponentWrapper c = w->entities[i].components[j];
-      if (bitflag_get(nb, c.type_id)) {
-        nb = bitflag_set(nb, c.type_id, 0);
+    for (uint j = 0; j < w->last_component; j++) {
+      if (w->entities[i].components[j] != UINT64_MAX) {
+        ComponentWrapper c = w->components[w->entities[i].components[j]];
+        if (bitflag_get(nb, c.type_id)) {
+          nb = bitflag_set(nb, c.type_id, 0);
+        }
       }
     }
     if (!nb) {
@@ -89,18 +102,47 @@ void register_system_requirement(World *w, Bitflag b) {
 }
 
 Entity *spawn_entity(World *w) {
+  VEC(uint64_t) cmps = vec_new(uint64_t);
+  uint64_t x = UINT64_MAX;
+  for (uint i = 0; i < w->last_component; i++) {
+    vec_push(cmps, x);
+  }
+
+  if (vec_len(w->entity_sparsity)) {
+    uint loc = vec_last(w->entity_sparsity);
+    vec_pop(w->entity_sparsity);
+    w->entities[loc] = (Entity){
+        loc,
+        cmps,
+    };
+    return &w->entities[loc];
+  }
+
   Entity e = {
       vec_len(w->entities),
-      vec_new(ComponentWrapper),
+      cmps,
   };
   vec_push(w->entities, e);
   return &w->entities[vec_len(w->entities) - 1];
 }
 
 void ecs_add_component(World *w, Entity *e, int cid, void *c) {
-  ComponentWrapper cw = {vec_len(w->components), cid, c};
-  vec_push(w->components, cw);
-  vec_push(e->components, cw);
+  uint emp;
+  uint8_t new = 1;
+  if (vec_len(w->component_sparsity)) {
+    emp = vec_last(w->component_sparsity);
+    vec_pop(w->component_sparsity);
+    new = 0;
+  } else
+    emp = vec_len(w->components);
+
+  ComponentWrapper cw = {emp, cid, c};
+  e->components[cid] = emp;
+
+  if (new)
+    vec_push(w->components, cw);
+  else
+    w->components[emp] = cw;
 
   uint64_t *cwid = malloc(sizeof(uint64_t)), *eid = malloc(sizeof(uint64_t));
   *cwid = cw.id;
@@ -117,10 +159,17 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
       HashMapEntry *he = cur->data;
       if (bitflag_get(*(Bitflag *)he->key, cid)) {
         Bitflag expected = bitflag_set(*(Bitflag *)he->key, cid, 0);
-        for (uint j = 0; j < vec_len(e->components); j++) {
-          expected = bitflag_set(expected, e->components[j].type_id, 0);
+        char failed = 0;
+        uint j = 0;
+        while (expected && !failed) {
+          if (expected & 1 && e->components[j] == UINT64_MAX) {
+            failed = 1;
+            break;
+          }
+          expected >>= 1;
+          j++;
         }
-        if (!expected) {
+        if (!failed) {
           vec_push(to_add, *(Bitflag *)he->key);
         }
       }
@@ -128,11 +177,8 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
       cur = nc;
     }
     for (uint i = 0; i < vec_len(to_add); i++) {
-      // Bitflag *u = malloc(sizeof(Bitflag));
-      // *u = to_add[i];
       uint64_t **es = hash_map_get(&w->entity_map, &to_add[i]);
       vec_push(*es, e->id);
-      // free(u);
     }
     vec_free(to_add);
   }
@@ -141,52 +187,13 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c) {
 void despawn_entity(World *w, Entity *e) {
   uint64_t id = e->id;
 
-  // free associated components
-  HashMap /*<uint64_t,int>*/ ccor = hash_map_create(hash_u64, eq_u64);
-
   for (uint i = 0; i < vec_len(e->components); i++) {
-    uint64_t ecid = e->components[i].id;
-    int *y = hash_map_get(&ccor, &ecid);
-    if (y) {
-#ifndef NDEBUG
-      if (*y == -1)
-        fprintf(stderr, "unreachable\n");
-#endif
-      ecid = *y;
-    }
-    uint64_t *c = malloc(sizeof(uint64_t));
-    *c = ecid;
-    int *a = malloc(sizeof(int));
-    *a = -1;
-    hash_map_insert(&ccor, c, a);
-    if (ecid != vec_len(w->components) - 1) {
-      vec_swap(w->components, ecid, vec_len(w->components) - 1);
-      w->components[ecid].id = ecid;
-      uint64_t *b = malloc(sizeof(uint64_t));
-      *b = vec_len(w->components) - 1;
-      int *c = malloc(sizeof(int));
-      *c = ecid;
-      hash_map_insert(&ccor, b, c);
-    }
-    (w->component_free[w->components[vec_len(w->components) - 1].type_id])(
-        w->components[vec_len(w->components) - 1].component);
-    vec_pop(w->components);
-  }
-
-  for (uint i = 0; i < vec_len(w->entities); i++) {
-    if (w->entities[i].id == e->id)
-      continue;
-    for (uint j = 0; j < vec_len(w->entities[i].components); j++) {
-      uint64_t ecid = w->entities[i].components[j].id;
-      int *y = hash_map_get(&ccor, &ecid);
-      if (y) {
-#ifndef NDEBUG
-        if (*y == -1)
-          fprintf(stderr, "unreachable\n");
-#endif
-        ecid = *y;
-      }
-      w->entities[i].components[j].id = ecid;
+    if (e->components[i] != UINT64_MAX) {
+      uint64_t cid = e->components[i];
+      w->component_free[w->components[cid].type_id](
+          w->components[cid].component);
+      w->components[cid].component = 0;
+      vec_push(w->component_sparsity, w->components[cid].id);
     }
   }
 
@@ -201,72 +208,14 @@ void despawn_entity(World *w, Entity *e) {
           vec_swap(uwu, i, vec_len(uwu) - 1);
           vec_pop(uwu);
         }
-        if (uwu[i] == vec_len(w->entities) - 1) {
-          uwu[i] = e->id;
-        }
       }
       cur = next;
     }
   }
 
-  // update component2entity
-  for (uint i = 0; i < w->component2entity.length; i++) {
-    LinkedListLink *cur = w->component2entity.bucket[i].head;
-    LinkedListLink *prev = w->component2entity.bucket[i].head;
-    char beg = 1;
-    while (cur) {
-      LinkedListLink *next = cur->next;
-      int64_t ecid = *(uint64_t *)((HashMapEntry *)cur->data)->key;
-      int *y = hash_map_get(&ccor, &ecid);
-      if (y) {
-        ecid = *y;
-      }
-      if (ecid == -1) {
-        if (beg) {
-          w->component2entity.bucket[i].head = next;
-          beg = 2;
-        } else
-          prev->next = next;
-        HashMapEntry *entry = cur->data;
-        free(entry->key);
-        free(entry->value);
-        free(entry);
-        free(cur);
-      } else if ((uint64_t)ecid !=
-                 *(uint64_t *)((HashMapEntry *)cur->data)->key) {
-        if (beg)
-          w->component2entity.bucket[i].head = next;
-        else
-          prev->next = next;
-        *(uint64_t *)((HashMapEntry *)cur->data)->key = ecid;
-        uint64_t h = hash_u64(&ecid);
-        ((HashMapEntry *)cur->data)->hash = h;
-
-        cur->next =
-            w->component2entity.bucket[h % w->component2entity.length].head;
-        w->component2entity.bucket[h % w->component2entity.length].head = cur;
-      }
-      if (beg)
-        beg--;
-      prev = cur;
-      cur = next;
-    }
-  }
-
-  hash_map_free(&ccor);
-
-  // UintPair out = {vec_len(w->entities) - 1, id};
-
+  vec_push(w->entity_sparsity, id);
   vec_free(e->components);
-
-  // free the entity
-  if (id != vec_len(w->entities) - 1) {
-    vec_swap(w->entities, id, vec_len(w->entities) - 1);
-    w->entities[id].id = id;
-  }
-  vec_pop(w->entities);
-
-  // return out;
+  e->components = 0;
 }
 Entity *get_entity(World *w, EntityRef ref) { return &w->entities[ref]; }
 EntityRef *world_query(World *w, Bitflag *b) {
@@ -276,11 +225,8 @@ EntityRef **world_query_mut(World *w, Bitflag *b) {
   return (EntityRef **)hash_map_get(&w->entity_map, b);
 }
 
-void *entity_get_component(Entity *e, int type) {
-  for (uint i = 0; i < vec_len(e->components); i++) {
-    ComponentWrapper cw = e->components[i];
-    if (cw.type_id == type)
-      return cw.component;
-  }
-  return 0;
+void *entity_get_component(World *w, Entity *e, int type) {
+  if (e->components[type] == UINT64_MAX)
+    return 0;
+  return w->components[e->components[type]].component;
 }
