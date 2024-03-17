@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "components.h"
+#include "data_structures/ecs.h"
 #include "data_structures/vec.h"
 #include "input.h"
 
@@ -34,11 +35,8 @@ void inputs_run_callbacks(World *w, Inputs *in, KeyState ks) {
     EntityRef *entities = world_query(w, &b);
     for (uint i = 0; i < vec_len(entities); i++) {
       Entity *e = get_entity(w, entities[i]);
-      for (uint j = 0; j < vec_len(e->components); j++) {
-        if (e->components[j].type_id == COMP_KEY_EVENT) {
-          (*(KeyEvent *)e->components[j].component)(e, in, ks);
-        }
-      }
+      KeyEvent *ke = entity_get_component(w, e, COMP_KEY_EVENT);
+      (*ke)(e, in, ks);
     }
   }
 }

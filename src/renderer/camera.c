@@ -24,8 +24,8 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam) {
   EntityRef *er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
-    Sprite *s = entity_get_component(e, COMP_SPRITE);
-    Position *p = entity_get_component(e, COMP_POSITION);
+    Sprite *s = entity_get_component(w, e, COMP_SPRITE);
+    Position *p = entity_get_component(w, e, COMP_POSITION);
 
     Position tr = {.x = s->rect->w - s->rect->x, .y = s->rect->h - s->rect->y};
 

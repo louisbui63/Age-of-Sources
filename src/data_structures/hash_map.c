@@ -1,4 +1,5 @@
 #include "hash_map.h"
+#include "../errors.h"
 #include "../util.h"
 #include "linked_list.h"
 #include <stdlib.h>
@@ -54,6 +55,8 @@ HashMap hash_map_create(uint64_t (*h)(void *), char (*c)(void *, void *)) {
 int grow(HashMap *h) {
   uint64_t ns = h->length * 2;
   LinkedList *nb = malloc(sizeof(LinkedList) * ns);
+  if (!nb)
+    return OUT_OF_MEMORY;
   for (uint i = 0; i < ns; i++) {
     // todo : replace this with a more efficient init routine
     LinkedList tmp = {0};
@@ -76,13 +79,15 @@ int grow(HashMap *h) {
   free(h->bucket);
   h->length *= 2;
   h->bucket = nb;
-  return 0;
+  return SUCCESS;
 }
 int shrink(HashMap *h) {
   uint64_t ns = h->length / 2;
   if (ns < HASHMAP_DEFAULT_LENGTH)
-    return 0;
+    return SUCCESS;
   LinkedList *nb = malloc(sizeof(LinkedList) * ns);
+  if (!nb)
+    return OUT_OF_MEMORY;
   for (uint i = 0; i < ns; i++) {
     // todo : replace this with a more efficient init routine
     LinkedList tmp = {0};
@@ -105,7 +110,7 @@ int shrink(HashMap *h) {
   free(h->bucket);
   h->length /= 2;
   h->bucket = nb;
-  return 0;
+  return SUCCESS;
 }
 
 int hash_map_insert_callback(HashMap *h, void *k, void *v,
@@ -115,6 +120,8 @@ int hash_map_insert_callback(HashMap *h, void *k, void *v,
   uint64_t bplace = hash % h->length;
 
   HashMapEntry *et = malloc(sizeof(HashMapEntry));
+  if (!et)
+    return OUT_OF_MEMORY;
   HashMapEntry temp = {k, v, hash};
   *et = temp;
   int err = linked_list_insert(&h->bucket[bplace], et, 0);
@@ -125,7 +132,7 @@ int hash_map_insert_callback(HashMap *h, void *k, void *v,
   if ((float)h->size / (float)h->length > HASHMAP_OCCUP_MAX) {
     return grow(h);
   }
-  return 0;
+  return SUCCESS;
 }
 
 void *hash_map_get(HashMap *h, void *k) {
@@ -154,7 +161,7 @@ int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *)) {
   uint64_t td = h->hash_function(k) % (uint64_t)h->length;
   LinkedList u = h->bucket[td];
   if (!u.head) {
-    return 0;
+    return SUCCESS;
   }
   if (h->comp_function(k, ((HashMapEntry *)(u.head->data))->key)) {
     void *next = u.head->next;
@@ -182,7 +189,7 @@ int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *)) {
     return shrink(h);
   }
 
-  return 0;
+  return SUCCESS;
 }
 
 void hash_map_free_callback(HashMap *h, void (*callback)(void *)) {

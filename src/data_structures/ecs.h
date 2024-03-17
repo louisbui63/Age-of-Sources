@@ -28,7 +28,7 @@ typedef struct {
   // this should probably be replaced by a simple array that acts as a primitive
   // hashmap
   //! A vector of `ComponentWrapper` containing the entity's components
-  VEC(ComponentWrapper) components;
+  VEC(uint64_t) components;
 } Entity;
 
 //! The world structure used to store the different parts of the ECS
@@ -51,9 +51,12 @@ typedef struct {
   //! components'ids and the values are entities'ids. It establishes for each
   //! component the list of the entities currently linked to it
   HashMap /*<uint64_t, uint64_t>*/ component2entity;
-  // HashMap /*<uint64_t, uint64_t>*/ entity2component;
   //! Indicates the id the next component to be added should take
   uint last_component;
+  //! Stores the available spaces in `components` that entity deletion created
+  VEC(uint) component_sparsity;
+  //! Stores the available spaces in `entities` that entity deletion created
+  VEC(uint) entity_sparsity;
 } World;
 
 //! Returns a normalized boolean (0 or 1) indicating if the two arguments are
@@ -107,4 +110,4 @@ VEC(EntityRef) * world_query_mut(World *w, Bitflag *b);
 //! Returns a pointer to the component of type `type` linked to the `Entity`, if
 //! no component of this type is linked the the `Entity` the NULL pointer is
 //! returned
-void *entity_get_component(Entity *e, int type);
+void *entity_get_component(World *w, Entity *e, int type);

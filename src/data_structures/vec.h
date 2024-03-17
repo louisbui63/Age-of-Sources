@@ -52,3 +52,6 @@ void vec_remove(void *vec, int a);
 
 //! copies `vec` and returns the copy
 VEC(void) vec_copy(VEC(void) vec);
+
+//! expands to the last element of the `vec`
+#define vec_last(a) (a)[vec_len((a)) - 1]
