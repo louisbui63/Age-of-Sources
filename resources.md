@@ -20,4 +20,4 @@ Books and articles :
 
 - Game AI Pro 360: Guide to Movement and Pathfinding - Steve Rabin - 2019
 - Steering Behaviors For Autonomous Characters - Craig W. Reynolds - 2002
-- Game Engine Architecture - Jason Gregory - 2018
+- Game Engine Architecture, 3rd edition - Jason Gregory - 2018
