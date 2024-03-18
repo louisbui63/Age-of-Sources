@@ -5,7 +5,6 @@
 #include "../src/util.h"
 #include <stdint.h>
 #include <stdlib.h>
-#include <time.h>
 
 typedef struct {
   int y;
