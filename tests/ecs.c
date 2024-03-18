@@ -5,6 +5,7 @@
 #include "../src/util.h"
 #include <stdint.h>
 #include <stdlib.h>
+#include <time.h>
 
 typedef struct {
   int y;
@@ -65,6 +66,16 @@ int test_ecs() {
     ok |= 1 << predicted;
   }
   ASSERT(ok == 0xffffffff);
+
+  clock_t b = clock();
+  ok = 0;
+  parallelize_query(er, {
+    Entity *e = get_entity(&w, ei);
+    TestComp *c = entity_get_component(&w, e, 0);
+    ok |= 1 << c->y;
+  });
+  ASSERT(ok = 0xffffffff);
+  printf("%f\n", (double)(clock() - b) / CLOCKS_PER_SEC);
 
   uint32_t u = 0;
   EntityRef **err = world_query_mut(&w, &d);
