@@ -67,15 +67,27 @@ int test_ecs() {
   }
   ASSERT(ok == 0xffffffff);
 
-  clock_t b = clock();
   ok = 0;
-  parallelize_query(er, {
-    Entity *e = get_entity(&w, ei);
-    TestComp *c = entity_get_component(&w, e, 0);
-    ok |= 1 << c->y;
+  TIME("parallel query", {
+    parallelize_query(er, {
+      sleep_nano(100'000'000);
+      Entity *e = get_entity(&w, ei);
+      TestComp *c = entity_get_component(&w, e, 0);
+      ok |= 1 << c->y;
+    });
   });
   ASSERT(ok = 0xffffffff);
-  printf("%f\n", (double)(clock() - b) / CLOCKS_PER_SEC);
+
+  ok = 0;
+  TIME("sequential query", {
+    for (uint i = 0; i < vec_len(er); i++) {
+      sleep_nano(100'000'000);
+      Entity *e = get_entity(&w, er[i]);
+      TestComp *c = entity_get_component(&w, e, 0);
+      ok |= 1 << c->y;
+    }
+  });
+  ASSERT(ok = 0xffffffff);
 
   uint32_t u = 0;
   EntityRef **err = world_query_mut(&w, &d);
