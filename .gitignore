@@ -4,5 +4,5 @@ test
 massif.out.*
 cachegrind.out.*
 .vscode
-latex
-html
+doc/latex
+doc/html

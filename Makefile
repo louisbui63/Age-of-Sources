@@ -25,8 +25,10 @@ format:
 	./format.sh
 
 doc:
-	doxygen Doxyfile
-	make -C ./latex
+	make -C doc ./doc
+
+htmldoc :
+	firefox file://$(shell pwd)/doc/html/index.html
 
 clean:
 	rm -rf build/*
