@@ -117,8 +117,11 @@ void *entity_get_component(World *w, Entity *e, int type);
 //! Expands to a parallel query on the elements of `erefs`. `erefs` is expected
 //! to be the return value of `world_query`, and must be a glvalue. Commands are
 //! executed with the understanding that they can access the element they work
-//! on with `ei`. Note that Valgrind will detect some "possibly lost memory".
-//! This is intended behavior, see
+//! on with `ei`.
+//! Note that spawning the threads is a significant overhead. For trivial cases,
+//! using the sequential method can be faster. If unsure, use `TIME` to
+//! benchmark both usecases. Note that Valgrind will detect some "possibly lost
+//! memory". This is intended behavior, see
 //! `https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36298`
 #define parallelize_query(erefs, commands)                                     \
   {                                                                            \
