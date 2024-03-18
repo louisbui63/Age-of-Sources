@@ -66,6 +66,28 @@ int test_ecs() {
   }
   ASSERT(ok == 0xffffffff);
 
+  ok = 0;
+  TIME("parallel query", {
+    parallelize_query(er, {
+      sleep_nano(100'000'000);
+      Entity *e = get_entity(&w, ei);
+      TestComp *c = entity_get_component(&w, e, 0);
+      ok |= 1 << c->y;
+    });
+  });
+  ASSERT(ok = 0xffffffff);
+
+  ok = 0;
+  TIME("sequential query", {
+    for (uint i = 0; i < vec_len(er); i++) {
+      sleep_nano(100'000'000);
+      Entity *e = get_entity(&w, er[i]);
+      TestComp *c = entity_get_component(&w, e, 0);
+      ok |= 1 << c->y;
+    }
+  });
+  ASSERT(ok = 0xffffffff);
+
   uint32_t u = 0;
   EntityRef **err = world_query_mut(&w, &d);
   ASSERT(err);

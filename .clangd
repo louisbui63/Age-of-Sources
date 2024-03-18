@@ -1,5 +1,5 @@
 CompileFlags:
-  Add: [-Wall, -std=c2x, -Wextra, -pedantic, -O2]
+  Add: [-Wall, -std=gnu2x, -Wextra, -pedantic, -O2]
 ---
 If:
   PathMatch: .*\.h
