@@ -129,7 +129,7 @@ void *entity_get_component(World *w, Entity *e, int type);
       _Pragma("omp for") {                                                     \
         for (uint i = 0; i < vec_len(erefs); i++) {                            \
           EntityRef ei = erefs[i];                                             \
-          commands                                                             \
+          commands;                                                            \
         }                                                                      \
       }                                                                        \
     }                                                                          \
