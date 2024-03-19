@@ -99,8 +99,10 @@ void despawn_entity(World *w, Entity *e);
 //! Returns an `Entity` pointer corresponding to the passed reference
 Entity *get_entity(World *w, EntityRef ref);
 //! Returns a vector of `EntityRef` referencing entities corresponding to the
-//! system described by the `Bitflag` argument. The system needs to be
-//! registered using `register_system_requirement` before using this function
+//! system described by the `Bitflag` argument. If you want to modify the
+//! `World` based on the return value of this function, use `world_query_mut`
+//! instead. The system needs to be registered using
+//! `register_system_requirement` before using this function
 VEC(EntityRef) world_query(World *w, Bitflag *b);
 //! Returns a pointer to a vector of `EntityRef` referencing entities
 //! corresponding to the system described by the `Bitflag` argument. The system
@@ -111,3 +113,24 @@ VEC(EntityRef) * world_query_mut(World *w, Bitflag *b);
 //! no component of this type is linked the the `Entity` the NULL pointer is
 //! returned
 void *entity_get_component(World *w, Entity *e, int type);
+
+//! Expands to a parallel query on the elements of `erefs`. `erefs` is expected
+//! to be the return value of `world_query`, and must be a glvalue. Commands are
+//! executed with the understanding that they can access the element they work
+//! on with `ei`.
+//! Note that spawning the threads is a significant overhead. For trivial cases,
+//! using the sequential method can be faster. If unsure, use `TIME` to
+//! benchmark both usecases. Note that Valgrind will detect some "possibly lost
+//! memory". This is intended behavior, see
+//! `https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36298`
+#define parallelize_query(erefs, commands)                                     \
+  {                                                                            \
+    _Pragma("omp parallel") {                                                  \
+      _Pragma("omp for") {                                                     \
+        for (uint i = 0; i < vec_len(erefs); i++) {                            \
+          EntityRef ei = erefs[i];                                             \
+          commands;                                                            \
+        }                                                                      \
+      }                                                                        \
+    }                                                                          \
+  }
