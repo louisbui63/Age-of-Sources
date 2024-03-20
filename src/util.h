@@ -16,7 +16,7 @@
   }
 
 //! The frametime that the game should try to maintain, in milliseconds
-#define TARGET_FRAMETIME (1000 / 60)
+#define TARGET_FRAMETIME (1000.0 / 60.0)
 
 //! Verify that `a != 0`. Otherwise, prints an error and exits the current
 //! function with error `-1`
@@ -54,3 +54,17 @@ typedef unsigned int uint;
 
 #define max(a, b) ((a > b) ? (a) : (b))
 #define min(a, b) ((a < b) ? (a) : (b))
+
+typedef struct {
+  float x;
+  float y;
+} Vec2;
+
+#define v2op_dec(name) Vec2 v2##name(Vec2 a, Vec2 b)
+
+v2op_dec(sub);
+v2op_dec(add);
+Vec2 v2normalize(Vec2 a);
+Vec2 v2mul(float a, Vec2 b);
+float v2angle(Vec2 a);
+float v2len(Vec2 a);
