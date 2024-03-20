@@ -8,7 +8,7 @@
 #include "input.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
-#include "ui.h"
+#include "renderer/ui.h"
 #include "util.h"
 
 int main() {

@@ -1,6 +1,6 @@
 //! @file ui.h
 #pragma once
-#include "ecs.h"
+#include "../data_structures/ecs.h"
 #include "sprite.h"
 
 //! Entities with this component are the background of the user interface
