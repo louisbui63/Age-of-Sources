@@ -124,5 +124,7 @@ int test_input() {
   inputs_free(in);
   world_free(&w);
 
+  world_free(&w);
+
   return 0;
 }

@@ -49,25 +49,44 @@ int test_ecs() {
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(&w, er[i]);
     int predicted = -1;
-    for (uint j = 0; j < vec_len(e->components); j++) {
-      ComponentWrapper cw = e->components[j];
-      if (cw.type_id == 0) {
-        TestComp *tc = cw.component;
-        ASSERT(tc->y == 2 * tc->uwu);
-        if (predicted == -1)
-          predicted = tc->y;
-        ASSERT(predicted == tc->y);
-      } else if (cw.type_id == 2) {
-        uint8_t *tc = cw.component;
-        if (predicted == -1)
-          predicted = *tc - 1;
-        ASSERT(predicted != (int)*tc);
-      }
-    }
+    TestComp *c1 = entity_get_component(&w, e, 0);
+    ASSERT(c1);
+    ASSERT(c1->y == 2 * c1->uwu);
+    if (predicted == -1)
+      predicted = c1->y;
+    ASSERT(predicted == c1->y)
+    uint8_t *c2 = entity_get_component(&w, e, 2);
+    ASSERT(c2);
+    ASSERT(c1->y == 2 * c1->uwu);
+    if (predicted == -1)
+      predicted = *c2 - 1;
+    ASSERT(predicted != (int)*c2)
     ASSERT(predicted != -1 && predicted < 32);
     ok |= 1 << predicted;
   }
   ASSERT(ok == 0xffffffff);
+
+  ok = 0;
+  TIME("parallel query", {
+    parallelize_query(er, {
+      sleep_nano(100'000'000);
+      Entity *e = get_entity(&w, ei);
+      TestComp *c = entity_get_component(&w, e, 0);
+      ok |= 1 << c->y;
+    });
+  });
+  ASSERT(ok = 0xffffffff);
+
+  ok = 0;
+  TIME("sequential query", {
+    for (uint i = 0; i < vec_len(er); i++) {
+      sleep_nano(100'000'000);
+      Entity *e = get_entity(&w, er[i]);
+      TestComp *c = entity_get_component(&w, e, 0);
+      ok |= 1 << c->y;
+    }
+  });
+  ASSERT(ok = 0xffffffff);
 
   uint32_t u = 0;
   EntityRef **err = world_query_mut(&w, &d);
@@ -75,7 +94,7 @@ int test_ecs() {
   ASSERT(vec_len(*err) == 15);
   while (vec_len(*err) > 0) {
     Entity *e = get_entity(&w, *err[0]);
-    u |= 1 << ((TestComp *)e->components[0].component)->y;
+    u |= 1 << ((TestComp *)entity_get_component(&w, e, 0))->y;
     despawn_entity(&w, e);
   }
 
@@ -84,10 +103,14 @@ int test_ecs() {
   ASSERT(vec_len(er) == 17);
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(&w, er[i]);
-    u |= 1 << ((TestComp *)e->components[0].component)->y;
+    u |= 1 << ((TestComp *)entity_get_component(&w, e, 0))->y;
   }
 
   ASSERT(u == 0xffffffff);
+
+  float *uwu = malloc(sizeof(float));
+  Entity *e = spawn_entity(&w);
+  ecs_add_component(&w, e, 0, uwu);
 
   world_free(&w);
   return 0;

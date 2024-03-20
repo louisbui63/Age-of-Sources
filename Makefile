@@ -1,6 +1,6 @@
 CC = clang
 
-CFLAGS = -std=c2x -Wall -Wextra -pedantic -O2 #-Isrc
+CFLAGS = -std=gnu2x -Wall -Wextra -pedantic -O2 -fopenmp=libomp #-Isrc
 
 LIBS = $(shell pkg-config --cflags --libs sdl2)
 
@@ -25,8 +25,10 @@ format:
 	./format.sh
 
 doc:
-	doxygen Doxyfile
-	make -C ./latex
+	make -C doc ./doc
+
+htmldoc :
+	firefox file://$(shell pwd)/doc/html/index.html
 
 clean:
 	rm -rf build/*
