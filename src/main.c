@@ -30,7 +30,11 @@ int main() {
   });
 
   SDL_Surface *test_bmp = SDL_LoadBMP("test.bmp");
-  HANDLE_ERROR(!test_bmp, SDL_GetError(), { SDL_DestroyRenderer(renderer); })
+  HANDLE_ERROR(!test_bmp, SDL_GetError(), {
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    abort();
+  })
 
   SDL_Texture *test_tex = SDL_CreateTextureFromSurface(renderer, test_bmp);
   HANDLE_ERROR(!test_tex, SDL_GetError(), {
