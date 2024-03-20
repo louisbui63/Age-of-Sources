@@ -36,7 +36,17 @@ void inputs_run_callbacks(World *w, Inputs *in, KeyState ks) {
     for (uint i = 0; i < vec_len(entities); i++) {
       Entity *e = get_entity(w, entities[i]);
       KeyEvent *ke = entity_get_component(w, e, COMP_KEY_EVENT);
-      (*ke)(e, in, ks);
+      (*ke)(w, e, in, ks);
     }
+  }
+}
+
+Uint8 mouse_in_rect(SDL_Rect *rect) {
+  SDL_Point mouse_position;
+  SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
+  if (SDL_PointInRect(&mouse_position, rect)) {
+    return 1;
+  } else {
+    return 0;
   }
 }
