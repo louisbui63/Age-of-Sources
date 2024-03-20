@@ -40,3 +40,13 @@ void inputs_run_callbacks(World *w, Inputs *in, KeyState ks) {
     }
   }
 }
+
+Uint8 mouse_in_rect(SDL_Rect *rect) {
+  SDL_Point mouse_position;
+  SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
+  if (SDL_PointInRect(&mouse_position, rect)) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
