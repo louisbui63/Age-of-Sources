@@ -1,0 +1,43 @@
+\hypertarget{camera_8h}{}\doxysubsection{camera.\+h File Reference}
+\label{camera_8h}\index{camera.h@{camera.h}}
+{\ttfamily \#include \char`\"{}ecs.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$S\+D\+L2/\+S\+D\+L\+\_\+render.\+h$>$}\newline
+Include dependency graph for camera.\+h\+:
+% FIG 0
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structCamera}{Camera}}
+\item 
+struct \mbox{\hyperlink{structPosition}{Position}}
+\begin{DoxyCompactList}\small\item\em A component that contains the world space coordinates of an entity. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{camera_8h_ae893136b52eb3d95f3a310c3900ae42b}\label{camera_8h_ae893136b52eb3d95f3a310c3900ae42b}} 
+\#define \mbox{\hyperlink{camera_8h_ae893136b52eb3d95f3a310c3900ae42b}{W\+I\+N\+\_\+H}}~360
+\begin{DoxyCompactList}\small\item\em The main window\textquotesingle{}s height. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{camera_8h_a23f7b870356588ddfcc49a1c364cba5e}\label{camera_8h_a23f7b870356588ddfcc49a1c364cba5e}} 
+\#define \mbox{\hyperlink{camera_8h_a23f7b870356588ddfcc49a1c364cba5e}{W\+I\+N\+\_\+W}}~640
+\begin{DoxyCompactList}\small\item\em The main window\textquotesingle{}s width. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{camera_8h_a29c94f21b1467006a260202f6ba3f19d}\label{camera_8h_a29c94f21b1467006a260202f6ba3f19d}} 
+\mbox{\hyperlink{structPosition}{Position}} \mbox{\hyperlink{camera_8h_a29c94f21b1467006a260202f6ba3f19d}{world2screenspace}} (\mbox{\hyperlink{structPosition}{Position}} $\ast$p, \mbox{\hyperlink{structCamera}{Camera}} $\ast$cam)
+\begin{DoxyCompactList}\small\item\em Transfers {\ttfamily p} to screenspace, according to {\ttfamily cam} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{camera_8h_a1409529c6e5eead29d6f17d27e28e493}\label{camera_8h_a1409529c6e5eead29d6f17d27e28e493}} 
+\mbox{\hyperlink{structPosition}{Position}} \mbox{\hyperlink{camera_8h_a1409529c6e5eead29d6f17d27e28e493}{screen2worldspace}} (\mbox{\hyperlink{structPosition}{Position}} $\ast$p, \mbox{\hyperlink{structCamera}{Camera}} $\ast$cam)
+\begin{DoxyCompactList}\small\item\em Transfers {\ttfamily p} to worldspace, according to {\ttfamily cam} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{camera_8h_a5ac74cd8eb305ea9ada55fe5e18948bb}{render}} (\mbox{\hyperlink{structWorld}{World}} $\ast$w, S\+D\+L\+\_\+\+Renderer $\ast$rdr, \mbox{\hyperlink{structCamera}{Camera}} $\ast$cam)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{camera_8h_a5ac74cd8eb305ea9ada55fe5e18948bb}\label{camera_8h_a5ac74cd8eb305ea9ada55fe5e18948bb}} 
+\index{camera.h@{camera.h}!render@{render}}
+\index{render@{render}!camera.h@{camera.h}}
+\doxyparagraph{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily void render (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structWorld}{World}} $\ast$}]{w,  }\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{rdr,  }\item[{\mbox{\hyperlink{structCamera}{Camera}} $\ast$}]{cam }\end{DoxyParamCaption})}
+
+Renders any entity with a {\ttfamily \mbox{\hyperlink{structPosition}{Position}}} and a {\ttfamily \mbox{\hyperlink{structSprite}{Sprite}}}, according to {\ttfamily cam}. Said position must be in worldspace coordinates 

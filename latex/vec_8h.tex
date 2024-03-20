@@ -1,0 +1,92 @@
+\hypertarget{vec_8h}{}\doxysubsection{vec.\+h File Reference}
+\label{vec_8h}\index{vec.h@{vec.h}}
+{\ttfamily \#include \char`\"{}util.\+h\char`\"{}}\newline
+This graph shows which files directly or indirectly include this file\+:
+% FIG 0
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{vec_8h_a7c6b749e60d8eb95d67f14a1da467f00}{V\+EC}}(x)~x $\ast$
+\item 
+\mbox{\Hypertarget{vec_8h_a0c6042d88b59f955a90c3d2104e58adc}\label{vec_8h_a0c6042d88b59f955a90c3d2104e58adc}} 
+\#define \mbox{\hyperlink{vec_8h_a0c6042d88b59f955a90c3d2104e58adc}{V\+E\+C\+\_\+\+I\+N\+I\+T\+\_\+\+C\+A\+P\+A\+C\+I\+TY}}~16
+\begin{DoxyCompactList}\small\item\em The length of a {\ttfamily vec} at creation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{vec_8h_a1197a3388ee3b9ca694f56987f8c209a}\label{vec_8h_a1197a3388ee3b9ca694f56987f8c209a}} 
+\#define \mbox{\hyperlink{vec_8h_a1197a3388ee3b9ca694f56987f8c209a}{vec\+\_\+new}}(type)~(vec\+\_\+new\+\_\+inner(sizeof(type)))
+\begin{DoxyCompactList}\small\item\em Creates a new {\ttfamily vec} for type {\ttfamily type} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{vec_8h_ab9063457e7162cf8e4bfa0697b69dc5a}\label{vec_8h_ab9063457e7162cf8e4bfa0697b69dc5a}} 
+\#define \mbox{\hyperlink{vec_8h_ab9063457e7162cf8e4bfa0697b69dc5a}{vec\+\_\+push}}(vec,  obj)~vec = (vec\+\_\+push\+\_\+inner(((void $\ast$)(vec)), (void $\ast$)\&(obj)))
+\begin{DoxyCompactList}\small\item\em adds a copy of {\ttfamily obj} at the end of {\ttfamily vec} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}{V\+EC}} (void) vec\+\_\+copy(V\+EC(void) vec)
+\begin{DoxyCompactList}\small\item\em copies {\ttfamily vec} and returns the copy \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{vec_8h_ad7c0cfa1066f95e2aba64299fc1d76fa}\label{vec_8h_ad7c0cfa1066f95e2aba64299fc1d76fa}} 
+void \mbox{\hyperlink{vec_8h_ad7c0cfa1066f95e2aba64299fc1d76fa}{vec\+\_\+free}} (\mbox{\hyperlink{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}{V\+EC}}(void) vec)
+\begin{DoxyCompactList}\small\item\em frees a {\ttfamily vec}. This should always be used instead of {\ttfamily free(vec)} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vec_8h_ac761f14c4ebb9d8c0952b309f22e82f8}{vec\+\_\+pop}} (\mbox{\hyperlink{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}{V\+EC}}(void) vec)
+\item 
+\mbox{\Hypertarget{vec_8h_a388ccec13e21ca3367129fb895d77cdb}\label{vec_8h_a388ccec13e21ca3367129fb895d77cdb}} 
+uint \mbox{\hyperlink{vec_8h_a388ccec13e21ca3367129fb895d77cdb}{vec\+\_\+len}} (\mbox{\hyperlink{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}{V\+EC}}(void) vec)
+\begin{DoxyCompactList}\small\item\em returns the length of {\ttfamily vec}. This is a {\ttfamily O(1)} operation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vec_8h_a990feddef5092b7918973c0a6c4b1f3f}{vec\+\_\+sort}} (\mbox{\hyperlink{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}{V\+EC}}(void) vec, char($\ast$gt)(void $\ast$a, void $\ast$b))
+\item 
+\mbox{\Hypertarget{vec_8h_ae2ea8eb97dff46fb51d776edc0e66d00}\label{vec_8h_ae2ea8eb97dff46fb51d776edc0e66d00}} 
+void \mbox{\hyperlink{vec_8h_ae2ea8eb97dff46fb51d776edc0e66d00}{vec\+\_\+swap}} (\mbox{\hyperlink{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}{V\+EC}}(void) vec, int a, int b)
+\begin{DoxyCompactList}\small\item\em swaps the elements at index {\ttfamily a} and {\ttfamily b} in {\ttfamily vec} \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{vec_8h_ac63f0a59bc227c4590870865205013b9}{u64\+\_\+gt}} (void $\ast$a, void $\ast$b)
+\item 
+\mbox{\Hypertarget{vec_8h_afc6dc7fe6f99e15cc35e96843e295cd7}\label{vec_8h_afc6dc7fe6f99e15cc35e96843e295cd7}} 
+void \mbox{\hyperlink{vec_8h_afc6dc7fe6f99e15cc35e96843e295cd7}{vec\+\_\+remove}} (void $\ast$vec, int a)
+\begin{DoxyCompactList}\small\item\em removes element at index {\ttfamily a} in {\ttfamily vec} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{vec_8h_aa919482768c0eac179575481f77e0fa3}\label{vec_8h_aa919482768c0eac179575481f77e0fa3}} 
+void $\ast$ {\bfseries obj}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+file This file defines a redimensionnable array, hereafter reffered to as {\ttfamily vec}. Relevent informations about the content of the {\ttfamily vec} are stored just before the pointer that the user manipulates 
+
+\doxysubsubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{vec_8h_a7c6b749e60d8eb95d67f14a1da467f00}\label{vec_8h_a7c6b749e60d8eb95d67f14a1da467f00}} 
+\index{vec.h@{vec.h}!VEC@{VEC}}
+\index{VEC@{VEC}!vec.h@{vec.h}}
+\doxyparagraph{\texorpdfstring{VEC}{VEC}}
+{\footnotesize\ttfamily \#define V\+EC(\begin{DoxyParamCaption}\item[{}]{x }\end{DoxyParamCaption})~x $\ast$}
+
+A macro that extends to a pointer to {\ttfamily x}, to differentiate vectors from arbitrary pointers 
+
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{vec_8h_ac63f0a59bc227c4590870865205013b9}\label{vec_8h_ac63f0a59bc227c4590870865205013b9}} 
+\index{vec.h@{vec.h}!u64\_gt@{u64\_gt}}
+\index{u64\_gt@{u64\_gt}!vec.h@{vec.h}}
+\doxyparagraph{\texorpdfstring{u64\_gt()}{u64\_gt()}}
+{\footnotesize\ttfamily char u64\+\_\+gt (\begin{DoxyParamCaption}\item[{void $\ast$}]{a,  }\item[{void $\ast$}]{b }\end{DoxyParamCaption})}
+
+{\ttfamily a} and {\ttfamily b} are assumed to be {\ttfamily uint64\+\_\+t}. returns true iff {\ttfamily \&(uint64\+\_\+t$\ast$)a$>$=\&(uint64\+\_\+t$\ast$)b}. Used for {\ttfamily vec\+\_\+sort} \mbox{\Hypertarget{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}\label{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}} 
+\index{vec.h@{vec.h}!VEC@{VEC}}
+\index{VEC@{VEC}!vec.h@{vec.h}}
+\doxyparagraph{\texorpdfstring{VEC()}{VEC()}}
+{\footnotesize\ttfamily V\+EC (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+copies {\ttfamily vec} and returns the copy 
+
+adds a copy of what {\ttfamily obj} points to at the end of {\ttfamily vec}. returns a potentially new pointer to the vec \mbox{\Hypertarget{vec_8h_ac761f14c4ebb9d8c0952b309f22e82f8}\label{vec_8h_ac761f14c4ebb9d8c0952b309f22e82f8}} 
+\index{vec.h@{vec.h}!vec\_pop@{vec\_pop}}
+\index{vec\_pop@{vec\_pop}!vec.h@{vec.h}}
+\doxyparagraph{\texorpdfstring{vec\_pop()}{vec\_pop()}}
+{\footnotesize\ttfamily void vec\+\_\+pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}{V\+EC}}(void)}]{vec }\end{DoxyParamCaption})}
+
+removes the last element of the {\ttfamily vec}. Doesn\textquotesingle{}t return it for optimisation purposes \mbox{\Hypertarget{vec_8h_a990feddef5092b7918973c0a6c4b1f3f}\label{vec_8h_a990feddef5092b7918973c0a6c4b1f3f}} 
+\index{vec.h@{vec.h}!vec\_sort@{vec\_sort}}
+\index{vec\_sort@{vec\_sort}!vec.h@{vec.h}}
+\doxyparagraph{\texorpdfstring{vec\_sort()}{vec\_sort()}}
+{\footnotesize\ttfamily void vec\+\_\+sort (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vec_8h_a943480feff9a8f9e40a5c45c4ffec25d}{V\+EC}}(void)}]{vec,  }\item[{char($\ast$)(void $\ast$a, void $\ast$b)}]{gt }\end{DoxyParamCaption})}
+
+sorts {\ttfamily vec} in place, using {\ttfamily gt} as a way to compare elements. {\ttfamily gt}\textquotesingle{}s parameters are pointers to the actually compared data, and {\ttfamily gt} returns true iff {\ttfamily a$>$=b}. {\ttfamily vec\+\_\+sort} uses merge sort and is consequentially in {\ttfamily O(n$\ast$log(n))} 

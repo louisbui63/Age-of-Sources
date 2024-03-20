@@ -1,0 +1,89 @@
+\hypertarget{hash__map_8h}{}\doxysubsection{hash\+\_\+map.\+h File Reference}
+\label{hash__map_8h}\index{hash\_map.h@{hash\_map.h}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}linked\+\_\+list.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}util.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}vec.\+h\char`\"{}}\newline
+Include dependency graph for hash\+\_\+map.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structHashMapEntry}{Hash\+Map\+Entry}}
+\begin{DoxyCompactList}\small\item\em An entry in a {\ttfamily \mbox{\hyperlink{structHashMap}{Hash\+Map}}}, i.\+e. a key-\/value pair. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structHashMap}{Hash\+Map}}
+\begin{DoxyCompactList}\small\item\em A hash map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{hash__map_8h_a43d73dcdbdaf368add42faa43be36c01}\label{hash__map_8h_a43d73dcdbdaf368add42faa43be36c01}} 
+\#define \mbox{\hyperlink{hash__map_8h_a43d73dcdbdaf368add42faa43be36c01}{H\+A\+S\+H\+M\+A\+P\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+E\+N\+G\+TH}}~32
+\begin{DoxyCompactList}\small\item\em The initial length of the internal array of a {\ttfamily \mbox{\hyperlink{structHashMap}{Hash\+Map}}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{hash__map_8h_a76bb12b9410147aeddac7cbdf699cbcb}\label{hash__map_8h_a76bb12b9410147aeddac7cbdf699cbcb}} 
+\#define \mbox{\hyperlink{hash__map_8h_a76bb12b9410147aeddac7cbdf699cbcb}{H\+A\+S\+H\+M\+A\+P\+\_\+\+O\+C\+C\+U\+P\+\_\+\+M\+AX}}~0.\+7
+\begin{DoxyCompactList}\small\item\em The occupation ratio of a {\ttfamily \mbox{\hyperlink{structHashMap}{Hash\+Map}}} over which it grows. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{hash__map_8h_a6f0ad6089eacd424257cf56522e6ccef}\label{hash__map_8h_a6f0ad6089eacd424257cf56522e6ccef}} 
+\#define \mbox{\hyperlink{hash__map_8h_a6f0ad6089eacd424257cf56522e6ccef}{H\+A\+S\+H\+M\+A\+P\+\_\+\+O\+C\+C\+U\+P\+\_\+\+M\+IN}}~0.\+3
+\begin{DoxyCompactList}\small\item\em The occupation ratio of a {\ttfamily \mbox{\hyperlink{structHashMap}{Hash\+Map}}} below which it shrinks. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{hash__map_8h_abbb50eb8ffe95636fb017463cb0a4d88}\label{hash__map_8h_abbb50eb8ffe95636fb017463cb0a4d88}} 
+uint64\+\_\+t \mbox{\hyperlink{hash__map_8h_abbb50eb8ffe95636fb017463cb0a4d88}{hash\+\_\+str}} (void $\ast$)
+\begin{DoxyCompactList}\small\item\em A polynomial rolling hash for strings. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{hash__map_8h_a117b55cd839d8d994dcfeabe96f2c8de}\label{hash__map_8h_a117b55cd839d8d994dcfeabe96f2c8de}} 
+uint64\+\_\+t \mbox{\hyperlink{hash__map_8h_a117b55cd839d8d994dcfeabe96f2c8de}{hash\+\_\+u64}} (void $\ast$)
+\begin{DoxyCompactList}\small\item\em A F\+NV hash function for 64 bit integers. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structHashMap}{Hash\+Map}} \mbox{\hyperlink{hash__map_8h_aea2cadcc3c16e34df4def4a17f343bef}{hash\+\_\+map\+\_\+create}} (uint64\+\_\+t($\ast$hash)(void $\ast$), char($\ast$cmp)(void $\ast$, void $\ast$))
+\item 
+\mbox{\Hypertarget{hash__map_8h_afe1b0ab334d3eb06d6659aedc8caec34}\label{hash__map_8h_afe1b0ab334d3eb06d6659aedc8caec34}} 
+void \mbox{\hyperlink{hash__map_8h_afe1b0ab334d3eb06d6659aedc8caec34}{hash\+\_\+map\+\_\+free\+\_\+callback}} (\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$h, void($\ast$callback)(void $\ast$))
+\begin{DoxyCompactList}\small\item\em Frees {\ttfamily h}, calling {\ttfamily callback} on each entry to free it. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{hash__map_8h_a4cd4fc84e285c494adb6ab1cead01c5a}\label{hash__map_8h_a4cd4fc84e285c494adb6ab1cead01c5a}} 
+void \mbox{\hyperlink{hash__map_8h_a4cd4fc84e285c494adb6ab1cead01c5a}{hash\+\_\+map\+\_\+free}} (\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$h)
+\begin{DoxyCompactList}\small\item\em Same as {\ttfamily hash\+\_\+map\+\_\+free\+\_\+callback} but uses {\ttfamily hash\+\_\+map\+\_\+entry\+\_\+free} as callback. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{hash__map_8h_adbf8dfd4390a3aaf6bd83b314425b7c7}\label{hash__map_8h_adbf8dfd4390a3aaf6bd83b314425b7c7}} 
+void \mbox{\hyperlink{hash__map_8h_adbf8dfd4390a3aaf6bd83b314425b7c7}{hash\+\_\+map\+\_\+free\+\_\+void}} (void $\ast$h)
+\begin{DoxyCompactList}\small\item\em Same as {\ttfamily hash\+\_\+map\+\_\+free}, deprecated. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{hash__map_8h_a8dcebc4dde23934a36817cd9751c5ce8}{hash\+\_\+map\+\_\+insert\+\_\+callback}} (\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$h, void $\ast$k, void $\ast$v, void($\ast$callback)(void $\ast$))
+\item 
+int \mbox{\hyperlink{hash__map_8h_af3f38ec264e978a8cce1a364b5e8424e}{hash\+\_\+map\+\_\+insert}} (\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$h, void $\ast$k, void $\ast$v)
+\item 
+\mbox{\Hypertarget{hash__map_8h_a756c42fcc697b0c656f578c6056c97ec}\label{hash__map_8h_a756c42fcc697b0c656f578c6056c97ec}} 
+int \mbox{\hyperlink{hash__map_8h_a756c42fcc697b0c656f578c6056c97ec}{hash\+\_\+map\+\_\+delete\+\_\+callback}} (\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$h, void $\ast$k, void($\ast$callback)(void $\ast$))
+\begin{DoxyCompactList}\small\item\em deletes the entry with key {\ttfamily k} using {\ttfamily callback} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{hash__map_8h_a84d92a84da11bf215c5653340f0b2e2e}\label{hash__map_8h_a84d92a84da11bf215c5653340f0b2e2e}} 
+int \mbox{\hyperlink{hash__map_8h_a84d92a84da11bf215c5653340f0b2e2e}{hash\+\_\+map\+\_\+delete}} (\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$h, void $\ast$k)
+\begin{DoxyCompactList}\small\item\em Same as hash\+\_\+map\+\_\+delete\+\_\+callback but uses {\ttfamily hash\+\_\+map\+\_\+entry\+\_\+free} as callback. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{hash__map_8h_a9ad2ab65abacbfb89cf5cb7f29532e92}{hash\+\_\+map\+\_\+get}} (\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$h, void $\ast$k)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{hash__map_8h_aea2cadcc3c16e34df4def4a17f343bef}\label{hash__map_8h_aea2cadcc3c16e34df4def4a17f343bef}} 
+\index{hash\_map.h@{hash\_map.h}!hash\_map\_create@{hash\_map\_create}}
+\index{hash\_map\_create@{hash\_map\_create}!hash\_map.h@{hash\_map.h}}
+\doxyparagraph{\texorpdfstring{hash\_map\_create()}{hash\_map\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structHashMap}{Hash\+Map}} hash\+\_\+map\+\_\+create (\begin{DoxyParamCaption}\item[{uint64\+\_\+t($\ast$)(void $\ast$)}]{hash,  }\item[{char($\ast$)(void $\ast$, void $\ast$)}]{cmp }\end{DoxyParamCaption})}
+
+Creates and returns a new {\ttfamily \mbox{\hyperlink{structHashMap}{Hash\+Map}}} that uses {\ttfamily hash} as the hash function and {\ttfamily cmp} as the comparison function \mbox{\Hypertarget{hash__map_8h_a9ad2ab65abacbfb89cf5cb7f29532e92}\label{hash__map_8h_a9ad2ab65abacbfb89cf5cb7f29532e92}} 
+\index{hash\_map.h@{hash\_map.h}!hash\_map\_get@{hash\_map\_get}}
+\index{hash\_map\_get@{hash\_map\_get}!hash\_map.h@{hash\_map.h}}
+\doxyparagraph{\texorpdfstring{hash\_map\_get()}{hash\_map\_get()}}
+{\footnotesize\ttfamily void$\ast$ hash\+\_\+map\+\_\+get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$}]{h,  }\item[{void $\ast$}]{k }\end{DoxyParamCaption})}
+
+Returns the value associated with key {\ttfamily k}, or a null pointer if there is no such pair \mbox{\Hypertarget{hash__map_8h_af3f38ec264e978a8cce1a364b5e8424e}\label{hash__map_8h_af3f38ec264e978a8cce1a364b5e8424e}} 
+\index{hash\_map.h@{hash\_map.h}!hash\_map\_insert@{hash\_map\_insert}}
+\index{hash\_map\_insert@{hash\_map\_insert}!hash\_map.h@{hash\_map.h}}
+\doxyparagraph{\texorpdfstring{hash\_map\_insert()}{hash\_map\_insert()}}
+{\footnotesize\ttfamily int hash\+\_\+map\+\_\+insert (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$}]{h,  }\item[{void $\ast$}]{k,  }\item[{void $\ast$}]{v }\end{DoxyParamCaption})}
+
+Same as {\ttfamily hash\+\_\+map\+\_\+insert\+\_\+callback} but uses {\ttfamily hash\+\_\+map\+\_\+entry\+\_\+free} as callback \mbox{\Hypertarget{hash__map_8h_a8dcebc4dde23934a36817cd9751c5ce8}\label{hash__map_8h_a8dcebc4dde23934a36817cd9751c5ce8}} 
+\index{hash\_map.h@{hash\_map.h}!hash\_map\_insert\_callback@{hash\_map\_insert\_callback}}
+\index{hash\_map\_insert\_callback@{hash\_map\_insert\_callback}!hash\_map.h@{hash\_map.h}}
+\doxyparagraph{\texorpdfstring{hash\_map\_insert\_callback()}{hash\_map\_insert\_callback()}}
+{\footnotesize\ttfamily int hash\+\_\+map\+\_\+insert\+\_\+callback (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structHashMap}{Hash\+Map}} $\ast$}]{h,  }\item[{void $\ast$}]{k,  }\item[{void $\ast$}]{v,  }\item[{void($\ast$)(void $\ast$)}]{callback }\end{DoxyParamCaption})}
+
+Inserts the key-\/value pair {\ttfamily k},{\ttfamily v} in {\ttfamily h}, deleting any previous entry of key {\ttfamily k} with {\ttfamily callback} 

@@ -1,34 +1,38 @@
 CC = clang
 
-CFLAGS = -std=c2x -Wall -Wextra -pedantic -O2
+CFLAGS = -std=gnu2x -Wall -Wextra -pedantic -O2 -fopenmp=libomp #-Isrc
 
 LIBS = $(shell pkg-config --cflags --libs sdl2)
 
 CFLAGS += -g -fno-omit-frame-pointer #-fsanitize=address
 
-SRC=$(subst .c,.o,$(wildcard *.c))
-TEST_SRC=$(subst .c,.o,$(wildcard tests/*.c))
+SRC=$(subst src,build/src,$(subst .c,.o,$(shell find src/ -type f -name '*.c')))
+TEST_SRC=$(subst tests/,build/tests/,$(subst .c,.o,$(wildcard tests/*.c)))
 
 .PHONY: all test format clean run test_run doc
 
 all: $(SRC)
-	$(CC) $(CFLAGS) $(LIBS) -o main *.o
+	$(CC) $(CFLAGS) $(LIBS) -o main $(SRC)
 
-%.o: %.c
+build/%.o: %.c
+	mkdir -p $(shell dirname $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test: $(SRC) $(TEST_SRC)
-	$(CC) $(CFLAGS) $(LIBS) -o test $(subst main.o,,$(SRC)) $(TEST_SRC)
+	$(CC) $(CFLAGS) $(LIBS) -o test $(subst build/src/main.o,,$(SRC)) $(TEST_SRC)
 
 format:
 	./format.sh
 
 doc:
-	doxygen Doxyfile
-	make -C ./latex
+	make -C doc ./doc
+
+htmldoc :
+	firefox file://$(shell pwd)/doc/html/index.html
 
 clean:
-	rm -f **/*.o *.o main test
+	rm -rf build/*
+	rm -f main test
 
 run: all
 	./main

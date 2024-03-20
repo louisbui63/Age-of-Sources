@@ -1,0 +1,98 @@
+\hypertarget{ecs_8h}{}\doxysubsection{ecs.\+h File Reference}
+\label{ecs_8h}\index{ecs.h@{ecs.h}}
+{\ttfamily \#include \char`\"{}bitflag.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}hash\+\_\+map.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}util.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+Include dependency graph for ecs.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structComponentWrapper}{Component\+Wrapper}}
+\begin{DoxyCompactList}\small\item\em Used to store the component, its type and its id. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structEntity}{Entity}}
+\begin{DoxyCompactList}\small\item\em The entity structure for the E\+CS. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structWorld}{World}}
+\begin{DoxyCompactList}\small\item\em The world structure used to store the different parts of the E\+CS. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{ecs_8h_a93feaea81e4771af6f819543e2676db7}\label{ecs_8h_a93feaea81e4771af6f819543e2676db7}} 
+\#define \mbox{\hyperlink{ecs_8h_a93feaea81e4771af6f819543e2676db7}{register\+\_\+component}}(w,  tp)~\mbox{\hyperlink{ecs_8h_ab10d8c5623bbf66066fa493724050e01}{register\+\_\+component\+\_\+inner\+\_\+callback}}((w), sizeof(tp), free)
+\begin{DoxyCompactList}\small\item\em {\ttfamily \mbox{\hyperlink{ecs_8h_a93feaea81e4771af6f819543e2676db7}{register\+\_\+component(\+World$\ast$, type)}}} where type is the type of the component. Registers a new component that uses {\ttfamily free} as a way to free it \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_a9f511d294267a6c75e1b1b4f0c0a7b29}\label{ecs_8h_a9f511d294267a6c75e1b1b4f0c0a7b29}} 
+\#define \mbox{\hyperlink{ecs_8h_a9f511d294267a6c75e1b1b4f0c0a7b29}{register\+\_\+component\+\_\+callback}}(w,  tp,  callback)~\mbox{\hyperlink{ecs_8h_ab10d8c5623bbf66066fa493724050e01}{register\+\_\+component\+\_\+inner\+\_\+callback}}((w), sizeof(tp), (callback))
+\begin{DoxyCompactList}\small\item\em {\ttfamily register\+\_\+component(World$\ast$, type, void ($\ast$callback)(void $\ast$))} where type is the type of the component. Registers a new component using a callback function to free it \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef uint64\+\_\+t \mbox{\hyperlink{ecs_8h_a8e840c05e4444e7fb1443f95c5bf572d}{Entity\+Ref}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{ecs_8h_a5e8ee1f54ce18392d6e55a8a01e493a9}\label{ecs_8h_a5e8ee1f54ce18392d6e55a8a01e493a9}} 
+char \mbox{\hyperlink{ecs_8h_a5e8ee1f54ce18392d6e55a8a01e493a9}{eq\+\_\+u64}} (void $\ast$a, void $\ast$b)
+\begin{DoxyCompactList}\small\item\em Returns a normalized boolean (0 or 1) indicating if the two arguments are equal when both interpreted as {\ttfamily uint64\+\_\+t} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_ac877d870bda5f759a96939baf82ff637}\label{ecs_8h_ac877d870bda5f759a96939baf82ff637}} 
+\mbox{\hyperlink{structWorld}{World}} \mbox{\hyperlink{ecs_8h_ac877d870bda5f759a96939baf82ff637}{world\+\_\+new}} ()
+\begin{DoxyCompactList}\small\item\em Returns a new initialized {\ttfamily \mbox{\hyperlink{structWorld}{World}}} structure. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_a4289f182605f18a4ea0d518ecb81fc6a}\label{ecs_8h_a4289f182605f18a4ea0d518ecb81fc6a}} 
+void \mbox{\hyperlink{ecs_8h_a4289f182605f18a4ea0d518ecb81fc6a}{world\+\_\+free}} (\mbox{\hyperlink{structWorld}{World}} $\ast$)
+\begin{DoxyCompactList}\small\item\em Frees a {\ttfamily \mbox{\hyperlink{structWorld}{World}}} structure created using {\ttfamily world\+\_\+new} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_ab10d8c5623bbf66066fa493724050e01}\label{ecs_8h_ab10d8c5623bbf66066fa493724050e01}} 
+int \mbox{\hyperlink{ecs_8h_ab10d8c5623bbf66066fa493724050e01}{register\+\_\+component\+\_\+inner\+\_\+callback}} (\mbox{\hyperlink{structWorld}{World}} $\ast$w, int size, void($\ast$callback)(void $\ast$))
+\begin{DoxyCompactList}\small\item\em Registers a new component using a callback function to free it, the size of the component\textquotesingle{}s type needs to be passed instead of the type itself. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_a69656300e4fd778ae10eb74802003103}\label{ecs_8h_a69656300e4fd778ae10eb74802003103}} 
+void \mbox{\hyperlink{ecs_8h_a69656300e4fd778ae10eb74802003103}{register\+\_\+system\+\_\+requirement}} (\mbox{\hyperlink{structWorld}{World}} $\ast$w, Bitflag b)
+\begin{DoxyCompactList}\small\item\em Updates the entity\+\_\+map of the world to take into account the system represented by the {\ttfamily Bitflag} argument. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_a81c16eef09e4d18082c57b4a86fdb2f6}\label{ecs_8h_a81c16eef09e4d18082c57b4a86fdb2f6}} 
+\mbox{\hyperlink{structEntity}{Entity}} $\ast$ \mbox{\hyperlink{ecs_8h_a81c16eef09e4d18082c57b4a86fdb2f6}{spawn\+\_\+entity}} (\mbox{\hyperlink{structWorld}{World}} $\ast$w)
+\begin{DoxyCompactList}\small\item\em Spawns an {\ttfamily \mbox{\hyperlink{structEntity}{Entity}}} into the world and returns a pointer to it. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_a446e38d955daba14f0fbb599399af962}\label{ecs_8h_a446e38d955daba14f0fbb599399af962}} 
+void \mbox{\hyperlink{ecs_8h_a446e38d955daba14f0fbb599399af962}{ecs\+\_\+add\+\_\+component}} (\mbox{\hyperlink{structWorld}{World}} $\ast$w, \mbox{\hyperlink{structEntity}{Entity}} $\ast$e, int cid, void $\ast$c)
+\begin{DoxyCompactList}\small\item\em Links a component to an {\ttfamily \mbox{\hyperlink{structEntity}{Entity}}}. The component itself need to live as long as the world does (beware of scopes) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_a4680e4da309e4ec49b2e3a664c3a7bad}\label{ecs_8h_a4680e4da309e4ec49b2e3a664c3a7bad}} 
+void \mbox{\hyperlink{ecs_8h_a4680e4da309e4ec49b2e3a664c3a7bad}{despawn\+\_\+entity}} (\mbox{\hyperlink{structWorld}{World}} $\ast$w, \mbox{\hyperlink{structEntity}{Entity}} $\ast$e)
+\begin{DoxyCompactList}\small\item\em Despawns an {\ttfamily \mbox{\hyperlink{structEntity}{Entity}}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_a822d013412875ac795c0f9903162b178}\label{ecs_8h_a822d013412875ac795c0f9903162b178}} 
+\mbox{\hyperlink{structEntity}{Entity}} $\ast$ \mbox{\hyperlink{ecs_8h_a822d013412875ac795c0f9903162b178}{get\+\_\+entity}} (\mbox{\hyperlink{structWorld}{World}} $\ast$w, \mbox{\hyperlink{ecs_8h_a8e840c05e4444e7fb1443f95c5bf572d}{Entity\+Ref}} ref)
+\begin{DoxyCompactList}\small\item\em Returns an {\ttfamily \mbox{\hyperlink{structEntity}{Entity}}} pointer corresponding to the passed reference. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{ecs_8h_a2fa186023e0fbea032cbb12ca776194a}{V\+EC}} (\mbox{\hyperlink{ecs_8h_a8e840c05e4444e7fb1443f95c5bf572d}{Entity\+Ref}}) world\+\_\+query(\mbox{\hyperlink{structWorld}{World}} $\ast$w
+\begin{DoxyCompactList}\small\item\em Returns a vector of {\ttfamily Entity\+Ref} referencing entities corresponding to the system described by the {\ttfamily Bitflag} argument. The system needs to be registered using {\ttfamily register\+\_\+system\+\_\+requirement} before using this function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ecs_8h_a8a77f7e3fab36b217aab40ac022075f1}\label{ecs_8h_a8a77f7e3fab36b217aab40ac022075f1}} 
+void $\ast$ \mbox{\hyperlink{ecs_8h_a8a77f7e3fab36b217aab40ac022075f1}{entity\+\_\+get\+\_\+component}} (\mbox{\hyperlink{structEntity}{Entity}} $\ast$e, int type)
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the component of type {\ttfamily type} linked to the {\ttfamily \mbox{\hyperlink{structEntity}{Entity}}}, if no component of this type is linked the the {\ttfamily \mbox{\hyperlink{structEntity}{Entity}}} the N\+U\+LL pointer is returned. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{ecs_8h_a0ce1c0e444c309e944c441719c42d5f4}\label{ecs_8h_a0ce1c0e444c309e944c441719c42d5f4}} 
+Bitflag $\ast$ {\bfseries b}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Typedef Documentation}
+\mbox{\Hypertarget{ecs_8h_a8e840c05e4444e7fb1443f95c5bf572d}\label{ecs_8h_a8e840c05e4444e7fb1443f95c5bf572d}} 
+\index{ecs.h@{ecs.h}!EntityRef@{EntityRef}}
+\index{EntityRef@{EntityRef}!ecs.h@{ecs.h}}
+\doxyparagraph{\texorpdfstring{EntityRef}{EntityRef}}
+{\footnotesize\ttfamily typedef uint64\+\_\+t \mbox{\hyperlink{ecs_8h_a8e840c05e4444e7fb1443f95c5bf572d}{Entity\+Ref}}}
+
+Note that this reference is only valid until the number of entities decreases 
+
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{ecs_8h_a2fa186023e0fbea032cbb12ca776194a}\label{ecs_8h_a2fa186023e0fbea032cbb12ca776194a}} 
+\index{ecs.h@{ecs.h}!VEC@{VEC}}
+\index{VEC@{VEC}!ecs.h@{ecs.h}}
+\doxyparagraph{\texorpdfstring{VEC()}{VEC()}}
+{\footnotesize\ttfamily V\+EC (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{ecs_8h_a8e840c05e4444e7fb1443f95c5bf572d}{Entity\+Ref}}}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns a vector of {\ttfamily Entity\+Ref} referencing entities corresponding to the system described by the {\ttfamily Bitflag} argument. The system needs to be registered using {\ttfamily register\+\_\+system\+\_\+requirement} before using this function. 
+
+Returns a pointer to a vector of {\ttfamily Entity\+Ref} referencing entities corresponding to the system described by the {\ttfamily Bitflag} argument. The system needs to be registered using {\ttfamily register\+\_\+system\+\_\+requirement} before using this function. 

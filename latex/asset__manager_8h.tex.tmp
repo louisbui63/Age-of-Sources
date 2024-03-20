@@ -1,0 +1,43 @@
+\hypertarget{asset__manager_8h}{}\doxysubsection{asset\+\_\+manager.\+h File Reference}
+\label{asset__manager_8h}\index{asset\_manager.h@{asset\_manager.h}}
+{\ttfamily \#include $<$S\+D\+L2/\+S\+D\+L.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}hash\+\_\+map.\+h\char`\"{}}\newline
+Include dependency graph for asset\+\_\+manager.\+h\+:
+% FIG 0
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{asset__manager_8h_a6a85dc2e61aec7ee5765708114145e2a}{init\+\_\+asset\+\_\+manager}} ()
+\item 
+void $\ast$ \mbox{\hyperlink{asset__manager_8h_adcabe5a554b9a638503ef6cac91929d3}{get\+\_\+texture}} (char $\ast$t, S\+D\+L\+\_\+\+Renderer $\ast$renderer, S\+D\+L\+\_\+\+Window $\ast$window)
+\item 
+void $\ast$ \mbox{\hyperlink{asset__manager_8h_a60d68e7c197092041359b769aa1c0384}{load\+\_\+texture}} (char $\ast$t, S\+D\+L\+\_\+\+Renderer $\ast$renderer, S\+D\+L\+\_\+\+Window $\ast$window)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{asset__manager_8h_a035545fe53ac8e6384851d08c039d56a}\label{asset__manager_8h_a035545fe53ac8e6384851d08c039d56a}} 
+\mbox{\hyperlink{structHashMap}{Hash\+Map}} \mbox{\hyperlink{asset__manager_8h_a035545fe53ac8e6384851d08c039d56a}{A\+S\+S\+E\+T\+\_\+\+S\+T\+O\+RE}}
+\begin{DoxyCompactList}\small\item\em Stores and manages the textures used in the game. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{asset__manager_8h_adcabe5a554b9a638503ef6cac91929d3}\label{asset__manager_8h_adcabe5a554b9a638503ef6cac91929d3}} 
+\index{asset\_manager.h@{asset\_manager.h}!get\_texture@{get\_texture}}
+\index{get\_texture@{get\_texture}!asset\_manager.h@{asset\_manager.h}}
+\doxyparagraph{\texorpdfstring{get\_texture()}{get\_texture()}}
+{\footnotesize\ttfamily void$\ast$ get\+\_\+texture (\begin{DoxyParamCaption}\item[{char $\ast$}]{t,  }\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{S\+D\+L\+\_\+\+Window $\ast$}]{window }\end{DoxyParamCaption})}
+
+Returns a pointer to the texture from file {\ttfamily t}. Will had it to the {\ttfamily A\+S\+S\+E\+T\+\_\+\+S\+T\+O\+RE} if it is not in it yet \mbox{\Hypertarget{asset__manager_8h_a6a85dc2e61aec7ee5765708114145e2a}\label{asset__manager_8h_a6a85dc2e61aec7ee5765708114145e2a}} 
+\index{asset\_manager.h@{asset\_manager.h}!init\_asset\_manager@{init\_asset\_manager}}
+\index{init\_asset\_manager@{init\_asset\_manager}!asset\_manager.h@{asset\_manager.h}}
+\doxyparagraph{\texorpdfstring{init\_asset\_manager()}{init\_asset\_manager()}}
+{\footnotesize\ttfamily void init\+\_\+asset\+\_\+manager (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initializes the {\ttfamily A\+S\+S\+E\+T\+\_\+\+S\+T\+O\+RE}; must be called before any call to {\ttfamily get\+\_\+texture} or {\ttfamily load\+\_\+texture} \mbox{\Hypertarget{asset__manager_8h_a60d68e7c197092041359b769aa1c0384}\label{asset__manager_8h_a60d68e7c197092041359b769aa1c0384}} 
+\index{asset\_manager.h@{asset\_manager.h}!load\_texture@{load\_texture}}
+\index{load\_texture@{load\_texture}!asset\_manager.h@{asset\_manager.h}}
+\doxyparagraph{\texorpdfstring{load\_texture()}{load\_texture()}}
+{\footnotesize\ttfamily void$\ast$ load\+\_\+texture (\begin{DoxyParamCaption}\item[{char $\ast$}]{t,  }\item[{S\+D\+L\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{S\+D\+L\+\_\+\+Window $\ast$}]{window }\end{DoxyParamCaption})}
+
+Loads the texture from file {\ttfamily t} in the {\ttfamily A\+S\+S\+E\+T\+\_\+\+S\+T\+O\+RE} While calling it multiple times with the same {\ttfamily t} shouldn\textquotesingle{}t fail, it is unadvisable as slow. Crashes on invalid file path or texture creation. 

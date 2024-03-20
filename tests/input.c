@@ -1,12 +1,9 @@
 #include "input.h"
 
-#include "../ecs.h"
-#include "../input.h"
-#include "../util.h"
-#include "../vec.h"
+#include "../src/data_structures/ecs.h"
+#include "../src/input.h"
+#include "../src/util.h"
 #include <stdint.h>
-
-#include <stdio.h>
 
 typedef struct {
   int y;
@@ -15,11 +12,14 @@ typedef struct {
 
 int global_count_mine_dont_touch = 0;
 
-void test_keyevent_1(__attribute__((unused)) Entity *e,__attribute__((unused)) Inputs *in,__attribute__((unused)) KeyState ks) {
+void test_keyevent_1(__attribute__((unused)) Entity *e,
+                     __attribute__((unused)) Inputs *in,
+                     __attribute__((unused)) KeyState ks) {
   global_count_mine_dont_touch += 1;
 }
 
-void test_keyevent_2(__attribute__((unused)) Entity *e, Inputs *in, KeyState ks) {
+void test_keyevent_2(__attribute__((unused)) Entity *e, Inputs *in,
+                     KeyState ks) {
   if (ks == KEY_PRESSED && inputs_is_mouse_button_in(in, SDL_BUTTON_MIDDLE))
     global_count_mine_dont_touch += 1;
 }
@@ -122,6 +122,8 @@ int test_input() {
   ASSERT(global_count_mine_dont_touch == 16);
 
   inputs_free(in);
+
+  world_free(&w);
 
   return 0;
 }

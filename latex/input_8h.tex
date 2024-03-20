@@ -1,0 +1,123 @@
+\hypertarget{input_8h}{}\doxysubsection{input.\+h File Reference}
+\label{input_8h}\index{input.h@{input.h}}
+{\ttfamily \#include \char`\"{}ecs.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$S\+D\+L2/\+S\+D\+L.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for input.\+h\+:
+% FIG 0
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structInputs}{Inputs}}
+\begin{DoxyCompactList}\small\item\em stores keys and mouse buttons \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{input_8h_a8386b89daf8ec3a1805554fd95b80a9e}\label{input_8h_a8386b89daf8ec3a1805554fd95b80a9e}} 
+\#define \mbox{\hyperlink{input_8h_a8386b89daf8ec3a1805554fd95b80a9e}{K\+E\+Y\+\_\+\+P\+R\+E\+S\+S\+ED}}~0
+\begin{DoxyCompactList}\small\item\em the instant the key is pressed \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{input_8h_ada3a4be515b3527c1691ce080655877f}\label{input_8h_ada3a4be515b3527c1691ce080655877f}} 
+\#define \mbox{\hyperlink{input_8h_ada3a4be515b3527c1691ce080655877f}{K\+E\+Y\+\_\+\+R\+E\+L\+E\+A\+S\+ED}}~1
+\begin{DoxyCompactList}\small\item\em the instant the key is released \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{input_8h_a203163bc0189184a1de6ca8d1e53c6bf}\label{input_8h_a203163bc0189184a1de6ca8d1e53c6bf}} 
+\#define \mbox{\hyperlink{input_8h_a203163bc0189184a1de6ca8d1e53c6bf}{K\+E\+Y\+\_\+\+D\+O\+WN}}~2
+\begin{DoxyCompactList}\small\item\em starts on press (included), ends on release (not included) \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{input_8h_a8f68951dfe2c0e0478d0bac922555a2a}{inputs\+\_\+is\+\_\+key\+\_\+in\+\_\+from\+\_\+scancode}}(inputs,  scancode)~((inputs)-\/$>$keys\mbox{[}(scancode)\mbox{]})
+\item 
+\#define \mbox{\hyperlink{input_8h_a1050680fb2e16f72c160463f5a04ed9b}{inputs\+\_\+is\+\_\+key\+\_\+in}}(inputs,  key)~((inputs)-\/$>$keys\mbox{[}S\+D\+L\+\_\+\+Get\+Scancode\+From\+Key(key)\mbox{]})
+\item 
+\#define \mbox{\hyperlink{input_8h_a0278feebd1dd7c5b24f7c4a5478b79d1}{inputs\+\_\+is\+\_\+mouse\+\_\+button\+\_\+in}}(inputs,  button)~(((inputs)-\/$>$mouse $>$$>$ ((button)-\/1)) \& 1)
+\item 
+\#define \mbox{\hyperlink{input_8h_a863919fa705b5086463cb327c3b826eb}{inputs\+\_\+update\+\_\+key\+\_\+in}}(inputs,  key,  new\+\_\+val)
+\item 
+\#define \mbox{\hyperlink{input_8h_a6d56661f394da6522c6870ef45756cb5}{inputs\+\_\+update\+\_\+mouse\+\_\+button\+\_\+in}}(inputs,  button,  new\+\_\+val)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{input_8h_ad6333b89e157867748467189c296f6a7}\label{input_8h_ad6333b89e157867748467189c296f6a7}} 
+typedef Uint8 {\bfseries Key\+State}
+\item 
+typedef Uint8 \mbox{\hyperlink{input_8h_aa07f3477d4c3f9e5effbc6377b1a4902}{Mouse\+Button}}
+\item 
+\mbox{\Hypertarget{input_8h_acc243f50fe05cb990c8eb2e3065f8fef}\label{input_8h_acc243f50fe05cb990c8eb2e3065f8fef}} 
+typedef void($\ast$ \mbox{\hyperlink{input_8h_acc243f50fe05cb990c8eb2e3065f8fef}{Key\+Event}}) (\mbox{\hyperlink{structEntity}{Entity}} $\ast$, \mbox{\hyperlink{structInputs}{Inputs}} $\ast$, Key\+State)
+\begin{DoxyCompactList}\small\item\em type of callback functions for the key events \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{input_8h_a53a538bf08912cd866caa598931e4259}\label{input_8h_a53a538bf08912cd866caa598931e4259}} 
+\mbox{\hyperlink{structInputs}{Inputs}} $\ast$ \mbox{\hyperlink{input_8h_a53a538bf08912cd866caa598931e4259}{inputs\+\_\+new}} ()
+\begin{DoxyCompactList}\small\item\em creates a new \mbox{\hyperlink{structInputs}{Inputs}} instance \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{input_8h_a0a0cb1e899d1f96d2cd82efefb29a452}\label{input_8h_a0a0cb1e899d1f96d2cd82efefb29a452}} 
+void \mbox{\hyperlink{input_8h_a0a0cb1e899d1f96d2cd82efefb29a452}{inputs\+\_\+free}} (\mbox{\hyperlink{structInputs}{Inputs}} $\ast$)
+\begin{DoxyCompactList}\small\item\em frees the \mbox{\hyperlink{structInputs}{Inputs}} instance \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{input_8h_a984ffab89519e5eaa8a75416fd87864f}{inputs\+\_\+update\+\_\+key\+\_\+in\+\_\+from\+\_\+scancode}} (\mbox{\hyperlink{structInputs}{Inputs}} $\ast$inputs, S\+D\+L\+\_\+\+Scancode scancode, bool new\+\_\+val)
+\item 
+\mbox{\Hypertarget{input_8h_a884a949c13e780bb7189488465d38f06}\label{input_8h_a884a949c13e780bb7189488465d38f06}} 
+void \mbox{\hyperlink{input_8h_a884a949c13e780bb7189488465d38f06}{inputs\+\_\+run\+\_\+callbacks}} (\mbox{\hyperlink{structWorld}{World}} $\ast$, \mbox{\hyperlink{structInputs}{Inputs}} $\ast$, Key\+State)
+\begin{DoxyCompactList}\small\item\em calls all the callbacks for the keyevent \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{input_8h_a1050680fb2e16f72c160463f5a04ed9b}\label{input_8h_a1050680fb2e16f72c160463f5a04ed9b}} 
+\index{input.h@{input.h}!inputs\_is\_key\_in@{inputs\_is\_key\_in}}
+\index{inputs\_is\_key\_in@{inputs\_is\_key\_in}!input.h@{input.h}}
+\doxyparagraph{\texorpdfstring{inputs\_is\_key\_in}{inputs\_is\_key\_in}}
+{\footnotesize\ttfamily \#define inputs\+\_\+is\+\_\+key\+\_\+in(\begin{DoxyParamCaption}\item[{}]{inputs,  }\item[{}]{key }\end{DoxyParamCaption})~((inputs)-\/$>$keys\mbox{[}S\+D\+L\+\_\+\+Get\+Scancode\+From\+Key(key)\mbox{]})}
+
+the state of a key accessed using S\+D\+L\+\_\+\+Key\+Code bool \mbox{\hyperlink{input_8h_a1050680fb2e16f72c160463f5a04ed9b}{inputs\+\_\+is\+\_\+key\+\_\+in(\+Inputs$\ast$, S\+D\+L\+\_\+\+Key\+Code)}} \mbox{\Hypertarget{input_8h_a8f68951dfe2c0e0478d0bac922555a2a}\label{input_8h_a8f68951dfe2c0e0478d0bac922555a2a}} 
+\index{input.h@{input.h}!inputs\_is\_key\_in\_from\_scancode@{inputs\_is\_key\_in\_from\_scancode}}
+\index{inputs\_is\_key\_in\_from\_scancode@{inputs\_is\_key\_in\_from\_scancode}!input.h@{input.h}}
+\doxyparagraph{\texorpdfstring{inputs\_is\_key\_in\_from\_scancode}{inputs\_is\_key\_in\_from\_scancode}}
+{\footnotesize\ttfamily \#define inputs\+\_\+is\+\_\+key\+\_\+in\+\_\+from\+\_\+scancode(\begin{DoxyParamCaption}\item[{}]{inputs,  }\item[{}]{scancode }\end{DoxyParamCaption})~((inputs)-\/$>$keys\mbox{[}(scancode)\mbox{]})}
+
+the state of a key accessed using S\+D\+L\+\_\+\+Scancode !!!!!!!!!! this does not take into account non Q\+W\+E\+R\+TY keyboards / remaps !!!!!!!!!! bool \mbox{\hyperlink{input_8h_a8f68951dfe2c0e0478d0bac922555a2a}{inputs\+\_\+is\+\_\+key\+\_\+in\+\_\+from\+\_\+scancode(\+Input$\ast$,\+S\+D\+L\+\_\+\+Scancode)}} \mbox{\Hypertarget{input_8h_a0278feebd1dd7c5b24f7c4a5478b79d1}\label{input_8h_a0278feebd1dd7c5b24f7c4a5478b79d1}} 
+\index{input.h@{input.h}!inputs\_is\_mouse\_button\_in@{inputs\_is\_mouse\_button\_in}}
+\index{inputs\_is\_mouse\_button\_in@{inputs\_is\_mouse\_button\_in}!input.h@{input.h}}
+\doxyparagraph{\texorpdfstring{inputs\_is\_mouse\_button\_in}{inputs\_is\_mouse\_button\_in}}
+{\footnotesize\ttfamily \#define inputs\+\_\+is\+\_\+mouse\+\_\+button\+\_\+in(\begin{DoxyParamCaption}\item[{}]{inputs,  }\item[{}]{button }\end{DoxyParamCaption})~(((inputs)-\/$>$mouse $>$$>$ ((button)-\/1)) \& 1)}
+
+the state of a mouse button bool \mbox{\hyperlink{input_8h_a0278feebd1dd7c5b24f7c4a5478b79d1}{inputs\+\_\+is\+\_\+mouse\+\_\+button\+\_\+in(\+Inputs$\ast$,\+Mouse\+Button)}} \mbox{\Hypertarget{input_8h_a863919fa705b5086463cb327c3b826eb}\label{input_8h_a863919fa705b5086463cb327c3b826eb}} 
+\index{input.h@{input.h}!inputs\_update\_key\_in@{inputs\_update\_key\_in}}
+\index{inputs\_update\_key\_in@{inputs\_update\_key\_in}!input.h@{input.h}}
+\doxyparagraph{\texorpdfstring{inputs\_update\_key\_in}{inputs\_update\_key\_in}}
+{\footnotesize\ttfamily \#define inputs\+\_\+update\+\_\+key\+\_\+in(\begin{DoxyParamCaption}\item[{}]{inputs,  }\item[{}]{key,  }\item[{}]{new\+\_\+val }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{  (\mbox{\hyperlink{input_8h_a984ffab89519e5eaa8a75416fd87864f}{inputs\_update\_key\_in\_from\_scancode}}(inputs, SDL\_GetScancodeFromKey(key),     \(\backslash\)}
+\DoxyCodeLine{                                      new\_val))}
+
+\end{DoxyCode}
+updates the state of a key using S\+D\+L\+\_\+\+Key\+Code void \mbox{\hyperlink{input_8h_a863919fa705b5086463cb327c3b826eb}{inputs\+\_\+update\+\_\+key\+\_\+in(\+Input$\ast$,\+S\+D\+L\+\_\+\+Key\+Code,bool)}} \mbox{\Hypertarget{input_8h_a6d56661f394da6522c6870ef45756cb5}\label{input_8h_a6d56661f394da6522c6870ef45756cb5}} 
+\index{input.h@{input.h}!inputs\_update\_mouse\_button\_in@{inputs\_update\_mouse\_button\_in}}
+\index{inputs\_update\_mouse\_button\_in@{inputs\_update\_mouse\_button\_in}!input.h@{input.h}}
+\doxyparagraph{\texorpdfstring{inputs\_update\_mouse\_button\_in}{inputs\_update\_mouse\_button\_in}}
+{\footnotesize\ttfamily \#define inputs\+\_\+update\+\_\+mouse\+\_\+button\+\_\+in(\begin{DoxyParamCaption}\item[{}]{inputs,  }\item[{}]{button,  }\item[{}]{new\+\_\+val }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{  ((inputs)-\/>mouse = (((!!(new\_val)) << ((button)-\/1)) |                        \(\backslash\)}
+\DoxyCodeLine{                      ((inputs)-\/>mouse \& (\string~(1 << ((button)-\/1))))))}
+
+\end{DoxyCode}
+updates the state of a mouse button Mouse\+Button \mbox{\hyperlink{input_8h_a6d56661f394da6522c6870ef45756cb5}{inputs\+\_\+update\+\_\+mouse\+\_\+button\+\_\+in(\+Input$\ast$,\+Mouse\+Button,bool)}} 
+
+\doxysubsubsection{Typedef Documentation}
+\mbox{\Hypertarget{input_8h_aa07f3477d4c3f9e5effbc6377b1a4902}\label{input_8h_aa07f3477d4c3f9e5effbc6377b1a4902}} 
+\index{input.h@{input.h}!MouseButton@{MouseButton}}
+\index{MouseButton@{MouseButton}!input.h@{input.h}}
+\doxyparagraph{\texorpdfstring{MouseButton}{MouseButton}}
+{\footnotesize\ttfamily typedef Uint8 \mbox{\hyperlink{input_8h_aa07f3477d4c3f9e5effbc6377b1a4902}{Mouse\+Button}}}
+
+describes any of the following\+: S\+D\+L\+\_\+\+B\+U\+T\+T\+O\+N\+\_\+\+L\+E\+FT,S\+D\+L\+\_\+\+B\+U\+T\+T\+O\+N\+\_\+\+M\+I\+D\+D\+LE, S\+D\+L\+\_\+\+B\+U\+T\+T\+O\+N\+\_\+\+R\+I\+G\+HT 
+
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{input_8h_a984ffab89519e5eaa8a75416fd87864f}\label{input_8h_a984ffab89519e5eaa8a75416fd87864f}} 
+\index{input.h@{input.h}!inputs\_update\_key\_in\_from\_scancode@{inputs\_update\_key\_in\_from\_scancode}}
+\index{inputs\_update\_key\_in\_from\_scancode@{inputs\_update\_key\_in\_from\_scancode}!input.h@{input.h}}
+\doxyparagraph{\texorpdfstring{inputs\_update\_key\_in\_from\_scancode()}{inputs\_update\_key\_in\_from\_scancode()}}
+{\footnotesize\ttfamily void inputs\+\_\+update\+\_\+key\+\_\+in\+\_\+from\+\_\+scancode (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structInputs}{Inputs}} $\ast$}]{inputs,  }\item[{S\+D\+L\+\_\+\+Scancode}]{scancode,  }\item[{bool}]{new\+\_\+val }\end{DoxyParamCaption})}
+
+updates the state of a key using S\+D\+L\+\_\+\+Scancode !!!!!!!!!! this does not take into account non Q\+W\+E\+R\+TY keyboards / remaps !!!!!!!!!! void inputs\+\_\+update\+\_\+key\+\_\+in\+\_\+from\+\_\+scancode(\+Input$\ast$,\+S\+D\+L\+\_\+\+Scancode,bool) 
