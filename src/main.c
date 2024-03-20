@@ -8,7 +8,7 @@
 #include "input.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
-#include "ui.h"
+#include "renderer/ui.h"
 #include "util.h"
 
 int main() {
@@ -49,11 +49,11 @@ int main() {
 
   init_world(&w);
 
-  Entity *test_e = spawn_entity(&w);
+  // Entity *test_e = spawn_entity(&w);
 
   Position *test_pos = malloc(sizeof(Position));
   *test_pos = (Position){.x = 155, .y = 250};
-  ecs_add_component(&w, test_e, COMP_POSITION, test_pos);
+  // ecs_add_component(&w, test_e, COMP_POSITION, test_pos);
 
   Sprite *test_sprite = malloc(sizeof(Sprite));
   SDL_Rect *size = malloc(sizeof(SDL_Rect));
@@ -61,17 +61,20 @@ int main() {
   size->x = 0;
   size->y = 0;
 
-  Background *test_background = malloc(sizeof(Background));
+  // Background *test_background = malloc(sizeof(Background));
   Clickable *test_clickable = malloc(sizeof(Clickable));
-  Minimap *test_minimap = malloc(sizeof(Minimap));
+  // Minimap *test_minimap = malloc(sizeof(Minimap));
+  KeyEvent *test_key_event = malloc(sizeof(KeyEvent));
 
   *test_sprite = (Sprite){.texture = test_tex, .rect = size};
-  *test_background = (Background){.sprite = test_sprite, .rect = size};
+  // *test_background = (Background){.sprite = test_sprite, .rect = size};
   *test_clickable = (Clickable){.sprite = test_sprite, .rect = size};
+  *test_key_event = clickable_event;
 
-  ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
-  ecs_add_component(&w, test_e, COMP_BACKGROUND, test_background);
-  ecs_add_component(&w, test_e, COMP_CLICKABLE, test_clickable);
+  // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
+  // ecs_add_component(&w, test_e, COMP_BACKGROUND, test_background);
+  // ecs_add_component(&w, test_e, COMP_CLICKABLE, test_clickable);
+  spawn_clickable(&w, test_clickable, test_key_event);
 
   // dt is the frametime from last frame
   Uint32 dt = TARGET_FRAMETIME;

@@ -27,7 +27,7 @@ typedef struct {
 } Inputs;
 
 //! type of callback functions for the key events
-typedef void (*KeyEvent)(Entity *, Inputs *, KeyState);
+typedef void (*KeyEvent)(World *, Entity *, Inputs *, KeyState);
 
 //! creates a new Inputs instance
 Inputs *inputs_new();
@@ -71,3 +71,6 @@ void inputs_update_key_in_from_scancode(Inputs *inputs, SDL_Scancode scancode,
 
 //! calls all the callbacks for the keyevent
 void inputs_run_callbacks(World *, Inputs *, KeyState);
+
+//! Checks if the mouse is in the rectangle
+Uint8 mouse_in_rect(SDL_Rect *rect);
