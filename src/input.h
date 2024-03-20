@@ -27,7 +27,7 @@ typedef struct {
 } Inputs;
 
 //! type of callback functions for the key events
-typedef void (*KeyEvent)(Entity *, Inputs *, KeyState);
+typedef void (*KeyEvent)(World *, Entity *, Inputs *, KeyState);
 
 //! creates a new Inputs instance
 Inputs *inputs_new();

@@ -36,7 +36,7 @@ void inputs_run_callbacks(World *w, Inputs *in, KeyState ks) {
     for (uint i = 0; i < vec_len(entities); i++) {
       Entity *e = get_entity(w, entities[i]);
       KeyEvent *ke = entity_get_component(w, e, COMP_KEY_EVENT);
-      (*ke)(e, in, ks);
+      (*ke)(w, e, in, ks);
     }
   }
 }
