@@ -1,4 +1,7 @@
 # 2PII 2
+## Compilation
+
+libomp is needed to compile, it can be installed with `sudo apt-get install libomp-dev`.
 
 ## Doxygen
 
