@@ -4,6 +4,7 @@
 #include "hash_map.h"
 #include "input.h"
 #include "linked_list.h"
+#include "pqueue.h"
 #include "vec.h"
 
 #define TEST(fn, name)                                                         \
@@ -25,5 +26,6 @@ int main() {
   TEST(test_hash_map, "hash_map");
   TEST(test_ecs, "ecs");
   TEST(test_input, "input");
+  TEST(test_pqueue, "pqueue");
   return 0;
 }
