@@ -45,7 +45,7 @@ Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event);
 
 //! The `KeyEvent` of the entities associated with a clickable component,
 //! there are different cases, if the mouse is out of the sprite,
-//! it is set `is_clicked`s to 0 as for doing nothing,
+//! it set `is_clicked` to 0 as for doing nothing,
 //! if the left click is pressed on the sprite,
 //! it will be set to 1 and if it is set to 1 and the click is released then it
 //! will be set to 2. The idea is that if set to 1
