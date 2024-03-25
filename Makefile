@@ -27,7 +27,7 @@ format:
 doc:
 	make -C doc ./doc
 
-htmldoc :
+htmldoc : doc
 	firefox file://$(shell pwd)/doc/html/index.html
 
 clean:
