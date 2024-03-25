@@ -17,7 +17,7 @@ typedef struct {
   Uint8 is_clicked;
 } Clickable;
 
-//! These entities are similar to the clickables but they also a text instead of
+//! These entities are similar to the clickables but they render a text instead of
 //! a sprite
 typedef struct {
   SDL_Rect *rect;
