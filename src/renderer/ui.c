@@ -59,8 +59,13 @@ void clickable_event(World *w, Entity *entity, Inputs *in, KeyState keystate) {
   if (!inputs_is_mouse_button_in(in, SDL_BUTTON_LEFT))
     return;
   Clickable *c = entity_get_component(w, entity, COMP_CLICKABLE);
-  if (keystate == KEY_RELEASED)
+
+  if (mouse_in_rect(c->sprite->rect)) {
+    if (keystate == KEY_PRESSED) {
+      c->is_clicked = 1;
+    } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1)) {
+      c->is_clicked = 2;
+    }
+  } else
     c->is_clicked = 0;
-  else if (mouse_in_rect(c->sprite->rect))
-    c->is_clicked = 1;
 }
