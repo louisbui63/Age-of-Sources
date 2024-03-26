@@ -66,5 +66,8 @@ v2op_dec(sub);
 v2op_dec(add);
 Vec2 v2normalize(Vec2 a);
 Vec2 v2mul(float a, Vec2 b);
+Vec2 v2div(Vec2 a, float b);
 float v2angle(Vec2 a);
 float v2len(Vec2 a);
+Vec2 v2truncate(Vec2 a, float b);
+float v2dot(Vec2 a, Vec2 b);
