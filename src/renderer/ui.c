@@ -44,14 +44,14 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   // To finish with SDL_TTF
   mask = COMPF_HOVERABLE;
   // printf("1\n ");
-  // er = world_query(w, &mask);
-  // printf("1\n ");
-  // for (uint i = 0; i < vec_len(er); i++) {
-  //   Entity *e = get_entity(w, er[i]);
-  //   Hoverable *h = entity_get_component(w, e, COMP_HOVERABLE);
-  //   //   if (mouse_in_rect(h->rect))
-  //   //     render_hoverable(h->rect, h->text);
-  // }
+  er = world_query(w, &mask);
+  printf("1\n ");
+  for (uint i = 0; i < vec_len(er); i++) {
+    Entity *e = get_entity(w, er[i]);
+    Hoverable *h = entity_get_component(w, e, COMP_HOVERABLE);
+      //  if (mouse_in_rect(h->rect))
+      //    render_hoverable(h->rect, h->text);
+  }
 }
 
 Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event) {

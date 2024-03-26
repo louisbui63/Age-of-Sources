@@ -172,7 +172,7 @@ int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *)) {
   } else {
     LinkedListLink *prev = u.head;
     LinkedListLink *cur = prev->next;
-
+    printf("%p\n",prev);
     while (cur && !deleted)
       if (h->comp_function(k, ((HashMapEntry *)(cur->data))->key)) {
         void *next = cur->next;
@@ -182,7 +182,7 @@ int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *)) {
         deleted = 1;
       }
   }
-
+  printf("beta\n");
   if (deleted)
     h->size--;
   if (deleted && (float)h->size / (float)h->length < HASHMAP_OCCUP_MIN) {
