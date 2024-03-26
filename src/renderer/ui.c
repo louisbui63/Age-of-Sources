@@ -29,8 +29,8 @@ void render_ui(World *w, SDL_Renderer *rdr) {
       SDL_SetTextureColorMod(c->sprite->texture, (Uint8)255, (Uint8)255,
                              (Uint8)255);
     }
-    if (!(c->is_clicked - 2)){
-      //script linked to clickable action 
+    if (!(c->is_clicked - 2)) {
+      // script linked to clickable action
       c->is_clicked = 0;
     }
   }
@@ -43,14 +43,12 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   }
   // To finish with SDL_TTF
   mask = COMPF_HOVERABLE;
-  // printf("1\n ");
   er = world_query(w, &mask);
-  printf("1\n ");
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Hoverable *h = entity_get_component(w, e, COMP_HOVERABLE);
-      //  if (mouse_in_rect(h->rect))
-      //    render_hoverable(h->rect, h->text);
+    if (mouse_in_rect(h->rect))
+      render_hoverable(h->rect, h->text);
   }
 }
 
@@ -62,16 +60,18 @@ Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event) {
 }
 
 void clickable_event(World *w, Entity *entity, Inputs *in, KeyState keystate) {
-  // if (!inputs_is_mouse_button_in(in, SDL_BUTTON_LEFT))
-  //   return;
   Clickable *c = entity_get_component(w, entity, COMP_CLICKABLE);
-  
-  if (mouse_in_rect(c->sprite->rect)) {
-    if (keystate == KEY_PRESSED) {
-      c->is_clicked = 1;
-    } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1)) {
-      c->is_clicked = 2;
-    }
-  } else
+  if (!(mouse_in_rect(c->sprite->rect))) {
     c->is_clicked = 0;
+    return;
+  } else if (!inputs_is_mouse_button_in(in, SDL_BUTTON_LEFT))
+    return;
+  else if (keystate == KEY_PRESSED) {
+    c->is_clicked = 1;
+  } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1))
+    c->is_clicked = 2;
+}
+void render_hoverable(SDL_Rect *rect, char *text) {
+  rect = rect + 1 - 1;
+  text = text + 1 - 1;
 }
