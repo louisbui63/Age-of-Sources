@@ -60,7 +60,6 @@ int main() {
   SDL_QueryTexture(test_tex, 0, 0, &size->w, &size->h);
   size->x = 0;
   size->y = 0;
-
   // Background *test_background = malloc(sizeof(Background));
   Clickable *test_clickable = malloc(sizeof(Clickable));
   // Minimap *test_minimap = malloc(sizeof(Minimap));
