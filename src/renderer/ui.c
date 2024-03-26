@@ -51,7 +51,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   //   Hoverable *h = entity_get_component(w, e, COMP_HOVERABLE);
   //   //   if (mouse_in_rect(h->rect))
   //   //     render_hoverable(h->rect, h->text);
-  }
+  // }
 }
 
 Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event) {
