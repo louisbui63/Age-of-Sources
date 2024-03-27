@@ -19,3 +19,9 @@ void *get_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
 //! While calling it multiple times with the same `t` shouldn't fail, it is
 //! unadvisable as slow. Crashes on invalid file path or texture creation.
 void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
+
+void *load_font(char *t, Uint8 size);
+
+void *get_font(char *t, Uint8 size);
+
+int drop_font(char *t, Uint8 size);

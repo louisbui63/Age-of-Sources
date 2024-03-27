@@ -218,11 +218,11 @@ void despawn_entity(World *w, Entity *e) {
   e->components = 0;
 }
 Entity *get_entity(World *w, EntityRef ref) { return &w->entities[ref]; }
-EntityRef *world_query(World *w, Bitflag *b) {
-  return *(EntityRef **)hash_map_get(&w->entity_map, b);
+VEC(EntityRef) world_query(World *w, Bitflag *b) {
+  return *(VEC(EntityRef) *)hash_map_get(&w->entity_map, b);
 }
-EntityRef **world_query_mut(World *w, Bitflag *b) {
-  return (EntityRef **)hash_map_get(&w->entity_map, b);
+VEC(EntityRef) * world_query_mut(World *w, Bitflag *b) {
+  return (VEC(EntityRef) *)hash_map_get(&w->entity_map, b);
 }
 
 void *entity_get_component(World *w, Entity *e, int type) {
