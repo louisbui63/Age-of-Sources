@@ -1,5 +1,6 @@
 #include "asset_manager.h"
 
+#include <SDL2/SDL_mixer.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -9,20 +10,41 @@
 
 HashMap ASSET_STORE;
 
+typedef enum { TEXTURE, SFX, MUSIC, TTF } AssetKind;
+
 typedef struct {
   uintptr_t counter;
   void *ref;
+  AssetKind kd;
 } Rc;
 
 void hmase_free(void *u) {
   HashMapEntry *w = u;
   free(w->key);
-  SDL_DestroyTexture(((Rc *)w->value)->ref);
+  switch (((Rc *)w->value)->kd) {
+
+  case TEXTURE:
+    SDL_DestroyTexture(((Rc *)w->value)->ref);
+    break;
+  case SFX:
+    Mix_FreeChunk(((Rc *)w->value)->ref);
+    break;
+  case MUSIC:
+    Mix_FreeMusic(((Rc *)w->value)->ref);
+    break;
+  case TTF:
+    break;
+  }
   free(w->value);
   free(u);
 }
 
 void free_asset_store() { hash_map_free_callback(&ASSET_STORE, hmase_free); }
+
+void init_asset_manager() {
+  ASSET_STORE = hash_map_create(hash_str, not_strcmp);
+  atexit(free_asset_store);
+}
 
 void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
   SDL_Surface *surf = SDL_LoadBMP(t);
@@ -43,7 +65,7 @@ void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
   strcpy(key, t);
 
   Rc *val = malloc(sizeof(Rc));
-  *val = (Rc){.ref = tex, .counter = 0};
+  *val = (Rc){.ref = tex, .counter = 0, .kd = TEXTURE};
 
   hash_map_insert(&ASSET_STORE, key, val);
   return tex;
@@ -69,7 +91,34 @@ int drop_texture(char *t) {
   return SUCCESS;
 }
 
-void init_asset_manager() {
-  ASSET_STORE = hash_map_create(hash_str, not_strcmp);
-  atexit(free_asset_store);
+void *load_audio(char *t, char is_mus) {
+
+  void *aud;
+  AssetKind kd;
+  if (is_mus) {
+    aud = Mix_LoadMUS(t);
+    kd = MUSIC;
+  } else {
+    aud = Mix_LoadWAV(t);
+    kd = SFX;
+  }
+  HANDLE_ERROR(!aud, Mix_GetError(), { abort(); });
+
+  char *key = malloc(strlen(t));
+  strcpy(key, t);
+
+  Rc *val = malloc(sizeof(Rc));
+  *val = (Rc){.ref = aud, .counter = 0, .kd = kd};
+
+  hash_map_insert(&ASSET_STORE, key, val);
+  return aud;
+}
+
+void *get_audio(char *t, char is_mus) {
+  void *aud = hash_map_get(&ASSET_STORE, t);
+  if (!aud) {
+    return load_audio(t, is_mus);
+  }
+  ((Rc *)aud)->counter++;
+  return ((Rc *)aud)->ref;
 }
