@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdint.h>
 
 #include "../components.h"
@@ -17,6 +18,8 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   }
   mask = COMPF_CLICKABLE;
   er = world_query(w, &mask);
+  SDL_Surface *text_surface;
+  SDL_Texture *text_texture;
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Clickable *c = entity_get_component(w, e, COMP_CLICKABLE);
@@ -72,6 +75,6 @@ void clickable_event(World *w, Entity *entity, Inputs *in, KeyState keystate) {
     c->is_clicked = 2;
 }
 void render_hoverable(SDL_Rect *rect, char *text) {
-  rect = rect + 1 - 1;
-  text = text + 1 - 1;
+  rect = rect + 0;
+  text = text + 0;
 }
