@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "components.h"
 #include "data_structures/asset_manager.h"
@@ -16,7 +17,8 @@ int main() {
 
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
   atexit(SDL_Quit);
-
+  HANDLE_ERROR(TTF_Init() < 0, SDL_GetError(), abort());
+  atexit(TTF_Quit);
   SDL_Window *window =
       SDL_CreateWindow("test", 100, 100, 640, 360, SDL_WINDOW_SHOWN);
 
@@ -57,18 +59,27 @@ int main() {
 
   Sprite *test_sprite = malloc(sizeof(Sprite));
   SDL_Rect *size = malloc(sizeof(SDL_Rect));
+  SDL_Rect *test_rect = malloc(sizeof(SDL_Rect));
+  SDL_Color *test_color = malloc(sizeof(SDL_Color));
+  Text *test_text = malloc(sizeof(Text));
   SDL_QueryTexture(test_tex, 0, 0, &size->w, &size->h);
+  SDL_QueryTexture(test_tex, 0, 0, &test_rect->w, &test_rect->h);
   size->x = 0;
   size->y = 0;
+  test_rect->x = 10;
+  test_rect->y = 10;
   // Background *test_background = malloc(sizeof(Background));
   Clickable *test_clickable = malloc(sizeof(Clickable));
   // Minimap *test_minimap = malloc(sizeof(Minimap));
   KeyEvent *test_key_event = malloc(sizeof(KeyEvent));
 
+  *test_color = (SDL_Color){.r = 0, .g = 255, .b = 0, .a = 255};
   *test_sprite = (Sprite){.texture = test_tex, .rect = size};
+  *test_text = (Text){.str = "uwu", .color = test_color};
+
   // *test_background = (Background){.sprite = test_sprite, .rect = size};
   *test_clickable =
-      (Clickable){.sprite = test_sprite, .rect = size, .text = ""};
+      (Clickable){.sprite = test_sprite, .rect = test_rect, .text = test_text};
   *test_key_event = clickable_event;
 
   // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
@@ -146,6 +157,9 @@ int main() {
   world_free(&w);
   free(size);
   free(test_sprite);
+  free(test_rect);
+  free(test_color);
+  free(test_text);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
 }

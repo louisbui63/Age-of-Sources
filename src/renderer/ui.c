@@ -7,6 +7,7 @@
 
 #include "../components.h"
 #include "../data_structures/vec.h"
+#include "../data_structures/asset_manager.h"
 
 void render_ui(World *w, SDL_Renderer *rdr) {
   uint64_t mask = COMPF_BACKGROUND;
@@ -18,16 +19,23 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   }
   mask = COMPF_CLICKABLE;
   er = world_query(w, &mask);
-  SDL_Surface *text_surface;
-  SDL_Texture *text_texture;
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Clickable *c = entity_get_component(w, e, COMP_CLICKABLE);
+    // SDL_Texture *tex = c->sprite->texture;
     if (c->is_clicked) {
       SDL_SetTextureColorMod(c->sprite->texture, (Uint8)100, (Uint8)100,
                              (Uint8)100);
     }
     SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->rect);
+    if (c->text->str[0]){
+      TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 100);
+      SDL_Surface *surf = TTF_RenderText_Solid(font, c->text->str, *c->text->color);
+      SDL_Texture *text_texture =  SDL_CreateTextureFromSurface(rdr, surf);
+      SDL_RenderCopy(rdr, text_texture, NULL, c->rect);
+      SDL_FreeSurface(surf);
+      SDL_DestroyTexture(text_texture);
+    }  
     if (c->is_clicked) {
       SDL_SetTextureColorMod(c->sprite->texture, (Uint8)255, (Uint8)255,
                              (Uint8)255);
@@ -42,7 +50,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Minimap *m = entity_get_component(w, e, COMP_MINIMAP);
-    SDL_RenderCopy(rdr, m->sprite->texture, m->sprite->rect, m->rect);
+    SDL_RenderCopy(rdr, m->sprite->texture, NULL, m->rect);
   }
   // To finish with SDL_TTF
   mask = COMPF_HOVERABLE;

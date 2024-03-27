@@ -79,9 +79,11 @@ void *load_font_aux(char *t) {
   Uint8 n = strlen(t);
   Uint8 size = t[n - 1] - 32;
   t[n - 2] = 0;
+  printf("%s\n%c\n",t,t[n-1]);
+  printf("%d\n", size);
   TTF_Font *font = TTF_OpenFont(t, size);
   t[n - 2] = '|';
-  char *key = malloc(n);
+  char *key = malloc(n + 1);
   strcpy(key, t);
 
   Rc *val = malloc(sizeof(Rc));
@@ -93,8 +95,8 @@ void *load_font_aux(char *t) {
 
 void *load_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t = malloc(n + 2);
-  strcpy(font, t);
+  char *t = malloc(n + 3);
+  strcpy(t, font);
   t[n] = '|';
   t[n + 1] = 32 + size;
   t[n + 2] = 0;
@@ -114,8 +116,8 @@ void *get_font_aux(char *t) {
 
 void *get_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t = malloc(n + 2);
-  strcpy(font, t);
+  char *t = malloc(n + 3);
+  strcpy(t, font);
   t[n] = '|';
   t[n + 1] = 32 + size;
   t[n + 2] = 0;
@@ -137,8 +139,8 @@ int drop_font_aux(char *t) {
 
 int drop_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t = malloc(n + 2);
-  strcpy(font, t);
+  char *t = malloc(n + 3);
+  strcpy(t, font);
   t[n] = '|';
   t[n + 1] = 32 + size;
   t[n + 2] = 0;

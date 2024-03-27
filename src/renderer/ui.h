@@ -4,6 +4,11 @@
 #include "../input.h"
 #include "sprite.h"
 
+typedef struct {
+  char *str;
+  SDL_Color *color;
+} Text;
+
 //! Entities with this component are the background of the user interface
 typedef struct {
   Sprite *sprite;
@@ -15,7 +20,7 @@ typedef struct {
   Sprite *sprite;
   SDL_Rect *rect;
   Uint8 is_clicked;
-  char *text;
+  Text *text;
 } Clickable;
 
 //! Component that corresponds to the minimap
