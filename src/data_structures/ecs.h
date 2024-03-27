@@ -95,7 +95,9 @@ int register_component_inner_callback(World *w, int size,
                                       void (*callback)(void *));
 
 //! Updates the entity_map of the world to take into account the system
-//! represented by the `Bitflag` argument
+//! represented by the `Bitflag` argument. Please not that single-component
+//! requirements SHOULD NOT be registered. This is considered undefined
+//! behavior, as well as registering the same requirements more than once.
 void register_system_requirement(World *w, Bitflag b);
 
 //! Spawns an `Entity` into the world and returns a pointer to it
