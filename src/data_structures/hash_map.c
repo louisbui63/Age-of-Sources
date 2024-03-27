@@ -145,7 +145,6 @@ void *hash_map_get(HashMap *h, void *k) {
       return ((HashMapEntry *)(cur->data))->value;
     cur = cur->next;
   }
-  printf("1\n");
   return 0;
 }
 
