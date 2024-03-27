@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <SDL2/SDL_ttf.h>
 
 #include "components.h"
 #include "data_structures/asset_manager.h"
@@ -75,7 +75,7 @@ int main() {
 
   *test_color = (SDL_Color){.r = 0, .g = 255, .b = 0, .a = 255};
   *test_sprite = (Sprite){.texture = test_tex, .rect = size};
-  *test_text = (Text){.str = "uwu", .color = test_color};
+  *test_text = (Text){.str = "uwu\nuwu\n", .color = test_color};
 
   // *test_background = (Background){.sprite = test_sprite, .rect = size};
   *test_clickable =

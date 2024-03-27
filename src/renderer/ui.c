@@ -6,8 +6,8 @@
 #include <stdint.h>
 
 #include "../components.h"
-#include "../data_structures/vec.h"
 #include "../data_structures/asset_manager.h"
+#include "../data_structures/vec.h"
 
 void render_ui(World *w, SDL_Renderer *rdr) {
   uint64_t mask = COMPF_BACKGROUND;
@@ -22,20 +22,26 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Clickable *c = entity_get_component(w, e, COMP_CLICKABLE);
-    // SDL_Texture *tex = c->sprite->texture;
     if (c->is_clicked) {
       SDL_SetTextureColorMod(c->sprite->texture, (Uint8)100, (Uint8)100,
                              (Uint8)100);
     }
     SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->rect);
-    if (c->text->str[0]){
-      TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 100);
-      SDL_Surface *surf = TTF_RenderText_Solid(font, c->text->str, *c->text->color);
-      SDL_Texture *text_texture =  SDL_CreateTextureFromSurface(rdr, surf);
+    if (c->text->str[0]) {
+      TTF_Font *font =
+          get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 255 - 32);
+      SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(font, c->text->str,
+                                                         *c->text->color, 0);
+      SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
+      //You need to comment or uncomment the three next lines to activate the text shading
+      if (c->is_clicked) {
+        SDL_SetTextureColorMod(text_texture, (Uint8)100, (Uint8)100,
+                               (Uint8)100);
+      }
       SDL_RenderCopy(rdr, text_texture, NULL, c->rect);
       SDL_FreeSurface(surf);
       SDL_DestroyTexture(text_texture);
-    }  
+    }
     if (c->is_clicked) {
       SDL_SetTextureColorMod(c->sprite->texture, (Uint8)255, (Uint8)255,
                              (Uint8)255);
@@ -82,6 +88,7 @@ void clickable_event(World *w, Entity *entity, Inputs *in, KeyState keystate) {
   } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1))
     c->is_clicked = 2;
 }
+
 void render_hoverable(SDL_Rect *rect, char *text) {
   rect = rect + 0;
   text = text + 0;

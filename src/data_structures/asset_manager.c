@@ -79,8 +79,6 @@ void *load_font_aux(char *t) {
   Uint8 n = strlen(t);
   Uint8 size = t[n - 1] - 32;
   t[n - 2] = 0;
-  printf("%s\n%c\n",t,t[n-1]);
-  printf("%d\n", size);
   TTF_Font *font = TTF_OpenFont(t, size);
   t[n - 2] = '|';
   char *key = malloc(n + 1);
