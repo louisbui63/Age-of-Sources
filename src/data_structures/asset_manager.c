@@ -1,8 +1,8 @@
 #include "asset_manager.h"
 
+#include <SDL2/SDL_ttf.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <SDL2/SDL_ttf.h>
 
 #include "../errors.h"
 #include "../util.h"
@@ -79,7 +79,7 @@ void *load_font_aux(char *t) {
   Uint8 n = strlen(t);
   Uint8 size = t[n - 1] - 32;
   t[n - 2] = 0;
-  TTF_Font* font = TTF_OpenFont(t, size);
+  TTF_Font *font = TTF_OpenFont(t, size);
   t[n - 2] = '|';
   char *key = malloc(n);
   strcpy(key, t);
@@ -91,10 +91,10 @@ void *load_font_aux(char *t) {
   return font;
 }
 
-void *load_font(char *font, Uint8 size){
+void *load_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t =  malloc(n + 2);
-  strcpy(font,  t);
+  char *t = malloc(n + 2);
+  strcpy(font, t);
   t[n] = '|';
   t[n + 1] = 32 + size;
   t[n + 2] = 0;
@@ -112,10 +112,10 @@ void *get_font_aux(char *t) {
   return ((Rc *)font)->ref;
 }
 
-void *get_font(char *font, Uint8 size){
+void *get_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t =  malloc(n + 2);
-  strcpy(font,  t);
+  char *t = malloc(n + 2);
+  strcpy(font, t);
   t[n] = '|';
   t[n + 1] = 32 + size;
   t[n + 2] = 0;
@@ -135,10 +135,10 @@ int drop_font_aux(char *t) {
   return SUCCESS;
 }
 
-int drop_font(char *font, Uint8 size){
+int drop_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t =  malloc(n + 2);
-  strcpy(font,  t);
+  char *t = malloc(n + 2);
+  strcpy(font, t);
   t[n] = '|';
   t[n + 1] = 32 + size;
   t[n + 2] = 0;

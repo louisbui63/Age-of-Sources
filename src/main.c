@@ -67,7 +67,8 @@ int main() {
 
   *test_sprite = (Sprite){.texture = test_tex, .rect = size};
   // *test_background = (Background){.sprite = test_sprite, .rect = size};
-  *test_clickable = (Clickable){.sprite = test_sprite, .rect = size, .text = ""};
+  *test_clickable =
+      (Clickable){.sprite = test_sprite, .rect = size, .text = ""};
   *test_key_event = clickable_event;
 
   // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
