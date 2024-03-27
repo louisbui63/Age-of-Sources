@@ -29,7 +29,7 @@ int main() {
     abort();
   });
 
-  SDL_Surface *test_bmp = SDL_LoadBMP("test.bmp");
+  SDL_Surface *test_bmp = SDL_LoadBMP("./asset/sprites/test.bmp");
   HANDLE_ERROR(!test_bmp, SDL_GetError(), {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
