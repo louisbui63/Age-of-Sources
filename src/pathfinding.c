@@ -10,6 +10,6 @@ double pathfind_astar_heuristic(UnitTypes u, TilePosition *src,
   return m * (abs(src->x - dest->x) + abs(src->y - dest->y));
 }
 
-Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
-
+Path pathfind_astar(__attribute__((unused)) Map m,__attribute__((unused)) UnitTypes u,__attribute__((unused)) TilePosition *src,__attribute__((unused)) TilePosition *dest) {
+  return NULL;
 }
