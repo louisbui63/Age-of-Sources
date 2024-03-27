@@ -9,7 +9,7 @@
 
 void render_ui(World *w, SDL_Renderer *rdr) {
   uint64_t mask = COMPF_BACKGROUND;
-  EntityRef *er = world_query(w, &mask);
+  VEC(EntityRef) er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Background *b = entity_get_component(w, e, COMP_BACKGROUND);

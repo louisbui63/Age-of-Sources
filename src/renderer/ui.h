@@ -15,15 +15,8 @@ typedef struct {
   Sprite *sprite;
   SDL_Rect *rect;
   Uint8 is_clicked;
-} Clickable;
-
-//! These entities are similar to the clickables but they render a text instead
-//! of a sprite
-typedef struct {
-  SDL_Rect *rect;
   char *text;
-  Uint8 is_clicked;
-} Button;
+} Clickable;
 
 //! Component that corresponds to the minimap
 typedef struct {

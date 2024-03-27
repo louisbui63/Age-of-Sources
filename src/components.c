@@ -13,7 +13,6 @@ int init_world(World *w) {
   register_component(w, KeyEvent);
   register_component(w, Background);
   register_component(w, Clickable);
-  register_component(w, Button);
   register_component(w, Minimap);
   register_component(w, Hoverable);
   return 0;
