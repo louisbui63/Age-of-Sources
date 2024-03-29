@@ -17,7 +17,6 @@ typedef struct {
   uintptr_t counter;
   void *ref;
   AssetKind kd;
-  char locked;
 } Rc;
 
 void hmase_free(void *u) {
@@ -35,7 +34,6 @@ void hmase_free(void *u) {
     Mix_FreeMusic(((Rc *)w->value)->ref);
     break;
   case TTF:
-    TTF_CloseFont(((Rc *)w->value)->ref);
     break;
   }
   free(w->value);
@@ -47,20 +45,6 @@ void free_asset_store() { hash_map_free_callback(&ASSET_STORE, hmase_free); }
 void init_asset_manager() {
   ASSET_STORE = hash_map_create(hash_str, not_strcmp);
   atexit(free_asset_store);
-}
-
-Error lock_asset(char *t, char locked) {
-  void *at = hash_map_get(&ASSET_STORE, t);
-  if (!at) {
-    return ASSET_NOT_FOUND;
-  }
-  ((Rc *)at)->locked = locked;
-  return SUCCESS;
-}
-
-char is_asset_locked(char *t) {
-  void *at = hash_map_get(&ASSET_STORE, t);
-  return ((Rc *)at)->locked;
 }
 
 void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
@@ -82,7 +66,7 @@ void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
   strcpy(key, t);
 
   Rc *val = malloc(sizeof(Rc));
-  *val = (Rc){.ref = tex, .counter = 0, .kd = TEXTURE, .locked = 0};
+  *val = (Rc){.ref = tex, .counter = 0, .kd = TEXTURE};
 
   hash_map_insert(&ASSET_STORE, key, val);
   return tex;
@@ -100,12 +84,10 @@ void *get_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
 int drop_texture(char *t) {
   void *tex = hash_map_get(&ASSET_STORE, t);
   if (!tex) {
-    return ASSET_NOT_FOUND;
+    return INVALID_TEXTURE;
   }
-  if (!((Rc *)tex)->locked) {
-    if (!--((Rc *)tex)->counter) {
-      return hash_map_delete_callback(&ASSET_STORE, t, hmase_free);
-    }
+  if (!--((Rc *)tex)->counter) {
+    return hash_map_delete_callback(&ASSET_STORE, t, hmase_free);
   }
   return SUCCESS;
 }
@@ -127,7 +109,7 @@ void *load_audio(char *t, char is_mus) {
   strcpy(key, t);
 
   Rc *val = malloc(sizeof(Rc));
-  *val = (Rc){.ref = aud, .counter = 0, .kd = kd, .locked = 0};
+  *val = (Rc){.ref = aud, .counter = 0, .kd = kd};
 
   hash_map_insert(&ASSET_STORE, key, val);
   return aud;
@@ -142,19 +124,6 @@ void *get_audio(char *t, char is_mus) {
   return ((Rc *)aud)->ref;
 }
 
-int drop_audio(char *t) {
-  void *aud = hash_map_get(&ASSET_STORE, t);
-  if (!aud) {
-    return ASSET_NOT_FOUND;
-  }
-  if (!((Rc *)aud)->locked) {
-    if (!--((Rc *)aud)->counter) {
-      return hash_map_delete_callback(&ASSET_STORE, t, hmase_free);
-    }
-  }
-  return SUCCESS;
-}
-
 void *load_font_aux(char *t) {
   Uint8 n = strlen(t);
   Uint8 size = t[n - 1] - 32;
@@ -165,7 +134,7 @@ void *load_font_aux(char *t) {
   strcpy(key, t);
 
   Rc *val = malloc(sizeof(Rc));
-  *val = (Rc){.ref = font, .counter = 0, .kd = TTF, .locked = 0};
+  *val = (Rc){.ref = font, .counter = 0};
 
   hash_map_insert(&ASSET_STORE, key, val);
   return font;
@@ -207,12 +176,10 @@ void *get_font(char *font, Uint8 size) {
 int drop_font_aux(char *t) {
   void *font = hash_map_get(&ASSET_STORE, t);
   if (!font) {
-    return ASSET_NOT_FOUND;
+    return INVALID_FONT;
   }
-  if (!((Rc *)font)->locked) {
-    if (!--((Rc *)font)->counter) {
-      return hash_map_delete_callback(&ASSET_STORE, t, hmase_free);
-    }
+  if (!--((Rc *)font)->counter) {
+    return hash_map_delete_callback(&ASSET_STORE, t, hmase_free);
   }
   return SUCCESS;
 }
