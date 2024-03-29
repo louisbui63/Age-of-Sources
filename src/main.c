@@ -39,7 +39,7 @@ int main() {
 
   atexit(Mix_Quit);
 
-  SDL_Surface *test_bmp = SDL_LoadBMP("test.bmp");
+  SDL_Surface *test_bmp = SDL_LoadBMP("./asset/sprites/test.bmp");
   HANDLE_ERROR(!test_bmp, SDL_GetError(), {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -70,16 +70,15 @@ int main() {
   SDL_QueryTexture(test_tex, 0, 0, &size->w, &size->h);
   size->x = 0;
   size->y = 0;
-
   // Background *test_background = malloc(sizeof(Background));
   Clickable *test_clickable = malloc(sizeof(Clickable));
   // Minimap *test_minimap = malloc(sizeof(Minimap));
   KeyEvent *test_key_event = malloc(sizeof(KeyEvent));
 
   *test_sprite = (Sprite){.texture = test_tex, .rect = size};
-  // *test_background = (Background){.sprite = test_sprite,
-  // .rect = size};
-  *test_clickable = (Clickable){.sprite = test_sprite, .rect = size};
+  // *test_background = (Background){.sprite = test_sprite, .rect = size};
+  *test_clickable =
+      (Clickable){.sprite = test_sprite, .rect = size, .text = ""};
   *test_key_event = clickable_event;
 
   // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
@@ -157,6 +156,7 @@ int main() {
   inputs_free(input_down);
   world_free(&w);
   free(size);
+  free(test_sprite);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
 }

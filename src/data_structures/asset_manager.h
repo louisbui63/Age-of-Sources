@@ -26,3 +26,7 @@ void *get_audio(char *t, char is_mus);
 //! While calling it multiple times with the same `t` shouldn't fail, it is
 //! unadvisable as slow. Crashes on invalid file path or audio creation.
 void *load_audio(char *t, char is_mus);
+
+void *load_font(char *t, Uint8 size);
+
+void *get_font(char *t, Uint8 size);

@@ -1,6 +1,7 @@
 #include "asset_manager.h"
 
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -121,4 +122,76 @@ void *get_audio(char *t, char is_mus) {
   }
   ((Rc *)aud)->counter++;
   return ((Rc *)aud)->ref;
+}
+
+void *load_font_aux(char *t) {
+  Uint8 n = strlen(t);
+  Uint8 size = t[n - 1] - 32;
+  t[n - 2] = 0;
+  TTF_Font *font = TTF_OpenFont(t, size);
+  t[n - 2] = '|';
+  char *key = malloc(n);
+  strcpy(key, t);
+
+  Rc *val = malloc(sizeof(Rc));
+  *val = (Rc){.ref = font, .counter = 0};
+
+  hash_map_insert(&ASSET_STORE, key, val);
+  return font;
+}
+
+void *load_font(char *font, Uint8 size) {
+  Uint8 n = strlen(font);
+  char *t = malloc(n + 2);
+  strcpy(font, t);
+  t[n] = '|';
+  t[n + 1] = 32 + size;
+  t[n + 2] = 0;
+  void *f = load_font_aux(t);
+  free(t);
+  return f;
+}
+
+void *get_font_aux(char *t) {
+  void *font = hash_map_get(&ASSET_STORE, t);
+  if (!font) {
+    return load_font_aux(t);
+  }
+  ((Rc *)font)->counter++;
+  return ((Rc *)font)->ref;
+}
+
+void *get_font(char *font, Uint8 size) {
+  Uint8 n = strlen(font);
+  char *t = malloc(n + 2);
+  strcpy(font, t);
+  t[n] = '|';
+  t[n + 1] = 32 + size;
+  t[n + 2] = 0;
+  void *f = get_font_aux(t);
+  free(t);
+  return f;
+}
+
+int drop_font_aux(char *t) {
+  void *font = hash_map_get(&ASSET_STORE, t);
+  if (!font) {
+    return INVALID_FONT;
+  }
+  if (!--((Rc *)font)->counter) {
+    return hash_map_delete_callback(&ASSET_STORE, t, hmase_free);
+  }
+  return SUCCESS;
+}
+
+int drop_font(char *font, Uint8 size) {
+  Uint8 n = strlen(font);
+  char *t = malloc(n + 2);
+  strcpy(font, t);
+  t[n] = '|';
+  t[n + 1] = 32 + size;
+  t[n + 2] = 0;
+  int f = drop_font_aux(t);
+  free(t);
+  return f;
 }

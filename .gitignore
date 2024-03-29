@@ -6,3 +6,4 @@ cachegrind.out.*
 .vscode
 doc/latex
 doc/html
+doc/doc.pdf
