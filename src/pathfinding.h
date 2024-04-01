@@ -11,8 +11,8 @@ typedef struct {
   int y;
 } TilePosition;
 
-//! a `Path` on the global map is succession of tile positions
-typedef VEC(TilePosition) Path;
+//! a `Path` on the global map is succession of tile positions, first index being the start of the path
+typedef VEC(TilePosition*) Path;
 
 //! returns a minimal `Path` using the A* algorithm
 Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest);
