@@ -2,6 +2,7 @@
 
 #include "../src/data_structures/linked_list.h"
 #include "../src/util.h"
+#include "../src/errors.h"
 
 #include <stdlib.h>
 
@@ -28,5 +29,5 @@ int test_linked_list() {
     ASSERT(*(int *)linked_list_get(&ll, i) == i + 1);
   }
   linked_list_free(&ll);
-  return 0;
+  return SUCCESS;
 }

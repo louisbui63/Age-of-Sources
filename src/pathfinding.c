@@ -3,6 +3,7 @@
 
 #include "pathfinding.h"
 #include "data_structures/pqueue.h"
+#include "util.h"
 
 typedef struct {
   int ind;
@@ -11,6 +12,7 @@ typedef struct {
 
 void pqueue_push_wrapper(PQueue p,int ind,int from,double w){
   Entry* e = malloc(sizeof(Entry));
+  *e = (Entry){.ind = ind, .from = from};
   pqueue_push(p,e,w);
 }
 
@@ -100,7 +102,7 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
     from[i] = -1;
     dist[i] = INFINITY;
   }
-  pqueue_push_wrapper(open,flatmap_tile_index(dist,src),-1,0.);
+  pqueue_push_wrapper(open,flatmap_tile_index(dist,src),-1,pathfind_astar_heuristic(u,src,dest));
 
   while(pqueue_len(open)) {
     PQueueEntry* pqe = pqueue_pop(open);
@@ -122,6 +124,7 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
       }
       t = malloc(sizeof(TilePosition));
       *t = (TilePosition){.x = flatmap_index_x(dist,curr), .y = flatmap_index_y(dist,curr)};
+      vec_push(p,t);
       vec_reverse(p);
 
       // frees everything
@@ -134,7 +137,7 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
     TileTypes ttype = m[flatmap_index_x(dist,curr)][flatmap_index_y(dist,curr)];
     double spd = units_get_tile_speed(u,ttype);
     VEC(int*) neigh = flatmap_get_neighbours(dist,curr,map_height(m));
-    for(int i=0;i<vec_len(neigh);i++){
+    for(uint i=0;i<vec_len(neigh);i++){
       int j = *neigh[i];
       if(dist[j] == INFINITY) {
         TilePosition tp = {.x = flatmap_index_x(dist,j),.y = flatmap_index_y(dist,j)};
@@ -146,7 +149,7 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
     }
     vec_free(neigh);
     neigh = flatmap_get_diag(dist,curr,map_height(m));
-    for(int i=0;i<vec_len(neigh);i++){
+    for(uint i=0;i<vec_len(neigh);i++){
       int j = *neigh[i];
       if(dist[j] == INFINITY) {
         TilePosition tp = {.x = flatmap_index_x(dist,j),.y = flatmap_index_y(dist,j)};

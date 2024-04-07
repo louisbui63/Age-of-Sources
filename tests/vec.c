@@ -47,5 +47,5 @@ int test_vec() {
   vec_reverse(tv);
   for (int i = 0; i < 2 * VEC_INIT_CAPACITY; i++) ASSERT(tv[i] == 2 * VEC_INIT_CAPACITY-1-i);
 
-  return 0;
+  return SUCCESS;
 }

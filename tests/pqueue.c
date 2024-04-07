@@ -51,5 +51,5 @@ int test_pqueue() {
 
   pqueue_free_callback(p,free);
 
-  return 0;
+  return SUCCESS;
 }
