@@ -43,9 +43,12 @@ int test_vec() {
   vec_free(tvcp);
 
   tv = vec_new(int);
-  for (int i = 0; i < 2 * VEC_INIT_CAPACITY; i++) vec_push(tv, i);
+  for (int i = 0; i < 2 * VEC_INIT_CAPACITY; i++)
+    vec_push(tv, i);
   vec_reverse(tv);
-  for (int i = 0; i < 2 * VEC_INIT_CAPACITY; i++) ASSERT(tv[i] == 2 * VEC_INIT_CAPACITY-1-i);
+  for (int i = 0; i < 2 * VEC_INIT_CAPACITY; i++)
+    ASSERT(tv[i] == 2 * VEC_INIT_CAPACITY - 1 - i);
+  vec_free(tv);
 
   return SUCCESS;
 }

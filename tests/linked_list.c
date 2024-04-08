@@ -1,8 +1,8 @@
 #include "linked_list.h"
 
 #include "../src/data_structures/linked_list.h"
-#include "../src/util.h"
 #include "../src/errors.h"
+#include "../src/util.h"
 
 #include <stdlib.h>
 

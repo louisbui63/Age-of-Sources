@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <math.h>
+#include <stdlib.h>
 
 #include "pqueue.h"
 
@@ -26,22 +26,24 @@ int test_pqueue() {
   pqueue_push(p, &t2, 4.7);
   pqueue_push(p, &t3, 2.5);
   pqueue_push(p, &t4, 7.1);
-  ASSERT(pqueue_len(p)==4);
+  ASSERT(pqueue_len(p) == 4);
 
   ASSERT(pqueue_get(p)->value == &t3);
-  ASSERT(pqueue_pop(p)->weight == 2.5);
+  PQueueEntry *pqe = pqueue_pop(p);
+  ASSERT(pqe->weight == 2.5);
+  free(pqe);
 
   ASSERT(pqueue_get(p)->value == &t1);
-  ASSERT(pqueue_len(p)==3);
+  ASSERT(pqueue_len(p) == 3);
 
   pqueue_free(p);
 
   // pqueue_free_callback test
   p = pqueue_new();
 
-  Test* a1 = malloc(sizeof(Test));
-  Test* a2 = malloc(sizeof(Test));
-  Test* a3 = malloc(sizeof(Test));
+  Test *a1 = malloc(sizeof(Test));
+  Test *a2 = malloc(sizeof(Test));
+  Test *a3 = malloc(sizeof(Test));
 
   pqueue_push(p, a1, -36);
   pqueue_push(p, a2, -INFINITY);
@@ -49,7 +51,7 @@ int test_pqueue() {
 
   ASSERT(pqueue_get(p)->value == a2);
 
-  pqueue_free_callback(p,free);
+  pqueue_free_callback(p, free);
 
   return SUCCESS;
 }

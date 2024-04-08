@@ -23,7 +23,7 @@ Map map_create(int w, int h);
 void map_free(Map m);
 
 //! returns the width of a `Map`
-#define map_width(m) ((int*)(m))[-2]
+#define map_width(m) ((int *)(m))[-2]
 
 //! returns the height of a `Map`
-#define map_height(m) ((int*)(m))[-1]
+#define map_height(m) ((int *)(m))[-1]

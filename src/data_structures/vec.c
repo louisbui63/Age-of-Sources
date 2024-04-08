@@ -115,12 +115,13 @@ void *vec_copy(void *vec) {
   return veccp;
 }
 
-void vec_reverse(void *vec){
+void vec_reverse(void *vec) {
   uint size = ((uint *)vec)[-3];
   uint len = ((uint *)vec)[-1];
-  void* cpy = vec_copy(vec);
-  for(uint i=0;i<vec_len(vec);i++){
-    memcpy((uint8_t *)vec + i * size, (uint8_t *)cpy + (len-1-i) * size, size);
+  void *cpy = vec_copy(vec);
+  for (uint i = 0; i < vec_len(vec); i++) {
+    memcpy((uint8_t *)vec + i * size, (uint8_t *)cpy + (len - 1 - i) * size,
+           size);
   }
   vec_free(cpy);
 }

@@ -56,5 +56,6 @@ VEC(void) vec_copy(VEC(void) vec);
 //! expands to the last element of the `vec`
 #define vec_last(a) (a)[vec_len((a)) - 1]
 
-//! reverses`vec` (i.e. old_vec[i] = new_vec[n-1-i] where n is the length of vec)
+//! reverses`vec` (i.e. old_vec[i] = new_vec[n-1-i] where n is the length of
+//! vec)
 void vec_reverse(void *vec);
