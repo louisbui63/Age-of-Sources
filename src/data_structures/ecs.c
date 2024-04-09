@@ -217,10 +217,13 @@ void despawn_entity(World *w, Entity *e) {
   vec_free(e->components);
   e->components = 0;
 }
+
 Entity *get_entity(World *w, EntityRef ref) { return &w->entities[ref]; }
+
 VEC(EntityRef) world_query(World *w, Bitflag *b) {
   return *(VEC(EntityRef) *)hash_map_get(&w->entity_map, b);
 }
+
 VEC(EntityRef) * world_query_mut(World *w, Bitflag *b) {
   return (VEC(EntityRef) *)hash_map_get(&w->entity_map, b);
 }
@@ -229,4 +232,13 @@ void *entity_get_component(World *w, Entity *e, int type) {
   if (e->components[type] == UINT64_MAX)
     return 0;
   return w->components[e->components[type]].component;
+}
+
+void despawn_from_component(World *w, Bitflag b) {
+  VEC(EntityRef) er = world_query(w, &b);
+  uint64_t n = vec_len(er);
+  for (int k = 0; k < n; k++) {
+    Entity *e = get_entity(w, er[k]);
+    despawn_entity(w, e);
+  }
 }

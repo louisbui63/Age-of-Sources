@@ -17,6 +17,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
     Background *b = entity_get_component(w, e, COMP_BACKGROUND);
     SDL_RenderCopy(rdr, b->sprite->texture, b->sprite->rect, b->rect);
   }
+
   mask = COMPF_CLICKABLE;
   er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
@@ -28,12 +29,12 @@ void render_ui(World *w, SDL_Renderer *rdr) {
     }
     SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->rect);
     if (c->text->str[0]) {
-      TTF_Font *font =
-          get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 255 - 32);
+      TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 32);
       SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(font, c->text->str,
                                                          *c->text->color, 0);
       SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
-      //You need to comment or uncomment the three next lines to activate the text shading
+      // You need to comment or uncomment the three next lines to activate the
+      // text shading
       if (c->is_clicked) {
         SDL_SetTextureColorMod(text_texture, (Uint8)100, (Uint8)100,
                                (Uint8)100);
@@ -47,10 +48,11 @@ void render_ui(World *w, SDL_Renderer *rdr) {
                              (Uint8)255);
     }
     if (!(c->is_clicked - 2)) {
-      // script linked to clickable action
       c->is_clicked = 0;
+      c->click_event();
     }
   }
+
   mask = COMPF_MINIMAP;
   er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
@@ -58,6 +60,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
     Minimap *m = entity_get_component(w, e, COMP_MINIMAP);
     SDL_RenderCopy(rdr, m->sprite->texture, NULL, m->rect);
   }
+
   // To finish with SDL_TTF
   mask = COMPF_HOVERABLE;
   er = world_query(w, &mask);

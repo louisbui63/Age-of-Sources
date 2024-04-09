@@ -26,7 +26,7 @@ void *get_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
 int drop_texture(char *t);
 
 //! Loads the font from file `t` in the `ASSET_STORE`
-//!The recommendations are the same as for `load_texture`.
+//! The recommendations are the same as for `load_texture`.
 void *load_font(char *t, Uint8 size);
 
 //! Returns a pointer to the font from file `t`. Will add it to the

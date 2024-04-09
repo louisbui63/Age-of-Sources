@@ -19,8 +19,9 @@ typedef struct {
 typedef struct {
   Sprite *sprite;
   SDL_Rect *rect;
-  Uint8 is_clicked;
   Text *text;
+  Uint8 is_clicked;
+  void (*click_event)();
 } Clickable;
 
 //! Component that corresponds to the minimap
