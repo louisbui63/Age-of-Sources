@@ -77,10 +77,10 @@ int drop_texture(char *t) {
 
 void *load_font_aux(char *t) {
   Uint8 n = strlen(t);
-  Uint8 size = t[n - 1] - 32;
-  t[n - 2] = 0;
+  Uint8 size = (t[n - 1] - '0') + (t[n - 2] - '0') * 10;
+  t[n - 3] = 0;
   TTF_Font *font = TTF_OpenFont(t, size);
-  t[n - 2] = '|';
+  t[n - 3] = '|';
   char *key = malloc(n + 1);
   strcpy(key, t);
 
@@ -93,11 +93,12 @@ void *load_font_aux(char *t) {
 
 void *load_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t = malloc(n + 3);
+  char *t = malloc(n + 4);
   strcpy(t, font);
   t[n] = '|';
-  t[n + 1] = 32 + size;
-  t[n + 2] = 0;
+  t[n + 1] = '0' + size / 10;
+  t[n + 2] = '0' + size % 10;
+  t[n + 3] = 0;
   void *f = load_font_aux(t);
   free(t);
   return f;
@@ -117,8 +118,9 @@ void *get_font(char *font, Uint8 size) {
   char *t = malloc(n + 3);
   strcpy(t, font);
   t[n] = '|';
-  t[n + 1] = 32 + size;
-  t[n + 2] = 0;
+  t[n + 1] = '0' + size / 10;
+  t[n + 2] = '0' + size % 10;
+  t[n + 3] = 0;
   void *f = get_font_aux(t);
   free(t);
   return f;
@@ -140,8 +142,9 @@ int drop_font(char *font, Uint8 size) {
   char *t = malloc(n + 3);
   strcpy(t, font);
   t[n] = '|';
-  t[n + 1] = 32 + size;
-  t[n + 2] = 0;
+  t[n + 1] = '0' + size / 10;
+  t[n + 2] = '0' + size % 10;
+  t[n + 3] = 0;
   int f = drop_font_aux(t);
   free(t);
   return f;
