@@ -67,9 +67,10 @@ PQueueEntry *pqueue_pop(PQueue p) {
 
 PQueueEntry *pqueue_get(PQueue p) { return p[0]; }
 
-void pqueue_push(PQueue p, void *val, double weight) {
+PQueue pqueue_push_inner(PQueue p, void *val, double weight) {
   PQueueEntry *pe = malloc(sizeof(PQueueEntry));
   *pe = (PQueueEntry){.value = val, .weight = weight};
   vec_push(p, pe);
   percolate_up(p, pqueue_len(p) - 1);
+  return p;
 }

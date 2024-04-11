@@ -26,8 +26,8 @@ int main() {
   TEST(test_linked_list, "linked_list");
   TEST(test_hash_map, "hash_map");
   TEST(test_input, "input");
-  //TEST(test_pqueue, "pqueue");
-  //TEST(test_pathfinding, "pathfinding");
+  TEST(test_pqueue, "pqueue");
+  TEST(test_pathfinding, "pathfinding");
   TEST(test_ecs, "ecs");
   return 0;
 }

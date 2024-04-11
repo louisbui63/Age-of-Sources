@@ -18,11 +18,14 @@ typedef struct {
   int from;
 } Entry;
 
-void pqueue_push_wrapper(PQueue p, int ind, int from, double w) {
+PQueue pqueue_push_wrapper_inner(PQueue p, int ind, int from, double w) {
   Entry *e = malloc(sizeof(Entry));
   *e = (Entry){.ind = ind, .from = from};
   pqueue_push(p, e, w);
+  return p;
 }
+
+#define pqueue_push_wrapper(p, ind, from, w) (p = pqueue_push_wrapper_inner(p, ind, from, w))
 
 int pqe_get_ind(PQueueEntry *pqe) { return ((Entry *)pqe->value)->ind; }
 int pqe_get_from(PQueueEntry *pqe) { return ((Entry *)pqe->value)->from; }
@@ -35,8 +38,11 @@ double dist(TilePosition *src, TilePosition *dest) {
 double pathfind_astar_heuristic(UnitTypes u, TilePosition *src,
                                 TilePosition *dest) {
   double m = INFINITY;
+  m = 0;
   for (int i = 0; i < TILE_NUMBER; i++)
-    m = m > units_get_tile_speed(u, i) ? units_get_tile_speed(u, i) : m;
+    //m = m > units_get_tile_speed(u, i) ? units_get_tile_speed(u, i) : m;
+    m += units_get_tile_speed(u, i);
+  m /= TILE_NUMBER;
   return dist(src, dest) / m;
   // return (abs(src->x - dest->x) + abs(src->y - dest->y))/m;
 }
@@ -62,11 +68,14 @@ double pathfind_astar_heuristic(UnitTypes u, TilePosition *src,
 // sets the value at given map coordinates to v
 #define flatmap_set(m, i, j, v) ((m)[flatmap_index(m, i, j)] = (v))
 
-void int_vec_push(VEC(int *) v, int i) {
+VEC(int*) int_vec_push_inner(VEC(int *) v, int i) {
   int *i_ = malloc(sizeof(int));
   *i_ = i;
   vec_push(v, i_);
+  return v;
 }
+
+#define int_vec_push(v,i) (v = int_vec_push_inner(v, i))
 
 VEC(int *) flatmap_get_neighbours(int *map, int ind, int height) {
   int x = flatmap_index_x(map, ind);
@@ -125,6 +134,8 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
     int curr = pqe_get_ind(pqe);
     TilePosition currpos = {.x = flatmap_index_x(dist, curr),
                             .y = flatmap_index_y(dist, curr)};
+
+    // printf("{x=%d,y=%d}\n",currpos.x,currpos.y); // DEBUG
     dist[curr] = pqe->weight - pathfind_astar_heuristic(u, &currpos, dest);
     from[curr] = pqe_get_from(pqe);
     free(pqe->value);
@@ -153,6 +164,7 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
       free(from);
       return p;
     }
+    // printf("  neighbour time\n"); // DEBUG
     // checks the neighbours of the current tile
     TileTypes ttype =
         m[flatmap_index_x(dist, curr)][flatmap_index_y(dist, curr)];
@@ -166,6 +178,7 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
                            .y = flatmap_index_y(dist, j)};
         TileTypes nttype = m[tp.x][tp.y];
         double nspd = units_get_tile_speed(u, nttype);
+        // printf("  %lf -> %lf + %lf\n",nspd,1 / (2 * spd) + 1 / (2 * nspd), pathfind_astar_heuristic(u, &tp, dest)); // DEBUG
         pqueue_push_wrapper(open, j, curr,
                             1 / (2 * spd) + 1 / (2 * nspd) +
                                 pathfind_astar_heuristic(u, &tp, dest));
@@ -181,6 +194,7 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
                            .y = flatmap_index_y(dist, j)};
         TileTypes nttype = m[tp.x][tp.y];
         double nspd = units_get_tile_speed(u, nttype);
+        // printf("  %lf -> %lf + %lf\n",nspd,sqrt(2) * (1 / (2 * spd) + 1 / (2 * nspd)), pathfind_astar_heuristic(u, &tp, dest)); // DEBUG
         pqueue_push_wrapper(open, j, curr,
                             sqrt(2) * (1 / (2 * spd) + 1 / (2 * nspd)) +
                                 pathfind_astar_heuristic(u, &tp, dest));
