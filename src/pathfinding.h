@@ -15,6 +15,8 @@ typedef struct {
 //! being the start of the path
 typedef VEC(TilePosition *) Path;
 
+void path_free(Path p);
+
 //! returns a minimal `Path` using the A* algorithm
 Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest);
 

@@ -1,9 +1,17 @@
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "data_structures/pqueue.h"
 #include "pathfinding.h"
 #include "util.h"
+#include "data_structures/vec.h"
+
+void path_free(Path p){
+  for (uint i = 0; i < vec_len(p); i++)
+    free(p[i]);
+  vec_free(p);
+}
 
 typedef struct {
   int ind;
@@ -34,16 +42,16 @@ double pathfind_astar_heuristic(UnitTypes u, TilePosition *src,
 }
 
 // converts map coordinates into flatmap coordinates
-#define flatmap_index(m, i, j) (1 + (i) % (m)[0] + (j) * (m)[0])
+#define flatmap_index(m, i, j) (1 + (i) % ((int*)(m))[0] + (j) * ((int*)(m))[0])
 
 // converts a TilePosition into flatmap coordinates
-#define flatmap_tile_index(m, t) (1 + ((t)->x) % (m)[0] + ((t)->y) * (m)[0])
+#define flatmap_tile_index(m, t) (1 + ((t)->x) % ((int*)(m))[0] + ((t)->y) * ((int*)(m))[0])
 
 // gets the horizontal component of a flatmap index
-#define flatmap_index_x(m, i) ((i) % (m)[0])
+#define flatmap_index_x(m, i) (((i)-1) % ((int*)(m))[0])
 
 // gets the vertical component of a flatmap index
-#define flatmap_index_y(m, i) (((int)(i)) / (m)[0])
+#define flatmap_index_y(m, i) (((int)(i)-1) / ((int*)(m))[0])
 
 // gets the value at given map coordinates
 #define flatmap_get(m, i, j) ((m)[flatmap_index(m, i, j)])
@@ -103,8 +111,8 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
   from[0] = map_width(m);
   // a flattened matrix containing the current distance from the source to each
   // point
-  int *dist = malloc(sizeof(int) * len);
-  dist[0] = map_width(m);
+  double *dist = malloc(sizeof(double) * len);
+  ((int*)dist)[0] = map_width(m);
   for (int i = 1; i < len; i++) {
     from[i] = -1;
     dist[i] = INFINITY;
@@ -149,10 +157,11 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
     TileTypes ttype =
         m[flatmap_index_x(dist, curr)][flatmap_index_y(dist, curr)];
     double spd = units_get_tile_speed(u, ttype);
-    VEC(int *) neigh = flatmap_get_neighbours(dist, curr, map_height(m));
+    VEC(int *) neigh = flatmap_get_neighbours(from, curr, map_height(m));
     for (uint i = 0; i < vec_len(neigh); i++) {
       int j = *neigh[i];
-      if (dist[j] == INFINITY) {
+      
+      if (isinf(dist[j])) {
         TilePosition tp = {.x = flatmap_index_x(dist, j),
                            .y = flatmap_index_y(dist, j)};
         TileTypes nttype = m[tp.x][tp.y];
@@ -164,10 +173,10 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
       free(neigh[i]);
     }
     vec_free(neigh);
-    neigh = flatmap_get_diag(dist, curr, map_height(m));
+    neigh = flatmap_get_diag(from, curr, map_height(m));
     for (uint i = 0; i < vec_len(neigh); i++) {
       int j = *neigh[i];
-      if (dist[j] == INFINITY) {
+      if (isinf(dist[j])) {
         TilePosition tp = {.x = flatmap_index_x(dist, j),
                            .y = flatmap_index_y(dist, j)};
         TileTypes nttype = m[tp.x][tp.y];
