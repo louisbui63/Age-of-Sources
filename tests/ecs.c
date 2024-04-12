@@ -113,5 +113,5 @@ int test_ecs() {
   ecs_add_component(&w, e, 0, uwu);
 
   world_free(&w);
-  return 0;
+  return SUCCESS;
 }

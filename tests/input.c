@@ -126,5 +126,5 @@ int test_input() {
   inputs_free(in);
   world_free(&w);
 
-  return 0;
+  return SUCCESS;
 }
