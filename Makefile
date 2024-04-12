@@ -2,11 +2,7 @@ CC = clang
 
 CFLAGS = -std=gnu2x -Wall -Wextra -pedantic -O2 -fopenmp=libomp #-Isrc
 
-<<<<<<< HEAD
-LIBS = $(shell pkg-config --cflags --libs sdl2 SDL2_ttf) -lm
-=======
-LIBS = $(shell pkg-config --cflags --libs sdl2 SDL2_mixer SDL2_ttf)
->>>>>>> main
+LIBS = $(shell pkg-config --cflags --libs sdl2 SDL2_mixer SDL2_ttf) -lm
 
 CFLAGS += -g -fno-omit-frame-pointer #-fsanitize=address
 
