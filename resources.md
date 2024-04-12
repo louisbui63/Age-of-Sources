@@ -15,6 +15,7 @@ Websites and pages :
 - <https://curc.readthedocs.io/en/latest/programming/OpenMP-C.html#work-sharing-directive-omp-for>
 - <http://www.gameaipro.com/>
 - <https://valgrind.org/docs/manual/index.html>
+- <https://lazyfoo.net/tutorials/SDL/21_sound_effects_and_music/index.php>
 
 Books and articles :
 

@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -28,6 +29,15 @@ int main() {
     SDL_DestroyWindow(window);
     abort();
   });
+
+  HANDLE_ERROR(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0,
+               Mix_GetError(), {
+                 SDL_DestroyRenderer(renderer);
+                 SDL_DestroyWindow(window);
+                 abort();
+               });
+
+  atexit(Mix_Quit);
 
   SDL_Surface *test_bmp = SDL_LoadBMP("./asset/sprites/test.bmp");
   HANDLE_ERROR(!test_bmp, SDL_GetError(), {
@@ -72,8 +82,9 @@ int main() {
   *test_key_event = clickable_event;
 
   // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
-  // ecs_add_component(&w, test_e, COMP_BACKGROUND, test_background);
-  // ecs_add_component(&w, test_e, COMP_CLICKABLE, test_clickable);
+  // ecs_add_component(&w, test_e, COMP_BACKGROUND,
+  // test_background); ecs_add_component(&w, test_e,
+  // COMP_CLICKABLE, test_clickable);
   spawn_clickable(&w, test_clickable, test_key_event);
 
   // dt is the frametime from last frame
