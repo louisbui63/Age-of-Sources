@@ -30,5 +30,6 @@ Position world2screenspace(Position *p, Camera *cam);
 Position screen2worldspace(Position *p, Camera *cam);
 
 //! Renders any entity with a `Position` and a `Sprite`, according to `cam`.
-//! Said position must be in worldspace coordinates
-void render(World *w, SDL_Renderer *rdr, Camera *cam);
+//! Said position must be in worldspace coordinates. Also renders the map if
+//! found.
+void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window);

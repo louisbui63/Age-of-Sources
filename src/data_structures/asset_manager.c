@@ -64,6 +64,7 @@ char is_asset_locked(char *t) {
 }
 
 void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
+  // printf("load%s\n", t);
   SDL_Surface *surf = SDL_LoadBMP(t);
   HANDLE_ERROR(!surf, SDL_GetError(), {
     SDL_DestroyRenderer(renderer);
@@ -78,7 +79,7 @@ void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
     abort();
   })
   SDL_FreeSurface(surf);
-  char *key = malloc(strlen(t));
+  char *key = malloc((strlen(t) + 1) * sizeof(char));
   strcpy(key, t);
 
   Rc *val = malloc(sizeof(Rc));
