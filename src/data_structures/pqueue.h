@@ -31,4 +31,6 @@ PQueueEntry *pqueue_pop(PQueue p);
 PQueueEntry *pqueue_get(PQueue p);
 
 //! puts an element in the queue
-void pqueue_push(PQueue p, void *val, double weight);
+PQueue pqueue_push_inner(PQueue p, void *val, double weight);
+
+#define pqueue_push(p, val, weight) (p = pqueue_push_inner(p, val, weight))

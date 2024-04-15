@@ -6,6 +6,7 @@
 //! an `enum` containing all the tiles for the game
 typedef enum {
   TILE_PLAIN,
+  TILE_FOREST,
 
   TILE_NUMBER
 } TileTypes;
