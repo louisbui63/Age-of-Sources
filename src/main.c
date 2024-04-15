@@ -6,6 +6,7 @@
 #include "components.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
+#include "data_structures/map.h"
 #include "input.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
@@ -55,7 +56,7 @@ int main() {
   SDL_FreeSurface(test_bmp);
 
   World w = world_new();
-  Camera cam = {.x = 100, .y = 100, .zoom = 1};
+  Camera cam = {.x = 0, .y = 0, .zoom = 1};
 
   init_world(&w);
 
@@ -93,6 +94,11 @@ int main() {
 
   // down keys and mouse buttons
   Inputs *input_down = inputs_new();
+
+  Entity *map = spawn_entity(&w);
+  MapComponent *mc = malloc(sizeof(MapComponent));
+  *mc = (MapComponent){load_map_from_bmp("asset/test_map.bmp")};
+  ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
 
   int running = 1;
   for (; running;) {
@@ -142,7 +148,7 @@ int main() {
 
     // render
     SDL_RenderClear(renderer);
-    render(&w, renderer, &cam);
+    render(&w, renderer, &cam, window);
     render_ui(&w, renderer);
 
     SDL_RenderPresent(renderer);

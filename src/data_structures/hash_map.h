@@ -21,6 +21,9 @@ uint64_t hash_str(void *);
 //! A FNV hash function for 64 bit integers
 uint64_t hash_u64(void *);
 
+//! A FNV hash function for 8 bit integers
+uint64_t hash_u8(void *);
+
 //! An entry in a `HashMap`, i.e. a key-value pair
 typedef struct {
   void *key;

@@ -44,6 +44,19 @@ uint64_t hash_u64(void *u) {
   return out;
 }
 
+uint64_t hash_u8(void *u) {
+  uint64_t w = *(uint64_t *)u;
+  // https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
+  uint64_t out = FNV_OFFSET_BASIS;
+  for (int i = 0; i < 1; i++) {
+    uint8_t byte = (uint8_t)w;
+    w >>= 8;
+    out *= FNV_PRIME;
+    out ^= byte;
+  }
+  return out;
+}
+
 HashMap hash_map_create(uint64_t (*h)(void *), char (*c)(void *, void *)) {
   HashMap hm = {malloc(sizeof(HashMapEntry) * HASHMAP_DEFAULT_LENGTH), h, c,
                 HASHMAP_DEFAULT_LENGTH, 0};
