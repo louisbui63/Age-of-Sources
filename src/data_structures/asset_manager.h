@@ -13,25 +13,23 @@ extern HashMap ASSET_STORE;
 //! `get_texture` or `load_texture`
 void init_asset_manager();
 
+Error lock_asset(char *t, char locked);
+
+char is_asset_locked(char *t);
+
+//! Returns a pointer to the texture from file `t`. Will had it to the
+//! `ASSET_STORE` if it is not in it yet
+void *get_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
+
 //! Loads the texture from file `t` in the `ASSET_STORE`
 //! While calling it multiple times with the same `t` shouldn't fail, it is
 //! unadvisable as slow. Crashes on invalid file path or texture creation.
 void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
 
-//! Returns a pointer to the texture from file `t`. Will add it to the
-//! `ASSET_STORE` if it is not in it yet.
-void *get_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
-
-//! Remove a texture from the `ASSET_STORE` and free it.
-int drop_texture(char *t);
-
-//! Loads the font from file `t` in the `ASSET_STORE`
-//! The recommendations are the same as for `load_texture`.
 void *load_font(char *t, Uint8 size);
 
 //! Returns a pointer to the font from file `t`. Will add it to the
 //! `ASSET_STORE` if it is not in it yet.
 void *get_font(char *t, Uint8 size);
 
-//! Remove a font from the `ASSET_STORE` and free it.
-int drop_font(char *t, Uint8 size);
+int drop_font(char *font, Uint8 size);

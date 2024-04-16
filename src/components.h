@@ -14,7 +14,7 @@
 #define COMP_MINIMAP 5
 #define COMPF_HOVERABLE (1 << 6)
 #define COMP_HOVERABLE 6
-#define COMPF_MAIN_MENU (1 << 7)
-#define COMP_MAIN_MENU 7
+#define COMPF_MAPCOMPONENT (1 << 7)
+#define COMP_MAPCOMPONENT 7
 
 int init_world(World *w);
