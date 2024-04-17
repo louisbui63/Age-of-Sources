@@ -59,6 +59,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Minimap *m = entity_get_component(w, e, COMP_MINIMAP);
+    m = m + 0;
     // SDL_RenderCopy(rdr, m->sprite->texture, NULL, m->rect);
   }
 

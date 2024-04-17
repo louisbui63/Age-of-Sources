@@ -196,7 +196,7 @@ void *get_font_aux(char *t) {
 
 void *get_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t = malloc(n + 3);
+  char *t = malloc(n + 4);
   strcpy(t, font);
   t[n] = '|';
   t[n + 1] = '0' + size / 10;

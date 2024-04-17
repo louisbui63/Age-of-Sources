@@ -45,7 +45,7 @@
   }
 
 Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
-  FILE *f = fopen(path, 'r');
+  FILE *f = fopen(path, "r");
   char c;
   char c1;
   char c2;
@@ -152,5 +152,6 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   fgetc(f); // this is to clean the '/' in '*/'
 
   free(temp);
+  fclose(f);
   return br;
 }
