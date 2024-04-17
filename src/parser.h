@@ -1,6 +1,6 @@
 //! @file parser.h
 #pragma once
 
-#include "./entities/entities.h"
+#include "units/units.h"
 
-body *parse(char *path);
+unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window);
