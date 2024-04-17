@@ -50,7 +50,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
     }
     if (!(c->is_clicked - 2)) {
       c->is_clicked = 0;
-      c->click_event();
+      // c->click_event();
     }
   }
 
