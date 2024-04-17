@@ -98,7 +98,7 @@ int register_component_inner_callback(World *w, int size,
 //! represented by the `Bitflag` argument. Please not that single-component
 //! requirements SHOULD NOT be registered. This is considered undefined
 //! behavior, as well as registering the same requirements more than once.
-void register_system_requirement(World *w, Bitflag *b);
+void register_system_requirement(World *w, Bitflag b);
 
 //! Spawns an `Entity` into the world and returns a pointer to it
 Entity *spawn_entity(World *w);
@@ -111,7 +111,7 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c);
 void despawn_entity(World *w, Entity *e);
 
 //! Despawns every `Entity` with this `Bitflag`
-void despawn_from_component(World *w, Bitflag *b);
+void despawn_from_component(World *w, Bitflag b);
 
 //! Returns an `Entity` pointer corresponding to the passed reference
 Entity *get_entity(World *w, EntityRef ref);
