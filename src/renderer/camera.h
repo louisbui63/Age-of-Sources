@@ -2,11 +2,6 @@
 #include "../data_structures/ecs.h"
 #include <SDL2/SDL_render.h>
 
-//! The main window's height
-#define WIN_H 360
-//! The main window's width
-#define WIN_W 640
-
 //! The `Camera` struct is not a component, it is meant to have exactly one
 //! instance and serves as the base for screenspace<->worldspace calculations
 typedef struct {

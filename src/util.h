@@ -24,6 +24,11 @@
 //! The frametime that the game should try to maintain, in milliseconds
 #define TARGET_FRAMETIME (1000 / 60)
 
+//! The main window's logical height
+#define WIN_H 360
+//! The main window's logical width
+#define WIN_W 640
+
 //! Verify that `a != 0`. Otherwise, prints an error and exits the current
 //! function with error `-1`
 #define ASSERT(a)                                                              \

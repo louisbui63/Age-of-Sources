@@ -46,7 +46,8 @@ Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event);
 //! and if it set to 2 it will start the action linked to the sprite.
 //! It must be noted that if you click on the sprite, mouve your mouse out and
 //! then release the click it will do nothing as a way to correct missclicks.
-void clickable_event(World *w, Entity *entity, Inputs *in, KeyState keystate);
+void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
+                     KeyState keystate);
 
 //! This function is used to render the entities associated with a hoverable
 //! component
