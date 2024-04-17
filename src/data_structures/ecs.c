@@ -237,7 +237,7 @@ void *entity_get_component(World *w, Entity *e, int type) {
 void despawn_from_component(World *w, Bitflag b) {
   VEC(EntityRef) er = world_query(w, &b);
   uint64_t n = vec_len(er);
-  for (int k = 0; k < n; k++) {
+  for (uint64_t k = 0; k < n; k++) {
     Entity *e = get_entity(w, er[k]);
     despawn_entity(w, e);
   }

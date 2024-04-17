@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #include "../data_structures/map.h"
-#include "renderer/sprite.h"
+#include "../renderer/sprite.h"
 
 //! The body type describes every unit and building in the game.
 //! Name matches the body's name, it must not be more than 255 characters long
@@ -49,4 +49,4 @@ typedef enum {
 
 double units_get_tile_speed(UnitTypes u, TileTypes t);
 
-void unit_component_free(Unit *uni);
+void unit_component_free(void *uni);

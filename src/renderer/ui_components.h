@@ -5,4 +5,4 @@
 
 //! This function adds every `Entity` needed for the main menu with the
 //! appropriate components.
-void main_menu(World *w) { Entity *e }
+// void main_menu(World *w) { Entity *e; }
