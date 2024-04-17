@@ -1,7 +1,7 @@
 # 2PII 2
 ## Compilation
 
-libomp is needed to compile, it can be installed with `sudo apt-get install libomp-dev` on Debian based distributions.
+Some dependencies are required to compile, they can be installed with `sudo apt-get install libsdl2-dev libomp-dev libsdl2-ttf-dev libsdl2-mixer-dev` on Debian based distributions.
 
 ## Doxygen
 
