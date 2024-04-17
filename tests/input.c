@@ -13,6 +13,7 @@ typedef struct {
 int global_count_mine_dont_touch = 0;
 
 void test_keyevent_1(__attribute__((unused)) World *w,
+                     __attribute__((unused)) SDL_Renderer *r,
                      __attribute__((unused)) Entity *e,
                      __attribute__((unused)) Inputs *in,
                      __attribute__((unused)) KeyState ks) {
@@ -20,6 +21,7 @@ void test_keyevent_1(__attribute__((unused)) World *w,
 }
 
 void test_keyevent_2(__attribute__((unused)) World *w,
+                     __attribute__((unused)) SDL_Renderer *r,
                      __attribute__((unused)) Entity *e, Inputs *in,
                      KeyState ks) {
   if (ks == KEY_PRESSED && inputs_is_mouse_button_in(in, SDL_BUTTON_MIDDLE))
@@ -115,18 +117,16 @@ int test_input() {
   }
 
   global_count_mine_dont_touch = 0;
-  inputs_run_callbacks(&w, in, KEY_RELEASED);
+  inputs_run_callbacks(&w, 0, in, KEY_RELEASED);
   ASSERT(global_count_mine_dont_touch == 8);
 
   global_count_mine_dont_touch = 0;
   ASSERT(inputs_is_mouse_button_in(in, SDL_BUTTON_MIDDLE));
-  inputs_run_callbacks(&w, in, KEY_PRESSED);
+  inputs_run_callbacks(&w, 0, in, KEY_PRESSED);
   ASSERT(global_count_mine_dont_touch == 16);
 
   inputs_free(in);
   world_free(&w);
 
-  world_free(&w);
-
-  return 0;
+  return SUCCESS;
 }

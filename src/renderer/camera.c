@@ -5,7 +5,9 @@
 #include <stdint.h>
 
 #include "../components.h"
+#include "../data_structures/asset_manager.h"
 #include "../data_structures/ecs.h"
+#include "../data_structures/map.h"
 #include "../data_structures/vec.h"
 #include "sprite.h"
 
@@ -19,9 +21,44 @@ Position screen2worldspace(Position *p, Camera *cam) {
                     .y = p->y * cam->zoom + cam->y};
 }
 
-void render(World *w, SDL_Renderer *rdr, Camera *cam) {
-  uint64_t mask = COMPF_POSITION | COMPF_SPRITE;
+void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
+
+  // render map
+  uint64_t mask = COMPF_MAPCOMPONENT;
   EntityRef *er = world_query(w, &mask);
+  if (vec_len(er) == 1) {
+    EntityRef ei = er[0];
+    Entity *e = get_entity(w, ei);
+    MapComponent *cmp = entity_get_component(w, e, COMP_MAPCOMPONENT);
+    for (int i = 0; i < map_width(cmp->map); i++) {
+      for (int j = 0; j < map_height(cmp->map); j++) {
+        char *file = get_tile_file_name(cmp->map[i][j]);
+        SDL_Texture *text = get_texture(file, rdr, window);
+
+        Position p = (Position){.x = i * TILE_SIZE, .y = j * TILE_SIZE};
+
+        Position wtl = world2screenspace(&p, cam);
+        Position wtr = world2screenspace(
+            &(Position){.x = p.x + TILE_SIZE, .y = p.y + TILE_SIZE}, cam);
+
+        SDL_Rect r = {
+            .x = wtl.x, .y = wtl.y, .w = wtr.x - wtl.x, .h = wtr.y - wtl.y};
+
+        if (wtl.x < WIN_W && wtl.y < WIN_H && wtr.x > 0 && wtr.y > 0) {
+          SDL_RenderCopy(rdr, text, 0, &r);
+        }
+
+        free(file);
+      }
+    }
+
+  } else {
+    WARN("Unexpected number of maps found");
+  }
+
+  // render sprites
+  mask = COMPF_POSITION | COMPF_SPRITE;
+  er = world_query(w, &mask);
   _Pragma("omp parallel") {
     _Pragma("omp for") {
       for (uint i = 0; i < vec_len(er); i++) {

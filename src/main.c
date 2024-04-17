@@ -1,10 +1,12 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
 #include "components.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
+#include "data_structures/map.h"
 #include "input.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
@@ -17,8 +19,8 @@ int main() {
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
   atexit(SDL_Quit);
 
-  SDL_Window *window =
-      SDL_CreateWindow("test", 100, 100, 640, 360, SDL_WINDOW_SHOWN);
+  SDL_Window *window = SDL_CreateWindow(
+      "test", 100, 100, WIN_W, WIN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
   HANDLE_ERROR(!window, SDL_GetError(), abort());
   SDL_Renderer *renderer = SDL_CreateRenderer(
@@ -29,7 +31,29 @@ int main() {
     abort();
   });
 
-  SDL_Surface *test_bmp = SDL_LoadBMP("test.bmp");
+  HANDLE_ERROR(SDL_RenderSetLogicalSize(renderer, WIN_W, WIN_H), SDL_GetError(),
+               {
+                 SDL_DestroyRenderer(renderer);
+                 SDL_DestroyWindow(window);
+                 abort();
+               });
+
+  HANDLE_ERROR(SDL_RenderSetIntegerScale(renderer, true), SDL_GetError(), {
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    abort();
+  });
+
+  HANDLE_ERROR(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0,
+               Mix_GetError(), {
+                 SDL_DestroyRenderer(renderer);
+                 SDL_DestroyWindow(window);
+                 abort();
+               });
+
+  atexit(Mix_Quit);
+
+  SDL_Surface *test_bmp = SDL_LoadBMP("./asset/sprites/test.bmp");
   HANDLE_ERROR(!test_bmp, SDL_GetError(), {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -45,7 +69,7 @@ int main() {
   SDL_FreeSurface(test_bmp);
 
   World w = world_new();
-  Camera cam = {.x = 100, .y = 100, .zoom = 1};
+  Camera cam = {.x = 32, .y = 32, .zoom = 1};
 
   init_world(&w);
 
@@ -60,7 +84,6 @@ int main() {
   SDL_QueryTexture(test_tex, 0, 0, &size->w, &size->h);
   size->x = 0;
   size->y = 0;
-
   // Background *test_background = malloc(sizeof(Background));
   Clickable *test_clickable = malloc(sizeof(Clickable));
   // Minimap *test_minimap = malloc(sizeof(Minimap));
@@ -68,12 +91,14 @@ int main() {
 
   *test_sprite = (Sprite){.texture = test_tex, .rect = size};
   // *test_background = (Background){.sprite = test_sprite, .rect = size};
-  *test_clickable = (Clickable){.sprite = test_sprite, .rect = size};
+  *test_clickable =
+      (Clickable){.sprite = test_sprite, .rect = size, .text = ""};
   *test_key_event = clickable_event;
 
   // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
-  // ecs_add_component(&w, test_e, COMP_BACKGROUND, test_background);
-  // ecs_add_component(&w, test_e, COMP_CLICKABLE, test_clickable);
+  // ecs_add_component(&w, test_e, COMP_BACKGROUND,
+  // test_background); ecs_add_component(&w, test_e,
+  // COMP_CLICKABLE, test_clickable);
   spawn_clickable(&w, test_clickable, test_key_event);
 
   // dt is the frametime from last frame
@@ -82,6 +107,11 @@ int main() {
 
   // down keys and mouse buttons
   Inputs *input_down = inputs_new();
+
+  Entity *map = spawn_entity(&w);
+  MapComponent *mc = malloc(sizeof(MapComponent));
+  *mc = (MapComponent){load_map_from_bmp("asset/test_map.bmp")};
+  ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
 
   int running = 1;
   for (; running;) {
@@ -121,9 +151,9 @@ int main() {
       }
     }
     // keyboard and mouse button events
-    inputs_run_callbacks(&w, input_pressed, KEY_PRESSED);
-    inputs_run_callbacks(&w, input_down, KEY_DOWN);
-    inputs_run_callbacks(&w, input_released, KEY_RELEASED);
+    inputs_run_callbacks(&w, renderer, input_pressed, KEY_PRESSED);
+    inputs_run_callbacks(&w, renderer, input_down, KEY_DOWN);
+    inputs_run_callbacks(&w, renderer, input_released, KEY_RELEASED);
 
     // free instant inputs
     inputs_free(input_pressed);
@@ -131,7 +161,7 @@ int main() {
 
     // render
     SDL_RenderClear(renderer);
-    render(&w, renderer, &cam);
+    render(&w, renderer, &cam, window);
     render_ui(&w, renderer);
 
     SDL_RenderPresent(renderer);
@@ -145,6 +175,7 @@ int main() {
   inputs_free(input_down);
   world_free(&w);
   free(size);
+  free(test_sprite);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
 }
