@@ -26,7 +26,6 @@ typedef struct {
 
 //! Component that corresponds to the minimap
 typedef struct {
-  Sprite *sprite;
   SDL_Rect *rect;
 } Minimap;
 
@@ -57,3 +56,11 @@ void clickable_event(World *w, Entity *entity, Inputs *in, KeyState keystate);
 //! This function is used to render the entities associated with a hoverable
 //! component
 void render_hoverable(SDL_Rect *rect, char *text);
+
+void hoverable_component_free(void *tmp);
+
+void minimap_component_free(void *temp);
+
+void background_component_free(void *temp);
+
+void clickable_component_free(void *temp);

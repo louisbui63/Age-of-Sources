@@ -3,4 +3,4 @@
 
 #include "units/units.h"
 
-unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window);
+Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window);

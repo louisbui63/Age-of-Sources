@@ -8,6 +8,7 @@
 #include "../components.h"
 #include "../data_structures/asset_manager.h"
 #include "../data_structures/vec.h"
+#include "sprite.h"
 
 void render_ui(World *w, SDL_Renderer *rdr) {
   uint64_t mask = COMPF_BACKGROUND;
@@ -58,7 +59,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Minimap *m = entity_get_component(w, e, COMP_MINIMAP);
-    SDL_RenderCopy(rdr, m->sprite->texture, NULL, m->rect);
+    // SDL_RenderCopy(rdr, m->sprite->texture, NULL, m->rect);
   }
 
   // To finish with SDL_TTF
@@ -95,4 +96,32 @@ void clickable_event(World *w, Entity *entity, Inputs *in, KeyState keystate) {
 void render_hoverable(SDL_Rect *rect, char *text) {
   rect = rect + 0;
   text = text + 0;
+}
+
+void hoverable_component_free(void *tmp) {
+  Hoverable *hov = (Hoverable *)tmp;
+  free(hov->text);
+  free(hov->rect);
+  free(hov);
+}
+
+void minimap_component_free(void *temp) {
+  Minimap *minm = (Minimap *)temp;
+  free(minm->rect);
+  free(minm);
+}
+
+void clickable_component_free(void *temp) {
+  Clickable *click = (Clickable *)temp;
+  sprite_component_free(click->sprite);
+  free(click->rect);
+  free(click->text);
+  free(click);
+}
+
+void background_component_free(void *temp) {
+  Background *bg = (Background *)temp;
+  sprite_component_free(bg->sprite);
+  free(bg->rect);
+  free(bg);
 }

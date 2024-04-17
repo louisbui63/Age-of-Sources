@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 
+#include "../data_structures/map.h"
 #include "renderer/sprite.h"
 
 //! The body type describes every unit and building in the game.
@@ -33,4 +34,19 @@ typedef struct {
   uint16_t Sp;    // Speed
   Sprite *sprite; // Sprite of the unit
   char *Descr;    // Description
-} unit;
+} Unit;
+
+//! an `enum` containing all the units for the game
+typedef enum {
+  UNIT_TEST, // funny name :)
+
+  UNIT_NUMBER
+} UnitTypes;
+
+//! returns the speed at which a unit of type `unit` should go on a tile of type
+//! `tile`
+// #define units_get_tile_speed(unit, tile) unit_speeds[unit][tile]
+
+double units_get_tile_speed(UnitTypes u, TileTypes t);
+
+void unit_component_free(Unit *uni);
