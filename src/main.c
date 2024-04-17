@@ -31,11 +31,12 @@ int main() {
     abort();
   });
 
-  HANDLE_ERROR(SDL_RenderSetLogicalSize(renderer, 640, 360), SDL_GetError(), {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    abort();
-  });
+  HANDLE_ERROR(SDL_RenderSetLogicalSize(renderer, WIN_W, WIN_H), SDL_GetError(),
+               {
+                 SDL_DestroyRenderer(renderer);
+                 SDL_DestroyWindow(window);
+                 abort();
+               });
 
   HANDLE_ERROR(SDL_RenderSetIntegerScale(renderer, true), SDL_GetError(), {
     SDL_DestroyRenderer(renderer);
