@@ -69,7 +69,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Hoverable *h = entity_get_component(w, e, COMP_HOVERABLE);
-    if (mouse_in_rect(h->rect))
+    if (mouse_in_rect(rdr, h->rect))
       render_hoverable(h->rect, h->text);
   }
 }
@@ -81,9 +81,10 @@ Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event) {
   return entity;
 }
 
-void clickable_event(World *w, Entity *entity, Inputs *in, KeyState keystate) {
+void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
+                     KeyState keystate) {
   Clickable *c = entity_get_component(w, entity, COMP_CLICKABLE);
-  if (!(mouse_in_rect(c->sprite->rect))) {
+  if (!(mouse_in_rect(rdr, c->sprite->rect))) {
     c->is_clicked = 0;
     return;
   } else if (!inputs_is_mouse_button_in(in, SDL_BUTTON_LEFT))

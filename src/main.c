@@ -21,14 +21,27 @@ int main() {
   atexit(SDL_Quit);
   HANDLE_ERROR(TTF_Init() < 0, SDL_GetError(), abort());
   atexit(TTF_Quit);
-  SDL_Window *window =
-      SDL_CreateWindow("test", 100, 100, 640, 360, SDL_WINDOW_SHOWN);
+  SDL_Window *window = SDL_CreateWindow(
+      "test", 100, 100, WIN_W, WIN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
   HANDLE_ERROR(!window, SDL_GetError(), abort());
   SDL_Renderer *renderer = SDL_CreateRenderer(
       window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
   HANDLE_ERROR(!renderer, SDL_GetError(), {
+    SDL_DestroyWindow(window);
+    abort();
+  });
+
+  HANDLE_ERROR(SDL_RenderSetLogicalSize(renderer, WIN_W, WIN_H), SDL_GetError(),
+               {
+                 SDL_DestroyRenderer(renderer);
+                 SDL_DestroyWindow(window);
+                 abort();
+               });
+
+  HANDLE_ERROR(SDL_RenderSetIntegerScale(renderer, true), SDL_GetError(), {
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     abort();
   });
@@ -58,7 +71,7 @@ int main() {
   SDL_FreeSurface(test_bmp);
 
   World w = world_new();
-  Camera cam = {.x = 0, .y = 0, .zoom = 1};
+  Camera cam = {.x = 32, .y = 32, .zoom = 1};
 
   init_world(&w);
 
@@ -149,9 +162,9 @@ int main() {
       }
     }
     // keyboard and mouse button events
-    inputs_run_callbacks(&w, input_pressed, KEY_PRESSED);
-    inputs_run_callbacks(&w, input_down, KEY_DOWN);
-    inputs_run_callbacks(&w, input_released, KEY_RELEASED);
+    inputs_run_callbacks(&w, renderer, input_pressed, KEY_PRESSED);
+    inputs_run_callbacks(&w, renderer, input_down, KEY_DOWN);
+    inputs_run_callbacks(&w, renderer, input_released, KEY_RELEASED);
 
     // free instant inputs
     inputs_free(input_pressed);
