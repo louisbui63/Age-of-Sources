@@ -28,7 +28,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
       SDL_SetTextureColorMod(c->sprite->texture, (Uint8)100, (Uint8)100,
                              (Uint8)100);
     }
-    SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->rect);
+    SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->sprite->rect);
     if (c->text->str[0]) {
       TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 32);
       SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(font, c->text->str,
