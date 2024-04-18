@@ -26,11 +26,11 @@ int main() {
   SDL_Renderer *renderer = SDL_CreateRenderer(
       window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
+  SDL_SetWindowMinimumSize(window, WIN_W, WIN_H);
   HANDLE_ERROR(!renderer, SDL_GetError(), {
     SDL_DestroyWindow(window);
     abort();
   });
-
   HANDLE_ERROR(SDL_RenderSetLogicalSize(renderer, WIN_W, WIN_H), SDL_GetError(),
                {
                  SDL_DestroyRenderer(renderer);
