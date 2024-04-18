@@ -114,7 +114,7 @@ int drop_texture(char *t) {
 void *load_audio(char *t, char is_mus) {
 
   void *aud;
-  hmase_free(src / data_structures / asset_manager.c : 38) AssetKind kd;
+  AssetKind kd;
   if (is_mus) {
     aud = Mix_LoadMUS(t);
     kd = MUSIC;
@@ -137,8 +137,7 @@ void *load_audio(char *t, char is_mus) {
 void *get_audio(char *t, char is_mus) {
   void *aud = hash_map_get(&ASSET_STORE, t);
   if (!aud) {
-    hmase_free(src / data_structures /
-               asset_manager.c : 38) return load_audio(t, is_mus);
+    return load_audio(t, is_mus);
   }
   ((Rc *)aud)->counter++;
   return ((Rc *)aud)->ref;
