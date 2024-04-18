@@ -185,9 +185,6 @@ int main() {
 
   inputs_free(input_down);
   world_free(&w);
-  free(size);
-  free(test_color);
-  free(test_text);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
 }

@@ -19,5 +19,6 @@ int init_world(World *w) {
   register_component_callback(w, Hoverable, hoverable_component_free);
   register_component_callback(w, MapComponent, map_component_free);
   register_component_callback(w, Unit, unit_component_free);
+  register_component_callback(w, Text, text_component_free);
   return SUCCESS;
 }

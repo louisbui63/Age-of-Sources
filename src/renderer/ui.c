@@ -102,7 +102,7 @@ void render_hoverable(SDL_Rect *rect, char *text) {
 
 void hoverable_component_free(void *tmp) {
   Hoverable *hov = (Hoverable *)tmp;
-  free(hov->text);
+  text_component_free(hov->text);
   free(hov->rect);
   free(hov);
 }
@@ -117,7 +117,7 @@ void clickable_component_free(void *temp) {
   Clickable *click = (Clickable *)temp;
   sprite_component_free(click->sprite);
   free(click->rect);
-  free(click->text);
+  text_component_free(click->text);
   free(click);
 }
 
@@ -126,4 +126,11 @@ void background_component_free(void *temp) {
   sprite_component_free(bg->sprite);
   free(bg->rect);
   free(bg);
+}
+
+void text_component_free(void *temp) {
+  Text *text = (Text *)temp;
+  // free(text->str);
+  free(text->color);
+  free(text);
 }
