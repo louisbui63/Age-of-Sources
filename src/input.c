@@ -51,8 +51,8 @@ Uint8 mouse_in_rect(SDL_Renderer *rdr, SDL_Rect *rect) {
   SDL_RenderGetViewport(rdr, &view_rect);
   float sx, sy;
   SDL_RenderGetScale(rdr, &sx, &sy);
-  mouse_position.x = (mouse_position.x - view_rect.x) / (sx);
-  mouse_position.y = (mouse_position.y - view_rect.y) / (sy);
+  mouse_position.x = mouse_position.x / sx - view_rect.x;
+  mouse_position.y = mouse_position.y / sy - view_rect.y;
 
   if (SDL_PointInRect(&mouse_position, rect)) {
     return 1;
