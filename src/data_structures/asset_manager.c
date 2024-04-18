@@ -46,7 +46,6 @@ void free_asset_store() { hash_map_free_callback(&ASSET_STORE, hmase_free); }
 
 void init_asset_manager() {
   ASSET_STORE = hash_map_create(hash_str, not_strcmp);
-  atexit(free_asset_store);
 }
 
 Error lock_asset(char *t, char locked) {

@@ -33,3 +33,5 @@ void *load_font(char *t, Uint8 size);
 void *get_font(char *t, Uint8 size);
 
 int drop_font(char *font, Uint8 size);
+
+void free_asset_store();
