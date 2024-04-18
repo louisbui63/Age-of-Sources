@@ -1,4 +1,5 @@
 #include <SDL2/SDL_render.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "components.h"

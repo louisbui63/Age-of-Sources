@@ -15,7 +15,6 @@
 #include "util.h"
 
 int main() {
-  init_asset_manager();
 
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
   atexit(SDL_Quit);
@@ -54,6 +53,8 @@ int main() {
                });
 
   atexit(Mix_Quit);
+
+  init_asset_manager();
 
   SDL_Surface *test_bmp = SDL_LoadBMP("./asset/sprites/test.bmp");
   HANDLE_ERROR(!test_bmp, SDL_GetError(), {
