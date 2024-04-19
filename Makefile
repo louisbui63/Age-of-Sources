@@ -2,7 +2,7 @@ CC = clang
 
 CFLAGS = -std=gnu2x -Wall -Wextra -pedantic -O2 -fopenmp=libomp #-Isrc
 
-LIBS = $(shell pkg-config --cflags --libs sdl2) -lm
+LIBS = $(shell pkg-config --cflags --libs sdl2 SDL2_mixer SDL2_ttf) -lm
 
 CFLAGS += -g -fno-omit-frame-pointer #-fsanitize=address
 
@@ -27,7 +27,7 @@ format:
 doc:
 	make -C doc ./doc
 
-htmldoc :
+htmldoc : doc
 	firefox file://$(shell pwd)/doc/html/index.html
 
 clean:

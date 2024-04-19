@@ -35,5 +35,5 @@ int test_hash_map() {
   ASSERT(*w = 31);
   hash_map_free(&hm);
 
-  return 0;
+  return SUCCESS;
 }

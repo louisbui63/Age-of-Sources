@@ -1,9 +1,10 @@
 #pragma once
 
-enum Error {
-  SUCCESS,
+typedef enum {
+  SUCCESS = 0,
   OUT_OF_MEMORY,
   INDEX_OUT_OF_RANGE,
   INVALID_TEXTURE,
-  ASSERTION_FAILED,
-};
+  ASSET_NOT_FOUND,
+  ASSERTION_FAILED
+} Error;
