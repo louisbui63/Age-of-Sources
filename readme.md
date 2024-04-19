@@ -8,3 +8,5 @@ Some dependencies are required to compile, they can be installed with `sudo apt-
 The use of `make doc` requires doxygen, LateX and graphviz.
 
 The use of the command `make htmldoc` requires firefox
+
+The html documentation is also available at https://uwu-segfault.eu/2p2doc
