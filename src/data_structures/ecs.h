@@ -110,6 +110,9 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c);
 //! Despawns an `Entity`
 void despawn_entity(World *w, Entity *e);
 
+//! Despawns every `Entity` with this `Bitflag`
+void despawn_from_component(World *w, Bitflag b);
+
 //! Returns an `Entity` pointer corresponding to the passed reference
 Entity *get_entity(World *w, EntityRef ref);
 
