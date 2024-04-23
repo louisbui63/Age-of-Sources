@@ -80,31 +80,31 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   br->name = nme;
   fgetc(f); // this is to clean the '/' in '*/'
 
-  // parsing of the HP
+  // parsing of the hp
   parser_get_uint16_t(hp);
 
-  // parsing of the BDam
+  // parsing of the b_dam
   parser_get_uint16_t(b_dam);
 
-  // parsing of the PDam
+  // parsing of the p_dam
   parser_get_uint16_t(p_dam);
 
-  // parsing of the SDam
+  // parsing of the s_dam
   parser_get_uint16_t(s_dam);
 
-  // parsing of the BDef
+  // parsing of the b_def
   parser_get_uint16_t(b_def);
 
-  // parsing of the PDef
+  // parsing of the p_def
   parser_get_uint16_t(p_def);
 
-  // parsing of the SDef
+  // parsing of the s_def
   parser_get_uint16_t(s_def);
 
-  // parsing of the Rg
+  // parsing of the rg
   parser_get_uint16_t(rg);
 
-  // parsing of the Sp
+  // parsing of the sp
   parser_get_uint16_t(sp);
 
   // parsing of the Sprite's rect's w
