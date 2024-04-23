@@ -77,35 +77,35 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   }
   char *nme = malloc(i + 1);
   strcpy(nme, temp);
-  br->Name = nme;
+  br->name = nme;
   fgetc(f); // this is to clean the '/' in '*/'
 
   // parsing of the HP
-  parser_get_uint16_t(HP);
+  parser_get_uint16_t(hp);
 
   // parsing of the BDam
-  parser_get_uint16_t(BDam);
+  parser_get_uint16_t(b_dam);
 
   // parsing of the PDam
-  parser_get_uint16_t(PDam);
+  parser_get_uint16_t(p_dam);
 
   // parsing of the SDam
-  parser_get_uint16_t(SDam);
+  parser_get_uint16_t(s_dam);
 
   // parsing of the BDef
-  parser_get_uint16_t(BDef);
+  parser_get_uint16_t(b_def);
 
   // parsing of the PDef
-  parser_get_uint16_t(PDef);
+  parser_get_uint16_t(p_def);
 
   // parsing of the SDef
-  parser_get_uint16_t(SDef);
+  parser_get_uint16_t(s_def);
 
   // parsing of the Rg
-  parser_get_uint16_t(Rg);
+  parser_get_uint16_t(rg);
 
   // parsing of the Sp
-  parser_get_uint16_t(Sp);
+  parser_get_uint16_t(sp);
 
   // parsing of the Sprite's rect's w
   parser_get_int(sprite->rect->w);
@@ -148,7 +148,7 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   temp[i] = '\0';
   char *descr = malloc(i + 1);
   strcpy(descr, temp);
-  br->Descr = descr;
+  br->descr = descr;
   fgetc(f); // this is to clean the '/' in '*/'
 
   free(temp);

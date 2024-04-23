@@ -9,39 +9,39 @@
 //! characters long.
 /*Name*/
 
-//! The second text is the HP of the unit, it must a be positive decimal number
+//! The second text is the hp of the unit, it must a be positive decimal number
 //! smaller or equal than 65535
 /*000*/
 
-//! The third text is the BDam of the unit, it must a be positive decimal
+//! The third text is the b_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
 /*000*/
 
-//! The fourth text is the PDam of the unit, it must a be positive decimal
+//! The fourth text is the p_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
 /*000*/
 
-//! The fifth text is the SDam of the unit, it must a be positive decimal
+//! The fifth text is the s_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
 /*000*/
 
-//! The sixth text is the BDef of the unit, it must a be positive decimal
+//! The sixth text is the b_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
 /*000*/
 
-//! The seventh text is the PDef of the unit, it must a be positive decimal
+//! The seventh text is the p_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
 /*000*/
 
-//! The eigth text is the SDef of the unit, it must a be positive decimal
+//! The eigth text is the s_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
 /*000*/
 
-//! The ninth text is the Rg of the unit, it must a be positive decimal
+//! The ninth text is the rg of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
 /*000*/
 
-//! The tenth text is the Sp of the unit, it must a be positive decimal
+//! The tenth text is the sp of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
 /*000*/
 
