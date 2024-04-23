@@ -114,6 +114,9 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   parser_get_int(sprite->rect->h);
 
   // parsing of the Sprite's rect's texture
+#ifndef TEST
+  // Lors des tests il n'y a pas de renderer et de window donc on ne peut pas
+  // charger la texture
   i = 0;
   c1 = fgetc(f);
   c2 = fgetc(f);
@@ -130,6 +133,7 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   temp[i] = '\0';
   br->sprite->texture = get_texture(temp, renderer, window);
   fgetc(f); // this is to clean the '/' in '*/'
+#endif
 
   // parsing of the unit's description
   i = 0;

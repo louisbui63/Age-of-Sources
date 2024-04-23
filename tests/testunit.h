@@ -24,4 +24,4 @@
 
 /*14*/
 
-/*asset/sprites/test.bmp*/
+/*descr */
