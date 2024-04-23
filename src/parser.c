@@ -10,35 +10,31 @@
   {                                                                            \
     c1 = fgetc(f);                                                             \
     c2 = fgetc(f);                                                             \
-    while ((c1 != '/') && (c2 != '*')) {                                       \
+    while ((c1 != '/') || (c2 != '*')) {                                       \
       c1 = c2;                                                                 \
       c2 = fgetc(f);                                                           \
     }                                                                          \
-    fgetc(f);                                                                  \
-    tempuint16_t = 0;                                                          \
+    tempuint16 = 0;                                                            \
     for (c = fgetc(f); c != '*'; c = fgetc(f)) {                               \
-      overf = tempuint16_t;                                                    \
-      printf("c %d\n", tempuint16_t);                                          \
-      tempuint16_t = tempuint16_t * 10 + (c - '0');                            \
-      if (overf > tempuint16_t) {                                              \
+      overf = tempuint16;                                                      \
+      tempuint16 = tempuint16 * 10 + (c - '0');                                \
+      if (overf > tempuint16) {                                                \
         HANDLE_ERROR(1, "overflow in a parsed uint16_t field", abort())        \
       }                                                                        \
     }                                                                          \
     fgetc(f);                                                                  \
-    br->field = tempuint16_t;                                                  \
-    printf("tempint %d\n", tempint);                                           \
+    br->field = tempuint16;                                                    \
   }
 
 #define parser_get_int(field)                                                  \
   {                                                                            \
     c1 = fgetc(f);                                                             \
     c2 = fgetc(f);                                                             \
-    while ((c1 != '/') && (c2 != '*')) {                                       \
+    while ((c1 != '/') || (c2 != '*')) {                                       \
       c1 = c2;                                                                 \
       c2 = fgetc(f);                                                           \
     }                                                                          \
-    fgetc(f);                                                                  \
-    int tempint = 0;                                                           \
+    tempint = 0;                                                               \
     for (c = fgetc(f); c != '*'; c = fgetc(f)) {                               \
       tempint = tempint * 10 + (c - '0');                                      \
     }                                                                          \
@@ -51,9 +47,9 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   char c;
   char c1;
   char c2;
-  uint16_t tempuint16_t;
+  uint16_t tempuint16;
   uint64_t overf;
-  int tempint;
+  int tempint = 0;
   int i;
   Unit *br = malloc(sizeof(Unit));
   SDL_Rect *rec = calloc(1, sizeof(SDL_Rect));
@@ -65,7 +61,7 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   i = 0;
   c1 = fgetc(f);
   c2 = fgetc(f);
-  while ((c1 != '/') && (c2 != '*')) {
+  while ((c1 != '/') || (c2 != '*')) {
     c1 = c2;
     c2 = fgetc(f);
   }
@@ -116,7 +112,7 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   parser_get_int(sprite->rect->h);
 
   // parsing of the Sprite's rect's texture
-#if 0
+#ifndef IS_TEST
   // Lors des tests il n'y a pas de renderer et de window donc on ne peut pas
   // charger la texture
   i = 0;
@@ -141,7 +137,7 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   i = 0;
   c1 = fgetc(f);
   c2 = fgetc(f);
-  while ((c1 != '/') && (c2 != '*')) {
+  while ((c1 != '/') || (c2 != '*')) {
     c1 = c2;
     c2 = fgetc(f);
   }
