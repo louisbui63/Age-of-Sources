@@ -18,6 +18,7 @@
     tempuint16_t = 0;                                                          \
     for (c = fgetc(f); c != '*'; c = fgetc(f)) {                               \
       overf = tempuint16_t;                                                    \
+      printf("c %d\n", tempuint16_t);                                          \
       tempuint16_t = tempuint16_t * 10 + (c - '0');                            \
       if (overf > tempuint16_t) {                                              \
         HANDLE_ERROR(1, "overflow in a parsed uint16_t field", abort())        \
@@ -25,6 +26,7 @@
     }                                                                          \
     fgetc(f);                                                                  \
     br->field = tempuint16_t;                                                  \
+    printf("tempint %d\n", tempint);                                           \
   }
 
 #define parser_get_int(field)                                                  \
@@ -36,7 +38,7 @@
       c2 = fgetc(f);                                                           \
     }                                                                          \
     fgetc(f);                                                                  \
-    tempint = 0;                                                               \
+    int tempint = 0;                                                           \
     for (c = fgetc(f); c != '*'; c = fgetc(f)) {                               \
       tempint = tempint * 10 + (c - '0');                                      \
     }                                                                          \
@@ -114,7 +116,7 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   parser_get_int(sprite->rect->h);
 
   // parsing of the Sprite's rect's texture
-#ifndef TEST
+#if 0
   // Lors des tests il n'y a pas de renderer et de window donc on ne peut pas
   // charger la texture
   i = 0;
