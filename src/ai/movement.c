@@ -39,7 +39,7 @@ void move_units(World *w) {
                2 * TILE_SIZE) {
           free(s->current_path[0]);
           vec_remove(stm->current_path, 0);
-          if (!vec_len(stm->current_path[0]))
+          if (!vec_len(stm->current_path))
             break;
         }
       }
