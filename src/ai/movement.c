@@ -37,6 +37,7 @@ void move_units(World *w) {
         // We must adapt the path if we find obstacles on the path
         while (v2len(v2sub(tile2pos(stm->current_path[0]), stm->position)) <
                2 * TILE_SIZE) {
+          free(s->current_path[0]);
           vec_remove(stm->current_path, 0);
           if (!vec_len(stm->current_path[0]))
             break;
