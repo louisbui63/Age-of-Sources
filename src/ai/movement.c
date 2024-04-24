@@ -14,7 +14,7 @@ void move_units(World *w) {
         EntityRef ei = er[i];
         Entity *e = get_entity(w, ei);
         // vary filters here
-        SteerObstacle *sto = entity_get_component(w, e, COMP_STEERMANAGER);
+        SteerObstacle *sto = entity_get_component(w, e, COMP_STEEROBSTACLE);
         vec_push(obs, sto);
       }
     }
