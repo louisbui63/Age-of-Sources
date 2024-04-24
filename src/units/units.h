@@ -22,18 +22,18 @@
 //! Descr matches the body's description, it must not be more than 65535
 //! characters long not including '\0', it must not contain '*'.
 typedef struct {
-  char *Name;
-  uint16_t HP;    // Health Point
-  uint16_t BDam;  // Blunt damage
-  uint16_t PDam;  // Piercing damage
-  uint16_t SDam;  // Special damage
-  uint16_t BDef;  // Blunt defence
-  uint16_t PDef;  // Piecing defence
-  uint16_t SDef;  // Special defence
-  uint16_t Rg;    // Range
-  uint16_t Sp;    // Speed
+  char *name;
+  uint16_t hp;    // Health Point
+  uint16_t b_dam; // Blunt damage
+  uint16_t p_dam; // Piercing damage
+  uint16_t s_dam; // Special damage
+  uint16_t b_def; // Blunt defence
+  uint16_t p_def; // Piecing defence
+  uint16_t s_def; // Special defence
+  uint16_t rg;    // Range
+  uint16_t sp;    // Speed
   Sprite *sprite; // Sprite of the unit
-  char *Descr;    // Description
+  char *descr;    // Description
 } Unit;
 
 //! an `enum` containing all the units for the game

@@ -11,8 +11,8 @@ double units_get_tile_speed(UnitTypes u, TileTypes t) {
 
 void unit_component_free(void *temp) {
   Unit *unit = (Unit *)temp;
-  free(unit->Descr);
-  free(unit->Name);
+  free(unit->descr);
+  free(unit->name);
   sprite_component_free(unit->sprite);
   free(unit);
 }

@@ -10,32 +10,30 @@
   {                                                                            \
     c1 = fgetc(f);                                                             \
     c2 = fgetc(f);                                                             \
-    while ((c1 != '/') && (c2 != '*')) {                                       \
+    while ((c1 != '/') || (c2 != '*')) {                                       \
       c1 = c2;                                                                 \
       c2 = fgetc(f);                                                           \
     }                                                                          \
-    fgetc(f);                                                                  \
-    tempuint16_t = 0;                                                          \
+    tempuint16 = 0;                                                            \
     for (c = fgetc(f); c != '*'; c = fgetc(f)) {                               \
-      overf = tempuint16_t;                                                    \
-      tempuint16_t = tempuint16_t * 10 + (c - '0');                            \
-      if (overf > tempuint16_t) {                                              \
+      overf = tempuint16;                                                      \
+      tempuint16 = tempuint16 * 10 + (c - '0');                                \
+      if (overf > tempuint16) {                                                \
         HANDLE_ERROR(1, "overflow in a parsed uint16_t field", abort())        \
       }                                                                        \
     }                                                                          \
     fgetc(f);                                                                  \
-    br->field = tempuint16_t;                                                  \
+    br->field = tempuint16;                                                    \
   }
 
 #define parser_get_int(field)                                                  \
   {                                                                            \
     c1 = fgetc(f);                                                             \
     c2 = fgetc(f);                                                             \
-    while ((c1 != '/') && (c2 != '*')) {                                       \
+    while ((c1 != '/') || (c2 != '*')) {                                       \
       c1 = c2;                                                                 \
       c2 = fgetc(f);                                                           \
     }                                                                          \
-    fgetc(f);                                                                  \
     tempint = 0;                                                               \
     for (c = fgetc(f); c != '*'; c = fgetc(f)) {                               \
       tempint = tempint * 10 + (c - '0');                                      \
@@ -49,9 +47,9 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   char c;
   char c1;
   char c2;
-  uint16_t tempuint16_t;
+  uint16_t tempuint16;
   uint64_t overf;
-  int tempint;
+  int tempint = 0;
   int i;
   Unit *br = malloc(sizeof(Unit));
   SDL_Rect *rec = calloc(1, sizeof(SDL_Rect));
@@ -63,7 +61,7 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   i = 0;
   c1 = fgetc(f);
   c2 = fgetc(f);
-  while ((c1 != '/') && (c2 != '*')) {
+  while ((c1 != '/') || (c2 != '*')) {
     c1 = c2;
     c2 = fgetc(f);
   }
@@ -77,35 +75,35 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   }
   char *nme = malloc(i + 1);
   strcpy(nme, temp);
-  br->Name = nme;
+  br->name = nme;
   fgetc(f); // this is to clean the '/' in '*/'
 
-  // parsing of the HP
-  parser_get_uint16_t(HP);
+  // parsing of the hp
+  parser_get_uint16_t(hp);
 
-  // parsing of the BDam
-  parser_get_uint16_t(BDam);
+  // parsing of the b_dam
+  parser_get_uint16_t(b_dam);
 
-  // parsing of the PDam
-  parser_get_uint16_t(PDam);
+  // parsing of the p_dam
+  parser_get_uint16_t(p_dam);
 
-  // parsing of the SDam
-  parser_get_uint16_t(SDam);
+  // parsing of the s_dam
+  parser_get_uint16_t(s_dam);
 
-  // parsing of the BDef
-  parser_get_uint16_t(BDef);
+  // parsing of the b_def
+  parser_get_uint16_t(b_def);
 
-  // parsing of the PDef
-  parser_get_uint16_t(PDef);
+  // parsing of the p_def
+  parser_get_uint16_t(p_def);
 
-  // parsing of the SDef
-  parser_get_uint16_t(SDef);
+  // parsing of the s_def
+  parser_get_uint16_t(s_def);
 
-  // parsing of the Rg
-  parser_get_uint16_t(Rg);
+  // parsing of the rg
+  parser_get_uint16_t(rg);
 
-  // parsing of the Sp
-  parser_get_uint16_t(Sp);
+  // parsing of the sp
+  parser_get_uint16_t(sp);
 
   // parsing of the Sprite's rect's w
   parser_get_int(sprite->rect->w);
@@ -114,6 +112,9 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   parser_get_int(sprite->rect->h);
 
   // parsing of the Sprite's rect's texture
+#ifndef IS_TEST
+  // Lors des tests il n'y a pas de renderer et de window donc on ne peut pas
+  // charger la texture
   i = 0;
   c1 = fgetc(f);
   c2 = fgetc(f);
@@ -130,12 +131,13 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   temp[i] = '\0';
   br->sprite->texture = get_texture(temp, renderer, window);
   fgetc(f); // this is to clean the '/' in '*/'
+#endif
 
   // parsing of the unit's description
   i = 0;
   c1 = fgetc(f);
   c2 = fgetc(f);
-  while ((c1 != '/') && (c2 != '*')) {
+  while ((c1 != '/') || (c2 != '*')) {
     c1 = c2;
     c2 = fgetc(f);
   }
@@ -148,7 +150,7 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   temp[i] = '\0';
   char *descr = malloc(i + 1);
   strcpy(descr, temp);
-  br->Descr = descr;
+  br->descr = descr;
   fgetc(f); // this is to clean the '/' in '*/'
 
   free(temp);
