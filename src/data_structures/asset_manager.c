@@ -48,7 +48,6 @@ void free_asset_store() { hash_map_free_callback(&ASSET_STORE, hmase_free); }
 
 void init_asset_manager() {
   ASSET_STORE = hash_map_create(hash_str, not_strcmp);
-  atexit(free_asset_store);
 }
 
 Error lock_asset(char *t, char locked) {
@@ -66,7 +65,6 @@ char is_asset_locked(char *t) {
 }
 
 void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
-  // printf("load%s\n", t);
   SDL_Surface *surf = SDL_LoadBMP(t);
   HANDLE_ERROR(!surf, SDL_GetError(), {
     SDL_DestroyRenderer(renderer);
@@ -160,11 +158,11 @@ int drop_audio(char *t) {
 
 void *load_font_aux(char *t) {
   Uint8 n = strlen(t);
-  Uint8 size = t[n - 1] - 32;
-  t[n - 2] = 0;
+  Uint8 size = (t[n - 1] - '0') + (t[n - 2] - '0') * 10;
+  t[n - 3] = 0;
   TTF_Font *font = TTF_OpenFont(t, size);
-  t[n - 2] = '|';
-  char *key = malloc(n);
+  t[n - 3] = '|';
+  char *key = malloc(n + 1);
   strcpy(key, t);
 
   Rc *val = malloc(sizeof(Rc));
@@ -176,11 +174,12 @@ void *load_font_aux(char *t) {
 
 void *load_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t = malloc(n + 2);
-  strcpy(font, t);
+  char *t = malloc(n + 4);
+  strcpy(t, font);
   t[n] = '|';
-  t[n + 1] = 32 + size;
-  t[n + 2] = 0;
+  t[n + 1] = '0' + size / 10;
+  t[n + 2] = '0' + size % 10;
+  t[n + 3] = 0;
   void *f = load_font_aux(t);
   free(t);
   return f;
@@ -197,11 +196,12 @@ void *get_font_aux(char *t) {
 
 void *get_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t = malloc(n + 2);
-  strcpy(font, t);
+  char *t = malloc(n + 4);
+  strcpy(t, font);
   t[n] = '|';
-  t[n + 1] = 32 + size;
-  t[n + 2] = 0;
+  t[n + 1] = '0' + size / 10;
+  t[n + 2] = '0' + size % 10;
+  t[n + 3] = 0;
   void *f = get_font_aux(t);
   free(t);
   return f;
@@ -222,11 +222,12 @@ int drop_font_aux(char *t) {
 
 int drop_font(char *font, Uint8 size) {
   Uint8 n = strlen(font);
-  char *t = malloc(n + 2);
-  strcpy(font, t);
+  char *t = malloc(n + 4);
+  strcpy(t, font);
   t[n] = '|';
-  t[n + 1] = 32 + size;
-  t[n + 2] = 0;
+  t[n + 1] = '0' + size / 10;
+  t[n + 2] = '0' + size % 10;
+  t[n + 3] = 0;
   int f = drop_font_aux(t);
   free(t);
   return f;

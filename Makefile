@@ -27,8 +27,11 @@ format:
 doc:
 	make -C doc ./doc
 
+latex:
+	make -C latex ./doc
+
 htmldoc : doc
-	firefox file://$(shell pwd)/doc/html/index.html
+	firefox https://uwu-segfault.eu/2p2doc/
 
 clean:
 	rm -rf build/*

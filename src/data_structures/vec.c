@@ -10,7 +10,7 @@ void *vec_new_inner(int size) {
   ((uint *)vec)[1] = VEC_INIT_CAPACITY;
   ((uint *)vec)[2] = 0;
 
-  return (uint8_t *)vec + 3 * sizeof(int);
+  return (uint8_t *)vec + 3 * sizeof(uint);
 }
 
 inline void vec_free(void *vec) { free((uint8_t *)vec - 3 * sizeof(uint)); }

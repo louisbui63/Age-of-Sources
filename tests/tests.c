@@ -4,6 +4,7 @@
 #include "hash_map.h"
 #include "input.h"
 #include "linked_list.h"
+#include "parser.h"
 #include "pathfinding.h"
 #include "pqueue.h"
 #include "vec.h"
@@ -29,5 +30,6 @@ int main() {
   TEST(test_pqueue, "pqueue");
   TEST(test_pathfinding, "pathfinding");
   TEST(test_ecs, "ecs");
+  TEST(test_parser, "parser");
   return 0;
 }

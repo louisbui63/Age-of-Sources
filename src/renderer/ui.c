@@ -6,7 +6,9 @@
 #include <stdint.h>
 
 #include "../components.h"
+#include "../data_structures/asset_manager.h"
 #include "../data_structures/vec.h"
+#include "sprite.h"
 
 void render_ui(World *w, SDL_Renderer *rdr) {
   uint64_t mask = COMPF_BACKGROUND;
@@ -16,10 +18,9 @@ void render_ui(World *w, SDL_Renderer *rdr) {
     Background *b = entity_get_component(w, e, COMP_BACKGROUND);
     SDL_RenderCopy(rdr, b->sprite->texture, b->sprite->rect, b->rect);
   }
+
   mask = COMPF_CLICKABLE;
   er = world_query(w, &mask);
-  SDL_Surface *text_surface;
-  SDL_Texture *text_texture;
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Clickable *c = entity_get_component(w, e, COMP_CLICKABLE);
@@ -27,23 +28,41 @@ void render_ui(World *w, SDL_Renderer *rdr) {
       SDL_SetTextureColorMod(c->sprite->texture, (Uint8)100, (Uint8)100,
                              (Uint8)100);
     }
-    SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->rect);
+    SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->sprite->rect);
+    if (c->text->str[0]) {
+      TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 32);
+      SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(font, c->text->str,
+                                                         *c->text->color, 0);
+      SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
+      // You need to comment or uncomment the three next lines to activate the
+      // text shading
+      if (c->is_clicked) {
+        SDL_SetTextureColorMod(text_texture, (Uint8)100, (Uint8)100,
+                               (Uint8)100);
+      }
+      SDL_RenderCopy(rdr, text_texture, NULL, c->rect);
+      SDL_FreeSurface(surf);
+      SDL_DestroyTexture(text_texture);
+    }
     if (c->is_clicked) {
       SDL_SetTextureColorMod(c->sprite->texture, (Uint8)255, (Uint8)255,
                              (Uint8)255);
     }
     if (!(c->is_clicked - 2)) {
-      // script linked to clickable action
       c->is_clicked = 0;
+      // c->click_event();
     }
   }
+
   mask = COMPF_MINIMAP;
   er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Minimap *m = entity_get_component(w, e, COMP_MINIMAP);
-    SDL_RenderCopy(rdr, m->sprite->texture, m->sprite->rect, m->rect);
+    m = m + 0;
+    // SDL_RenderCopy(rdr, m->sprite->texture, NULL, m->rect);
   }
+
   // To finish with SDL_TTF
   mask = COMPF_HOVERABLE;
   er = world_query(w, &mask);
@@ -75,7 +94,43 @@ void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
   } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1))
     c->is_clicked = 2;
 }
+
 void render_hoverable(SDL_Rect *rect, char *text) {
   rect = rect + 0;
   text = text + 0;
+}
+
+void hoverable_component_free(void *tmp) {
+  Hoverable *hov = (Hoverable *)tmp;
+  text_component_free(hov->text);
+  free(hov->rect);
+  free(hov);
+}
+
+void minimap_component_free(void *temp) {
+  Minimap *minm = (Minimap *)temp;
+  free(minm->rect);
+  free(minm);
+}
+
+void clickable_component_free(void *temp) {
+  Clickable *click = (Clickable *)temp;
+  sprite_component_free(click->sprite);
+  free(click->rect);
+  text_component_free(click->text);
+  free(click);
+}
+
+void background_component_free(void *temp) {
+  Background *bg = (Background *)temp;
+  sprite_component_free(bg->sprite);
+  free(bg->rect);
+  free(bg);
+}
+
+void text_component_free(void *temp) {
+  Text *text = (Text *)temp;
+  // free(text->str);
+  free(text->color);
+  free(text);
 }

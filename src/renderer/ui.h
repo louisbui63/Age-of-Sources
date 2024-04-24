@@ -4,6 +4,11 @@
 #include "../input.h"
 #include "sprite.h"
 
+typedef struct {
+  char *str;
+  SDL_Color *color;
+} Text;
+
 //! Entities with this component are the background of the user interface
 typedef struct {
   Sprite *sprite;
@@ -14,13 +19,13 @@ typedef struct {
 typedef struct {
   Sprite *sprite;
   SDL_Rect *rect;
+  Text *text;
   Uint8 is_clicked;
-  char *text;
+  void (*click_event)();
 } Clickable;
 
 //! Component that corresponds to the minimap
 typedef struct {
-  Sprite *sprite;
   SDL_Rect *rect;
 } Minimap;
 
@@ -52,3 +57,13 @@ void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
 //! This function is used to render the entities associated with a hoverable
 //! component
 void render_hoverable(SDL_Rect *rect, char *text);
+
+void hoverable_component_free(void *tmp);
+
+void minimap_component_free(void *temp);
+
+void background_component_free(void *temp);
+
+void clickable_component_free(void *temp);
+
+void text_component_free(void *temp);
