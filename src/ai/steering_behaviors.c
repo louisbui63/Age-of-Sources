@@ -55,9 +55,10 @@ Vec2 tile2pos(TilePosition *tp) {
 BehaviorStatus behavior_follow_path(SteerManager *s) {
   while (v2len(v2sub(tile2pos(s->current_path[0]), s->position)) < TILE_SIZE) {
     vec_remove(s->current_path, 0);
-    if (!vec_len(s->current_path[0]))
+    if (!vec_len(s->current_path))
       break;
   }
-  behavior_seek(s, tile2pos(s->current_path[0]));
+  if (vec_len(s->current_path))
+    behavior_seek(s, tile2pos(s->current_path[0]));
   return ONGOING;
 }
