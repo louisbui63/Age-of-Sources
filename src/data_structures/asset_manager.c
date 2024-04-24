@@ -13,6 +13,8 @@ HashMap ASSET_STORE;
 
 typedef enum { TEXTURE, SFX, MUSIC, TTF } AssetKind;
 
+//! A reference counter for the assets. Should only be used through the API
+//! available in `asset_manager.h`
 typedef struct {
   uintptr_t counter;
   void *ref;

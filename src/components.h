@@ -16,5 +16,9 @@
 #define COMP_HOVERABLE 6
 #define COMPF_MAPCOMPONENT (1 << 7)
 #define COMP_MAPCOMPONENT 7
+#define COMPF_STEERMANAGER (1 << 8)
+#define COMP_STEERMANAGER 8
+#define COMPF_STEEROBSTACLE (1 << 9)
+#define COMP_STEEROBSTACLE 9
 
 int init_world(World *w);

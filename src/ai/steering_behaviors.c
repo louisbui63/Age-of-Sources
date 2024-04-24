@@ -10,15 +10,15 @@ BehaviorStatus behavior_seek(SteerManager *s, Vec2 target) {
 }
 
 BehaviorStatus behavior_obstacle_avoidance(SteerManager *s,
-                                           VEC(SteerObstacle) obstacles) {
+                                           VEC(SteerObstacle *) obstacles) {
   Vec2 bl = v2mul(s->awareness, v2normalize(s->velocity));
   int best = -1;
   float bdist = INFINITY;
   for (uint i = 0; i < vec_len(obstacles); i++) {
-    float cdist = v2dot(bl, v2sub(obstacles[i].position, s->position));
+    float cdist = v2dot(bl, v2sub(obstacles[i]->position, s->position));
     if (v2len(v2sub(v2add(s->position, v2mul(cdist, bl)),
-                    obstacles[i].position)) <
-        s->bounding_circle + obstacles[i].bounding_circle) {
+                    obstacles[i]->position)) <
+        s->bounding_circle + obstacles[i]->bounding_circle) {
       if (cdist < bdist) {
         best = i;
         bdist = cdist;
@@ -27,7 +27,12 @@ BehaviorStatus behavior_obstacle_avoidance(SteerManager *s,
   }
 
   if (best != -1) {
+    Vec2 avoidance =
+        v2mul(5, v2normalize(v2sub(bl, obstacles[best]->position)));
+    s->steering = avoidance;
+    return INTERRUPTED;
   }
+  return ONGOING;
 }
 
 BehaviorStatus behavior_complete(SteerManager *s) {
@@ -40,4 +45,19 @@ BehaviorStatus behavior_complete(SteerManager *s) {
     s->rotation = v2angle(s->velocity);
 
   return COMPLETE;
+}
+
+Vec2 tile2pos(TilePosition *tp) {
+  return (Vec2){tp->x * TILE_SIZE + (TILE_SIZE >> 1),
+                tp->y * TILE_SIZE + (TILE_SIZE >> 1)};
+}
+
+BehaviorStatus behavior_follow_path(SteerManager *s) {
+  while (v2len(v2sub(tile2pos(s->current_path[0]), s->position)) < TILE_SIZE) {
+    vec_remove(s->current_path, 0);
+    if (!vec_len(s->current_path[0]))
+      break;
+  }
+  behavior_seek(s, tile2pos(s->current_path[0]));
+  return ONGOING;
 }
