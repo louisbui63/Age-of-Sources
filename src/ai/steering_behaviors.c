@@ -19,7 +19,7 @@ BehaviorStatus behavior_obstacle_avoidance(SteerManager *s,
     if (v2len(v2sub(v2add(s->position, v2mul(cdist, bl)),
                     obstacles[i]->position)) <
         s->bounding_circle + obstacles[i]->bounding_circle) {
-      if (cdist < bdist) {
+      if (cdist < bdist && cdist > obstacles[i]->bounding_circle) {
         best = i;
         bdist = cdist;
       }
