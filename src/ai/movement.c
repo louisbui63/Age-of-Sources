@@ -68,4 +68,5 @@ void move_units(World *w) {
     }
     _Pragma("omp barrier")
   }
+  vec_free(obs);
 }
