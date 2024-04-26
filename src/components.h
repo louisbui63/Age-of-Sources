@@ -1,3 +1,5 @@
+#pragma once
+
 #include "data_structures/ecs.h"
 
 #define COMPF_POSITION (1 << 0)
@@ -16,5 +18,13 @@
 #define COMP_HOVERABLE 6
 #define COMPF_MAPCOMPONENT (1 << 7)
 #define COMP_MAPCOMPONENT 7
+#define COMPF_STEERMANAGER (1 << 8)
+#define COMP_STEERMANAGER 8
+#define COMPF_STEEROBSTACLE (1 << 9)
+#define COMP_STEEROBSTACLE 9
+#define COMPF_UNIT (1 << 10)
+#define COMP_UNIT 10
+#define COMPF_TEXT (1 << 11)
+#define COMP_TEXT 11
 
 int init_world(World *w);
