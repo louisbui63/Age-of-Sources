@@ -1,7 +1,7 @@
 doc :
 	doxygen ./Doxyfile
 
-latex :
+latex : doc
 	make -C ./latex
 	cp ./latex/refman.pdf doc.pdf
 	

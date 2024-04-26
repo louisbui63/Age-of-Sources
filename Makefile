@@ -18,17 +18,20 @@ build/%.o: %.c
 	mkdir -p $(shell dirname $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-test: $(SRC) $(TEST_SRC)
+add_flag:
+	$(eval CFLAGS += -DIS_TEST)
+
+test: add_flag $(SRC) $(TEST_SRC)
 	$(CC) $(CFLAGS) $(LIBS) -o test $(subst build/src/main.o,,$(SRC)) $(TEST_SRC)
 
 format:
 	./format.sh
 
 doc:
-	make -C doc ./doc
+	make -C ./doc doc
 
 latex:
-	make -C latex ./doc
+	make -C ./doc latex
 
 htmldoc : doc
 	firefox https://uwu-segfault.eu/2p2doc/
