@@ -14,6 +14,8 @@
 #include "renderer/ui.h"
 #include "util.h"
 
+int RUNNING = 1;
+
 int main() {
   init_asset_manager();
 

@@ -1,8 +1,9 @@
 #include <string.h>
 
 #include "../data_structures/asset_manager.h"
-#include "../util.h"
 #include "button.h"
+
+extern int RUNNING;
 
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
                         void (*event)(void *), char *t, int xp, int yp) {
