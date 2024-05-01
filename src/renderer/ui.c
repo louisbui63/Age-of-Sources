@@ -28,7 +28,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
       SDL_SetTextureColorMod(c->sprite->texture, (Uint8)100, (Uint8)100,
                              (Uint8)100);
     }
-    SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->sprite->rect);
+    SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->rect);
     if (c->text->str[0]) {
       TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 32);
       SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(font, c->text->str,
@@ -84,7 +84,7 @@ Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event) {
 void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
                      KeyState keystate) {
   Clickable *c = entity_get_component(w, entity, COMP_CLICKABLE);
-  if (!(mouse_in_rect(rdr, c->sprite->rect))) {
+  if (!(mouse_in_rect(rdr, c->rect))) {
     c->is_clicked = 0;
     return;
   } else if (!inputs_is_mouse_button_in(in, SDL_BUTTON_LEFT))

@@ -22,8 +22,8 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
   click->rect->y = yp;
   click->rect->w = 100;
   click->rect->h = 30;
-  click->sprite->rect->x = xp;
-  click->sprite->rect->y = yp;
+  click->sprite->rect->x = 0;
+  click->sprite->rect->y = 0;
   click->sprite->rect->w = 100;
   click->sprite->rect->h = 30;
   click->sprite->texture =
