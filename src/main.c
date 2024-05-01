@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "./renderer/button.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
@@ -13,6 +14,8 @@
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
 #include "util.h"
+
+int RUNNING = 1;
 
 int main() {
   init_asset_manager();
@@ -81,36 +84,12 @@ int main() {
   *test_pos = (Position){.x = 155, .y = 250};
   // ecs_add_component(&w, test_e, COMP_POSITION, test_pos);
 
-  Sprite *test_sprite = malloc(sizeof(Sprite));
-  SDL_Rect *size = malloc(sizeof(SDL_Rect));
-  SDL_Rect *test_rect = malloc(sizeof(SDL_Rect));
-  SDL_Color *test_color = malloc(sizeof(SDL_Color));
-  Text *test_text = malloc(sizeof(Text));
-  SDL_QueryTexture(test_tex, 0, 0, &size->w, &size->h);
-  SDL_QueryTexture(test_tex, 0, 0, &test_rect->w, &test_rect->h);
-  size->x = 0;
-  size->y = 0;
-  test_rect->x = 10;
-  test_rect->y = 10;
-  // Background *test_background = malloc(sizeof(Background));
-  Clickable *test_clickable = malloc(sizeof(Clickable));
-  // Minimap *test_minimap = malloc(sizeof(Minimap));
-  KeyEvent *test_key_event = malloc(sizeof(KeyEvent));
-
-  *test_color = (SDL_Color){.r = 0, .g = 255, .b = 0, .a = 255};
-  *test_sprite = (Sprite){.texture = test_tex, .rect = size};
-  *test_text = (Text){.str = "uwu\nuwu\n", .color = test_color};
-
-  // *test_background = (Background){.sprite = test_sprite, .rect = size};
-  *test_clickable =
-      (Clickable){.sprite = test_sprite, .rect = test_rect, .text = test_text};
-  *test_key_event = clickable_event;
+  spawn_main_quit(&w, renderer, window);
 
   // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
   // ecs_add_component(&w, test_e, COMP_BACKGROUND,
   // test_background); ecs_add_component(&w, test_e,
   // COMP_CLICKABLE, test_clickable);
-  spawn_clickable(&w, test_clickable, test_key_event);
 
   // dt is the frametime from last frame
   Uint32 dt = TARGET_FRAMETIME;
@@ -124,8 +103,7 @@ int main() {
   *mc = (MapComponent){load_map_from_bmp("asset/test_map.bmp")};
   ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
 
-  int running = 1;
-  for (; running;) {
+  for (; RUNNING;) {
     Uint32 start_time = SDL_GetTicks();
 
     Inputs *input_pressed = inputs_new();
@@ -157,7 +135,7 @@ int main() {
                                       true);
         break;
       case SDL_QUIT:
-        running = 0;
+        RUNNING = 0;
         break;
       }
     }
@@ -179,7 +157,7 @@ int main() {
 
     // delay before next frame
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
-    if (running && dt != TARGET_FRAMETIME)
+    if (RUNNING && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
   }
 
