@@ -33,7 +33,7 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
   return click;
 }
 
-void event_main_quit() { RUNNING = 0; }
+void event_main_quit(void *) { RUNNING = 0; }
 
 Clickable *spawn_main_quit(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
