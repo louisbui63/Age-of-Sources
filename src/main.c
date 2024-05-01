@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "./renderer/button.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
@@ -107,6 +108,7 @@ int main() {
   *test_clickable =
       (Clickable){.sprite = test_sprite, .rect = test_rect, .text = test_text};
   *test_key_event = clickable_event;
+  spawn_main_quit(&w, renderer, window);
 
   // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
   // ecs_add_component(&w, test_e, COMP_BACKGROUND,
