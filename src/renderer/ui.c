@@ -134,3 +134,5 @@ void text_component_free(void *temp) {
   free(text->color);
   free(text);
 }
+
+void null_function(){};

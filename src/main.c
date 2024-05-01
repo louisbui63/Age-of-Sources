@@ -105,8 +105,10 @@ int main() {
   *test_text = (Text){.str = "uwu\nuwu\n", .color = test_color};
 
   // *test_background = (Background){.sprite = test_sprite, .rect = size};
-  *test_clickable =
-      (Clickable){.sprite = test_sprite, .rect = test_rect, .text = test_text};
+  *test_clickable = (Clickable){.sprite = test_sprite,
+                                .rect = test_rect,
+                                .text = test_text,
+                                .click_event = null_function};
   *test_key_event = clickable_event;
   spawn_main_quit(&w, renderer, window);
 
