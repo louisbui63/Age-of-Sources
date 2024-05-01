@@ -66,6 +66,7 @@ typedef unsigned int uint;
 #define max(a, b) ((a > b) ? (a) : (b))
 #define min(a, b) ((a < b) ? (a) : (b))
 
+//! a 2d vector for use in units movement
 typedef struct {
   float x;
   float y;
@@ -73,12 +74,21 @@ typedef struct {
 
 #define v2op_dec(name) Vec2 v2##name(Vec2 a, Vec2 b)
 
+//! substracts two `Vec2`
 v2op_dec(sub);
+//! adds two `Vec2`
 v2op_dec(add);
+//! normalizes a `Vec2`
 Vec2 v2normalize(Vec2 a);
+//! performs a scalar product between `Vec2` `b` and `a`
 Vec2 v2mul(float a, Vec2 b);
+//! performs a scalar product between `Vec2` `a` and `1/b`
 Vec2 v2div(Vec2 a, float b);
+//! returns the angle (in radian) between `a` and the `(1,0)` vector
 float v2angle(Vec2 a);
+//! returns the length of a `Vec2`
 float v2len(Vec2 a);
+//! returns a vector of same direction than `a` and of length `max(v2len(a), b)`
 Vec2 v2truncate(Vec2 a, float b);
+//! performs a dot product between two `Vec2`
 float v2dot(Vec2 a, Vec2 b);
