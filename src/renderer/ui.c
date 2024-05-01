@@ -135,4 +135,4 @@ void text_component_free(void *temp) {
   free(text);
 }
 
-void null_function(){};
+void null_function() {}
