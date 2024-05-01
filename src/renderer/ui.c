@@ -130,7 +130,7 @@ void background_component_free(void *temp) {
 
 void text_component_free(void *temp) {
   Text *text = (Text *)temp;
-  // free(text->str);
+  free(text->str);
   free(text->color);
   free(text);
 }
