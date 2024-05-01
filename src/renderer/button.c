@@ -6,7 +6,7 @@
 extern int RUNNING;
 
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
-                        void (*event)(void *), char *t, int xp, int yp) {
+                        void (*event)(), char *t, int xp, int yp) {
   Clickable *click = malloc(sizeof(Clickable));
   click->sprite = malloc(sizeof(Sprite));
   click->rect = malloc(sizeof(SDL_Rect));
@@ -34,7 +34,7 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
   return click;
 }
 
-void event_main_quit(void *) { RUNNING = 0; }
+void event_main_quit() { RUNNING = 0; }
 
 Clickable *spawn_main_quit(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
