@@ -15,7 +15,13 @@ typedef struct {
   SDL_Rect *rect;
 } Background;
 
-//! Entities with this component start an action when clicked on
+//! Entities with this component start an action when clicked on.
+//! The value of is_clicked depends if and how it is clicked on,
+//! when is_clicked is equal to one it means the left click is pressed on over
+//! the clickable and that either it was already equal to one before or that it
+//! was being clicked on.
+//! If it is equal to two, it means the value was one and the click was released
+//! while over it. It activates the clickable's click_event.
 typedef struct {
   Sprite *sprite;
   SDL_Rect *rect;
