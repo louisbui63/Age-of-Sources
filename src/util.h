@@ -73,6 +73,8 @@ typedef struct {
 
 #define v2op_dec(name) Vec2 v2##name(Vec2 a, Vec2 b)
 
+int RUNNING = 1;
+
 v2op_dec(sub);
 v2op_dec(add);
 Vec2 v2normalize(Vec2 a);

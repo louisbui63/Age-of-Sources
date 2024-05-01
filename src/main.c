@@ -124,8 +124,7 @@ int main() {
   *mc = (MapComponent){load_map_from_bmp("asset/test_map.bmp")};
   ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
 
-  int running = 1;
-  for (; running;) {
+  for (; RUNNING;) {
     Uint32 start_time = SDL_GetTicks();
 
     Inputs *input_pressed = inputs_new();
@@ -157,7 +156,7 @@ int main() {
                                       true);
         break;
       case SDL_QUIT:
-        running = 0;
+        RUNNING = 0;
         break;
       }
     }
@@ -179,7 +178,7 @@ int main() {
 
     // delay before next frame
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
-    if (running && dt != TARGET_FRAMETIME)
+    if (RUNNING && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
   }
 

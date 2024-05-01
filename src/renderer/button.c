@@ -1,10 +1,11 @@
 #include <string.h>
 
 #include "../data_structures/asset_manager.h"
+#include "../util.h"
 #include "button.h"
 
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
-                        void (*event)(), char *t, int xp, int yp) {
+                        void (*event)(void *), char *t, int xp, int yp) {
   Clickable *click = malloc(sizeof(Clickable));
   click->sprite = malloc(sizeof(Sprite));
   click->rect = malloc(sizeof(SDL_Rect));
@@ -26,11 +27,13 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
   click->sprite->rect->h = 30;
   click->sprite->texture =
       get_texture("./asset/sprites/button.bmp", renderer, window);
-  spawn_clickable(w, click, clickable_event);
+  KeyEvent *key_event = malloc(sizeof(KeyEvent));
+  *key_event = clickable_event;
+  spawn_clickable(w, click, key_event);
   return click;
 }
 
-void *event_main_quit() {}
+void event_main_quit() { RUNNING = 0; }
 
 Clickable *spawn_main_quit(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
