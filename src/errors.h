@@ -10,8 +10,6 @@ typedef enum {
   //! function was called with invalid parameters leading to access out of the
   //! allowed range
   INDEX_OUT_OF_RANGE,
-  //!
-  INVALID_TEXTURE,
   //! asset doesn't exist, i.e. it is not loaded in the asset manager and there
   //! is no file corresponding to the requested asset
   ASSET_NOT_FOUND,
