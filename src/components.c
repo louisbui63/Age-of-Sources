@@ -15,6 +15,8 @@ int init_world(World *w) {
   register_system_requirement(w, COMPF_POSITION | COMPF_STEERMANAGER);
   register_system_requirement(w, COMPF_POSITION | COMPF_STEERMANAGER |
                                      COMPF_STEEROBSTACLE);
+  register_system_requirement(w, COMPF_POSITION | COMPF_STEERMANAGER |
+                                     COMPF_ANIMATOR);
   register_component(w, Position);
   register_component(w, Sprite);
   register_component(w, KeyEvent);
