@@ -130,6 +130,8 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   }
   temp[i] = '\0';
   br->sprite->texture = get_texture(temp, renderer, window);
+  br->path_to_sprite = malloc(strlen(temp) + 1);
+  strcpy(br->path_to_sprite, temp);
   fgetc(f); // this is to clean the '/' in '*/'
 #endif
 
