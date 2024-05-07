@@ -33,7 +33,7 @@ typedef struct {
   uint16_t rg;    // Range
   uint16_t sp;    // Speed
   Sprite *sprite; // Sprite of the unit
-  char *path_to_sprite // Path to the sprite of the unit
+  char *path_to_sprite; // Path to the sprite of the unit
   char *descr;    // Description
 } Unit;
 
