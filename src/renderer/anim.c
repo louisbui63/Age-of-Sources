@@ -16,3 +16,8 @@ void advance_anim_state(Animator *a, AnimState as) {
   if (a->current.x / w > a->max[a->state])
     a->current.x %= w;
 }
+
+Animator animator_new(Unit *unit_kind) {
+  SDL_Surface *surf = SDL_LoadBMP(unit_kind->sprite_path);
+  HANDLE_ERROR(!surf, SDL_GetError(), { abort(); })
+}

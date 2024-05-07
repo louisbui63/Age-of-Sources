@@ -4,6 +4,7 @@
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
 #include "input.h"
+#include "renderer/anim.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
@@ -26,5 +27,6 @@ int init_world(World *w) {
   register_component(w, SteerObstacle);
   register_component_callback(w, Unit, unit_component_free);
   register_component_callback(w, Text, text_component_free);
+  register_component(w, Animator);
   return SUCCESS;
 }
