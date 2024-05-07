@@ -14,5 +14,6 @@ void unit_component_free(void *temp) {
   free(unit->descr);
   free(unit->name);
   sprite_component_free(unit->sprite);
+  free(unit->path_to_sprite);
   free(unit);
 }
