@@ -74,4 +74,7 @@ void clickable_component_free(void *temp);
 
 void text_component_free(void *temp);
 
+//! Creates a blue background that will be rendered before everything else.
+Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
+
 void null_function();

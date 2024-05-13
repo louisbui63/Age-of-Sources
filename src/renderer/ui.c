@@ -135,4 +135,13 @@ void text_component_free(void *temp) {
   free(text);
 }
 
+Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window) {
+  Background *back = malloc(sizeof(Background));
+  back->sprite = malloc(sizeof(Sprite));
+  back->rect = NULL;
+  back->sprite->rect = NULL;
+  back->sprite->texture =
+      get_texture("./asset/backbackground.bmp", rdr, window);
+  return back;
+}
 void null_function() {}
