@@ -1,12 +1,15 @@
 #include <string.h>
 
+#include "../components.h"
 #include "../data_structures/asset_manager.h"
 #include "button.h"
 
 extern int RUNNING;
 
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
-                        void (*event)(), char *t, int xp, int yp) {
+                        void (*event)(World *w, SDL_Renderer *renderer,
+                                      SDL_Window *window),
+                        char *t, int xp, int yp) {
   Clickable *click = malloc(sizeof(Clickable));
   click->sprite = malloc(sizeof(Sprite));
   click->rect = malloc(sizeof(SDL_Rect));
@@ -30,13 +33,53 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
       get_texture("./asset/sprites/button.bmp", renderer, window);
   KeyEvent *key_event = malloc(sizeof(KeyEvent));
   *key_event = clickable_event;
-  spawn_clickable(w, click, key_event);
+  Entity *e = spawn_clickable(w, click, key_event);
+  // To check
+  ecs_add_component(w, e, COMPF_INTERACTIVE_UI_DEPTH, click);
   return click;
 }
 
-void event_main_quit() { RUNNING = 0; }
+void spawn_main_menu(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  spawn_main_quit(w, renderer, window);
+  spawn_main_option(w, renderer, window);
+}
 
 Clickable *spawn_main_quit(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
-  return spawn_button(w, renderer, window, event_main_quit, "exit\n", 256, 256);
+  return spawn_button(w, renderer, window, event_main_quit, "Exit\n", 256, 256);
+}
+
+void event_main_quit(__attribute__((unused)) World *w,
+                     __attribute__((unused)) SDL_Renderer *renderer,
+                     __attribute__((unused)) SDL_Window *window) {
+  RUNNING = 0;
+}
+
+Clickable *spawn_main_option(World *w, SDL_Renderer *renderer,
+                             SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_main_option, "Option\n", 256,
+                      192);
+}
+
+void event_main_option(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  despawn_from_component(w, COMP_INTERACTIVE_UI_DEPTH);
+  spawn_optionmain_menu(w, renderer, window);
+}
+
+void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window) {
+  spawn_optionmain_back(w, renderer, window);
+}
+
+Clickable *spawn_optionmain_back(World *w, SDL_Renderer *renderer,
+                                 SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_optionmain_back, "Back\n", 256,
+                      256);
+}
+
+void event_optionmain_back(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window) {
+  despawn_from_component(w, COMP_INTERACTIVE_UI_DEPTH);
+  despawn_from_component(w, COMPF_STATIC_UI_DEPTH);
+  spawn_main_menu(w, renderer, window);
 }

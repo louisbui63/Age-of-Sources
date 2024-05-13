@@ -26,5 +26,13 @@
 #define COMP_UNIT 10
 #define COMPF_TEXT (1 << 11)
 #define COMP_TEXT 11
+#define COMPF_MAP_DEPTH (1 << 12)
+#define COMP_MAP_DEPTH 12
+#define COMPF_UNIT_DEPTH (1 << 13)
+#define COMP_UNIT_DEPTH 13
+#define COMPF_STATIC_UI_DEPTH (1 << 14)
+#define COMP_STATIC_UI_DEPTH 14
+#define COMPF_INTERACTIVE_UI_DEPTH (1 << 15)
+#define COMP_INTERACTIVE_UI_DEPTH 15
 
 int init_world(World *w);

@@ -10,7 +10,7 @@
 #include "../data_structures/vec.h"
 #include "sprite.h"
 
-void render_ui(World *w, SDL_Renderer *rdr) {
+void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
   uint64_t mask = COMPF_BACKGROUND;
   VEC(EntityRef) er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
@@ -50,7 +50,7 @@ void render_ui(World *w, SDL_Renderer *rdr) {
     }
     if (!(c->is_clicked - 2)) {
       c->is_clicked = 0;
-      c->click_event();
+      c->click_event(w, rdr, wi);
     }
   }
 
@@ -144,4 +144,6 @@ Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window) {
       get_texture("./asset/backbackground.bmp", rdr, window);
   return back;
 }
-void null_function() {}
+void null_click_event(__attribute__((unused)) World *w,
+                      __attribute__((unused)) SDL_Renderer *renderer,
+                      __attribute__((unused)) SDL_Window *window) {}
