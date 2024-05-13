@@ -34,8 +34,6 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
   KeyEvent *key_event = malloc(sizeof(KeyEvent));
   *key_event = clickable_event;
   Entity *e = spawn_clickable(w, click, key_event);
-  // To check
-  ecs_add_component(w, e, COMPF_INTERACTIVE_UI_DEPTH, click);
   return click;
 }
 
@@ -62,8 +60,9 @@ Clickable *spawn_main_option(World *w, SDL_Renderer *renderer,
 }
 
 void event_main_option(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-  despawn_from_component(w, COMP_INTERACTIVE_UI_DEPTH);
-  spawn_optionmain_menu(w, renderer, window);
+  despawn_from_component(w, COMPF_CLICKABLE);
+  // despawn_from_component(w, COMP_HOVERABLE);
+  spawn_main_menu(w, renderer, window);
 }
 
 void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
@@ -79,7 +78,7 @@ Clickable *spawn_optionmain_back(World *w, SDL_Renderer *renderer,
 
 void event_optionmain_back(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
-  despawn_from_component(w, COMP_INTERACTIVE_UI_DEPTH);
-  despawn_from_component(w, COMPF_STATIC_UI_DEPTH);
+  despawn_from_component(w, COMPF_CLICKABLE);
+  despawn_from_component(w, COMPF_BACKGROUND);
   spawn_main_menu(w, renderer, window);
 }

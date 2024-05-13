@@ -21,6 +21,7 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
 
   mask = COMPF_CLICKABLE;
   er = world_query(w, &mask);
+  printf("%d\n", vec_len(er));
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Clickable *c = entity_get_component(w, e, COMP_CLICKABLE);

@@ -84,8 +84,8 @@ int main() {
   *test_pos = (Position){.x = 155, .y = 250};
   // ecs_add_component(&w, test_e, COMP_POSITION, test_pos);
 
-  // spawn_main_menu(&w, renderer, window);
-  spawn_main_quit(&w, renderer, window);
+  spawn_main_menu(&w, renderer, window);
+  // spawn_main_quit(&w, renderer, window);
 
   // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
   // ecs_add_component(&w, test_e, COMP_BACKGROUND,
