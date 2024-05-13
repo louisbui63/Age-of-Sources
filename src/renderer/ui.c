@@ -138,10 +138,11 @@ void text_component_free(void *temp) {
 void spawn_backbackground(World *w, SDL_Renderer *rdr, SDL_Window *window) {
   Entity *entity = spawn_entity(w);
   Background *back = malloc(sizeof(Background));
+  back->sprite = malloc(sizeof(Sprite));
   back->rect = NULL;
   back->sprite->rect = NULL;
   back->sprite->texture =
-      get_texture("./asset/sprites/backbackground.bmp", rdr, window);
+      get_texture("./asset/backbackground.bmp", rdr, window);
   ecs_add_component(w, entity, COMP_BACKGROUND, back);
 }
 void null_function() {}
