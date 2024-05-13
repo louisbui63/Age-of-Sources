@@ -74,6 +74,6 @@ void clickable_component_free(void *temp);
 
 void text_component_free(void *temp);
 
-void spawn_backbackground(World *w, SDL_Renderer *rdr, SDL_Window *window);
+Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
 
 void null_function();
