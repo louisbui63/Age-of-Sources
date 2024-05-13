@@ -102,6 +102,7 @@ int main() {
   MapComponent *mc = malloc(sizeof(MapComponent));
   *mc = (MapComponent){load_map_from_bmp("asset/test_map.bmp")};
   ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
+  spawn_backbackground(&w, renderer, window);
 
   for (; RUNNING;) {
     Uint32 start_time = SDL_GetTicks();
