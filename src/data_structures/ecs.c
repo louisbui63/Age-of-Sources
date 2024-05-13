@@ -109,7 +109,7 @@ Entity *spawn_entity(World *w) {
   }
 
   if (vec_len(w->entity_sparsity)) {
-    uint loc = vec_last(w->entity_sparsity);
+    uint64_t loc = vec_last(w->entity_sparsity);
     vec_pop(w->entity_sparsity);
     w->entities[loc] = (Entity){
         loc,
@@ -127,7 +127,7 @@ Entity *spawn_entity(World *w) {
 }
 
 void ecs_add_component(World *w, Entity *e, int cid, void *c) {
-  uint emp;
+  uint64_t emp;
   uint8_t new = 1;
   if (vec_len(w->component_sparsity)) {
     emp = vec_last(w->component_sparsity);

@@ -62,7 +62,7 @@ Clickable *spawn_main_option(World *w, SDL_Renderer *renderer,
 void event_main_option(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   despawn_from_component(w, COMPF_CLICKABLE);
   // despawn_from_component(w, COMP_HOVERABLE);
-  spawn_main_menu(w, renderer, window);
+  spawn_optionmain_menu(w, renderer, window);
 }
 
 void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
