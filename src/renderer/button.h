@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../data_structures/ecs.h"
+#include "../util.h"
 #include "ui.h"
 
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
@@ -28,3 +29,12 @@ Clickable *spawn_optionmain_back(World *w, SDL_Renderer *renderer,
 
 void event_optionmain_back(World *w, SDL_Renderer *renderer,
                            SDL_Window *window);
+
+Background *spawn_optionmain_background(World *w, SDL_Renderer *renderer,
+                                        SDL_Window *window);
+
+void event_optionmain_fullscreen(World *w, SDL_Renderer *renderer,
+                                 SDL_Window *window);
+
+Clickable *spawn_optionmain_fullscreen(World *w, SDL_Renderer *renderer,
+                                       SDL_Window *window);
