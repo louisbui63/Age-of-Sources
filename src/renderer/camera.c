@@ -88,3 +88,28 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
     _Pragma("omp barrier")
   }
 }
+
+void map_movement(World *w, SDL_Renderer *, Entity *e, Inputs *i, KeyState st) {
+  int x = 0, y = 0;
+  if (st == KEY_DOWN) {
+    if (inputs_is_key_in(i, SDLK_DOWN))
+      y++;
+    if (inputs_is_key_in(i, SDLK_UP))
+      y--;
+    if (inputs_is_key_in(i, SDLK_RIGHT))
+      x++;
+    if (inputs_is_key_in(i, SDLK_LEFT))
+      x--;
+  }
+  if (x || y) {
+    Camera *c = entity_get_component(w, e, COMP_CAMERA);
+    c->x += 16 * x;
+    c->y += 16 * y;
+    c->x = c->x < 0 ? 0
+                    : (c->x > TILE_SIZE * 400 - WIN_W ? TILE_SIZE * 400 - WIN_W
+                                                      : c->x);
+    c->y = c->y < 0 ? 0
+                    : (c->y > TILE_SIZE * 400 - WIN_H ? TILE_SIZE * 400 - WIN_H
+                                                      : c->y);
+  }
+}

@@ -7,12 +7,13 @@
 #include "../src/pathfinding.h"
 #include "../src/util.h"
 
-void print_pathln(Path p){
+void print_pathln(Path p) {
   printf("[");
-  for(uint i=0; i<vec_len(p)-1;i++){
-    printf("{x=%d,y=%d}, ",p[i]->x,p[i]->y);
+  for (uint i = 0; i < vec_len(p) - 1; i++) {
+    printf("{x=%d,y=%d}, ", p[i]->x, p[i]->y);
   }
-  if(vec_len(p) > 0) printf("{x=%d,y=%d}",p[vec_len(p)-1]->x,p[vec_len(p)-1]->y);
+  if (vec_len(p) > 0)
+    printf("{x=%d,y=%d}", p[vec_len(p) - 1]->x, p[vec_len(p) - 1]->y);
   printf("]\n");
 }
 
@@ -40,7 +41,6 @@ int test_pathfinding() {
   ASSERT(p != 0);
   ASSERT(vec_len(p) == 2);
   path_free(p);
-
 
   src = (TilePosition){.x = 0, .y = 0};
   dest = (TilePosition){.x = 7, .y = 3};

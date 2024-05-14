@@ -124,7 +124,7 @@ void *load_audio(char *t, char is_mus) {
   }
   HANDLE_ERROR(!aud, Mix_GetError(), { abort(); });
 
-  char *key = malloc(strlen(t));
+  char *key = malloc((strlen(t) + 1) * sizeof(char));
   strcpy(key, t);
 
   Rc *val = malloc(sizeof(Rc));

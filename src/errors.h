@@ -14,5 +14,7 @@ typedef enum {
   //! is no file corresponding to the requested asset
   ASSET_NOT_FOUND,
   //! self explanatory
-  ASSERTION_FAILED
+  ASSERTION_FAILED,
+  //! self explanatory
+  COULD_NOT_MIX_SOUND
 } Error;

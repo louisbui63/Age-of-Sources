@@ -77,14 +77,14 @@ int main() {
 
   World w = world_new();
   Camera *camcam = malloc(sizeof(Camera));
-  *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
+  {.x = 32, .y = 32, .zoom = 1};
 
   init_world(&w);
 
   Entity *cam = spawn_entity(&w);
   KeyEvent *cammove = malloc(sizeof(KeyEvent));
   *cammove = map_movement;
-  ecs_add_component(&w, cam, COMP_CAMERA, camcam);
+  ecs_add_component(&w, cam, COMP_CAMERA, &camcam);
   ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 
   // Entity *test_e = spawn_entity(&w);
@@ -164,7 +164,7 @@ int main() {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, back->sprite->texture, back->sprite->rect,
                    back->rect);
-    render(&w, renderer, camcam, window);
+    render(&w, renderer, &camcam, window);
     render_ui(&w, renderer, window);
 
     SDL_RenderPresent(renderer);
