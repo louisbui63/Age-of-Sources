@@ -15,6 +15,8 @@
 #include "renderer/ui.h"
 #include "util.h"
 
+#include "audio/audio.h"
+
 int RUNNING = 1;
 
 int main() {
@@ -105,6 +107,7 @@ int main() {
   ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
   Background *back = spawn_backbackground(renderer, window);
 
+  play_audio("asset/sfx/click.wav", 0);
   for (; RUNNING;) {
     Uint32 start_time = SDL_GetTicks();
 
