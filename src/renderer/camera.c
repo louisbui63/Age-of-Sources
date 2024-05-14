@@ -112,4 +112,11 @@ void map_movement(World *w, SDL_Renderer *, Entity *e, Inputs *i, KeyState st) {
                     : (c->y > TILE_SIZE * 400 - WIN_H ? TILE_SIZE * 400 - WIN_H
                                                       : c->y);
   }
+  if (st == KEY_PRESSED && inputs_is_key_in(i, SDLK_COMMA)) {
+    Camera *c = entity_get_component(w, e, COMP_CAMERA);
+    if (c->zoom == 1)
+      c->zoom = 2;
+    else
+      c->zoom = 1;
+  }
 }
