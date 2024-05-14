@@ -5,7 +5,7 @@
 #include "button.h"
 
 extern int RUNNING;
-extern int IS_FULLSCRENN;
+extern char IS_FULLSCRENN;
 
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
                         void (*event)(World *w, SDL_Renderer *renderer,
