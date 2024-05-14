@@ -1,6 +1,7 @@
 //! @file camera.h
 #pragma once
 #include "../data_structures/ecs.h"
+#include "../input.h"
 #include <SDL2/SDL_render.h>
 
 //! The `Camera` struct is not a component, it is meant to have exactly one
@@ -29,3 +30,6 @@ Position screen2worldspace(Position *p, Camera *cam);
 //! Said position must be in worldspace coordinates. Also renders the map if
 //! found.
 void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window);
+
+//! A `KeyEvent` that moves the camera around
+void map_movement(World *w, SDL_Renderer *, Entity *e, Inputs *i, KeyState st);

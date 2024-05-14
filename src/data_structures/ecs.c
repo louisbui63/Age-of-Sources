@@ -54,7 +54,7 @@ void world_free(World *w) {
 
 int register_component_inner_callback(World *w, int size,
                                       void (*callback)(void *)) {
-  if (w->last_component >= sizeof(Bitflag)) {
+  if (w->last_component >= sizeof(Bitflag) * 8) {
     return -1;
   }
   vec_push(w->component_sizes, size);

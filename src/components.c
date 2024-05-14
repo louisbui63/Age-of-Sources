@@ -30,5 +30,6 @@ int init_world(World *w) {
   register_component_callback(w, Unit, unit_component_free);
   register_component_callback(w, Text, text_component_free);
   register_component(w, Animator);
+  register_component(w, Camera);
   return SUCCESS;
 }
