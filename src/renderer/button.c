@@ -68,6 +68,7 @@ void event_main_option(World *w, SDL_Renderer *renderer, SDL_Window *window) {
 void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
   spawn_optionmain_back(w, renderer, window);
+  spawn_optionmain_background(w, renderer, window);
 }
 
 Clickable *spawn_optionmain_back(World *w, SDL_Renderer *renderer,
@@ -81,4 +82,25 @@ void event_optionmain_back(World *w, SDL_Renderer *renderer,
   despawn_from_component(w, COMPF_CLICKABLE);
   despawn_from_component(w, COMPF_BACKGROUND);
   spawn_main_menu(w, renderer, window);
+}
+
+Background *spawn_optionmain_background(World *w, SDL_Renderer *renderer,
+                                        SDL_Window *window) {
+  Background *b = malloc(sizeof(Background));
+  b->sprite = malloc(sizeof(Sprite));
+  b->sprite->rect = malloc(sizeof(SDL_Rect));
+  b->sprite->rect->x = 0;
+  b->sprite->rect->y = 0;
+  b->sprite->rect->w = 1000;
+  b->sprite->rect->h = 300;
+  b->sprite->texture =
+      get_texture("./asset/sprites/optionbg.bmp", renderer, window);
+  b->rect = malloc(sizeof(SDL_Rect));
+  b->rect->w = 1000;
+  b->rect->h = 300;
+  b->rect->x = (WIN_W - b->rect->w) / 2;
+  b->rect->x = (WIN_H - b->rect->h) / 2;
+  Entity *e = spawn_entity(w);
+  ecs_add_component(w, e, COMP_BACKGROUND, b);
+  return b;
 }

@@ -16,7 +16,13 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Background *b = entity_get_component(w, e, COMP_BACKGROUND);
+
+    int test1 = b->sprite->rect->x;
+
+    int test2 = b->rect->x;
+
     SDL_RenderCopy(rdr, b->sprite->texture, b->sprite->rect, b->rect);
+    printf("%s", SDL_GetError());
   }
 
   mask = COMPF_CLICKABLE;
