@@ -22,7 +22,7 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     int test2 = b->rect->x;
 
     SDL_RenderCopy(rdr, b->sprite->texture, b->sprite->rect, b->rect);
-    printf("%s", SDL_GetError());
+    printf("%s\n", SDL_GetError());
   }
 
   mask = COMPF_CLICKABLE;
