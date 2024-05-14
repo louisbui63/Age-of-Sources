@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdint.h>
 
+#include "../audio/audio.h"
 #include "../components.h"
 #include "../data_structures/asset_manager.h"
 #include "../data_structures/vec.h"
