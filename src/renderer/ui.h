@@ -27,7 +27,7 @@ typedef struct {
   SDL_Rect *rect;
   Text *text;
   Uint8 is_clicked;
-  void (*click_event)();
+  void (*click_event)(World *w, SDL_Renderer *renderer, SDL_Window *window);
 } Clickable;
 
 //! Component that corresponds to the minimap
@@ -42,7 +42,7 @@ typedef struct {
 } Hoverable;
 
 //! Renders any entity that has user interface related component
-void render_ui(World *w, SDL_Renderer *rdr);
+void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi);
 
 //! Adds a clickable to the world
 Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event);
@@ -74,4 +74,9 @@ void clickable_component_free(void *temp);
 
 void text_component_free(void *temp);
 
-void null_function();
+//! Creates a blue background that will be rendered before everything else.
+Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
+
+void null_click_event(__attribute__((unused)) World *w,
+                      __attribute__((unused)) SDL_Renderer *renderer,
+                      __attribute__((unused)) SDL_Window *window);

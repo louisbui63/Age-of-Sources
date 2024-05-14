@@ -61,10 +61,10 @@ typedef struct {
   uint last_component;
 
   //! Stores the available spaces in `components` that entity deletion created
-  VEC(uint) component_sparsity;
+  VEC(uint64_t) component_sparsity;
 
   //! Stores the available spaces in `entities` that entity deletion created
-  VEC(uint) entity_sparsity;
+  VEC(uint64_t) entity_sparsity;
 
 } World;
 
