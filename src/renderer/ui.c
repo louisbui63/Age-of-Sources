@@ -31,6 +31,8 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->rect);
     if (c->text->str[0]) {
       TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 99);
+      SDL_Rect r = *(c->rect);
+      TTF_SizeUTF8(font, c->text->str, &(r.w), &(r.h));
       SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(font, c->text->str,
                                                          *c->text->color, 0);
       SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
@@ -40,6 +42,7 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
         SDL_SetTextureColorMod(text_texture, (Uint8)100, (Uint8)100,
                                (Uint8)100);
       }
+
       SDL_RenderCopy(rdr, text_texture, NULL, c->rect);
       SDL_FreeSurface(surf);
       SDL_DestroyTexture(text_texture);
@@ -91,8 +94,10 @@ void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
     return;
   else if (keystate == KEY_PRESSED) {
     c->is_clicked = 1;
-  } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1))
+  } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1)) {
     c->is_clicked = 2;
+    play_audio("./asset/sfx/click.wav", 0);
+  }
 }
 
 void render_hoverable(SDL_Rect *rect, char *text) {
