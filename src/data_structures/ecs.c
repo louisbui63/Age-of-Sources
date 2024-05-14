@@ -109,7 +109,7 @@ Entity *spawn_entity(World *w) {
   }
 
   if (vec_len(w->entity_sparsity)) {
-    uint loc = vec_last(w->entity_sparsity);
+    uint64_t loc = vec_last(w->entity_sparsity);
     vec_pop(w->entity_sparsity);
     w->entities[loc] = (Entity){
         loc,
@@ -127,7 +127,7 @@ Entity *spawn_entity(World *w) {
 }
 
 void ecs_add_component(World *w, Entity *e, int cid, void *c) {
-  uint emp;
+  uint64_t emp;
   uint8_t new = 1;
   if (vec_len(w->component_sparsity)) {
     emp = vec_last(w->component_sparsity);
@@ -235,10 +235,9 @@ void *entity_get_component(World *w, Entity *e, int type) {
 }
 
 void despawn_from_component(World *w, Bitflag b) {
-  VEC(EntityRef) er = world_query(w, &b);
-  uint64_t n = vec_len(er);
-  for (uint64_t k = 0; k < n; k++) {
-    Entity *e = get_entity(w, er[k]);
+  EntityRef **err = world_query_mut(w, &b);
+  while (vec_len(*err) > 0) {
+    Entity *e = get_entity(w, *err[0]);
     despawn_entity(w, e);
   }
 }
