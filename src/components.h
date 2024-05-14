@@ -26,5 +26,9 @@
 #define COMP_UNIT 10
 #define COMPF_TEXT (1 << 11)
 #define COMP_TEXT 11
+#define COMPF_ANIMATOR (1 << 12)
+#define COMP_ANIMATOR 12
 
+//! Initializes the components required by the game. Must be called exactly once
+//! before using the world.
 int init_world(World *w);

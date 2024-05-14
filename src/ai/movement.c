@@ -1,6 +1,7 @@
 #include "movement.h"
 #include "../components.h"
 #include "../data_structures/bitflag.h"
+#include "../renderer/anim.h"
 #include "steering_behaviors.h"
 
 void move_units(World *w) {
@@ -55,18 +56,37 @@ void move_units(World *w) {
   }
   mask = COMPF_POSITION | COMPF_STEERMANAGER | COMPF_STEEROBSTACLE;
   er = world_query(w, &mask);
-  _Pragma("omp parallel") {
-    _Pragma("omp for") {
-      for (uint i = 0; i < vec_len(er); i++) {
-        EntityRef ei = er[i];
-        Entity *e = get_entity(w, ei);
-        SteerObstacle *sto = entity_get_component(w, e, COMP_STEEROBSTACLE);
-        Position *p = entity_get_component(w, e, COMP_POSITION);
+  _Pragma("omp parallel"){_Pragma("omp for"){
+      for (uint i = 0; i < vec_len(er); i++){EntityRef ei = er[i];
+  Entity *e = get_entity(w, ei);
+  SteerObstacle *sto = entity_get_component(w, e, COMP_STEEROBSTACLE);
+  Position *p = entity_get_component(w, e, COMP_POSITION);
 
-        sto->position = (Vec2){p->x, p->y};
-      }
+  sto->position = (Vec2){p->x, p->y};
+}
+}
+_Pragma("omp barrier")
+}
+
+vec_free(obs);
+
+// unless I'm thoroughly mistaken, there should be no component that's animated
+// but doesn't use a `SteerManager`
+mask = COMPF_POSITION | COMPF_STEERMANAGER | COMPF_ANIMATOR;
+er = world_query(w, &mask);
+_Pragma("omp parallel") {
+  _Pragma("omp for") {
+    for (uint i = 0; i < vec_len(er); i++) {
+      EntityRef ei = er[i];
+      Entity *e = get_entity(w, ei);
+      Animator *an = entity_get_component(w, e, COMP_ANIMATOR);
+      SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
+      if (stm->velocity.x == 0 && stm->velocity.y == 0)
+        advance_anim_state(an, Idle);
+      else
+        advance_anim_state(an, Moving);
     }
-    _Pragma("omp barrier")
   }
-  vec_free(obs);
+  _Pragma("omp barrier")
+}
 }
