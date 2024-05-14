@@ -18,6 +18,7 @@
 #include "audio/audio.h"
 
 int RUNNING = 1;
+char IS_FULLSCRENN = false;
 
 int main() {
   init_asset_manager();
