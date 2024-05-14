@@ -5,6 +5,7 @@
 #include "button.h"
 
 extern int RUNNING;
+extern int IS_FULLSCRENN;
 
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
                         void (*event)(World *w, SDL_Renderer *renderer,
@@ -69,6 +70,7 @@ void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
   spawn_optionmain_back(w, renderer, window);
   spawn_optionmain_background(w, renderer, window);
+  spawn_optionmain_fullscreen(w, renderer, window);
 }
 
 Clickable *spawn_optionmain_back(World *w, SDL_Renderer *renderer,
@@ -91,16 +93,36 @@ Background *spawn_optionmain_background(World *w, SDL_Renderer *renderer,
   b->sprite->rect = malloc(sizeof(SDL_Rect));
   b->sprite->rect->x = 0;
   b->sprite->rect->y = 0;
-  b->sprite->rect->w = 1000;
-  b->sprite->rect->h = 300;
+  b->sprite->rect->w = 600;
+  b->sprite->rect->h = 250;
   b->sprite->texture =
       get_texture("./asset/sprites/optionbg.bmp", renderer, window);
   b->rect = malloc(sizeof(SDL_Rect));
-  b->rect->w = 1000;
-  b->rect->h = 300;
+  b->rect->w = 500;
+  b->rect->h = 200;
   b->rect->x = (WIN_W - b->rect->w) / 2;
-  b->rect->x = (WIN_H - b->rect->h) / 2;
+  b->rect->y = (WIN_H - b->rect->h) / 2 - WIN_H / 8;
   Entity *e = spawn_entity(w);
   ecs_add_component(w, e, COMP_BACKGROUND, b);
   return b;
+}
+
+Clickable *spawn_optionmain_fullscreen(World *w, SDL_Renderer *renderer,
+                                       SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_optionmain_fullscreen,
+                      "Fullscreen\n", 100, 100);
+}
+
+void event_optionmain_fullscreen(__attribute__((unused)) World *w,
+                                 __attribute__((unused)) SDL_Renderer *renderer,
+                                 SDL_Window *window) {
+  SDL_DisplayMode dm;
+  SDL_GetWindowDisplayMode(window, &dm);
+  if (IS_FULLSCRENN) {
+    SDL_SetWindowFullscreen(window, 0);
+    SDL_SetWindowSize(window, WIN_W, WIN_H);
+  } else {
+    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+  }
+  IS_FULLSCRENN = !IS_FULLSCRENN;
 }

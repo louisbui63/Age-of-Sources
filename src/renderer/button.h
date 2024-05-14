@@ -32,3 +32,9 @@ void event_optionmain_back(World *w, SDL_Renderer *renderer,
 
 Background *spawn_optionmain_background(World *w, SDL_Renderer *renderer,
                                         SDL_Window *window);
+
+void event_optionmain_fullscreen(World *w, SDL_Renderer *renderer,
+                                 SDL_Window *window);
+
+Clickable *spawn_optionmain_fullscreen(World *w, SDL_Renderer *renderer,
+                                       SDL_Window *window);
