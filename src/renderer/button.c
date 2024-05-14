@@ -33,7 +33,7 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
       get_texture("./asset/sprites/button.bmp", renderer, window);
   KeyEvent *key_event = malloc(sizeof(KeyEvent));
   *key_event = clickable_event;
-  Entity *e = spawn_clickable(w, click, key_event);
+  spawn_clickable(w, click, key_event);
   return click;
 }
 
@@ -55,7 +55,7 @@ void event_main_quit(__attribute__((unused)) World *w,
 
 Clickable *spawn_main_option(World *w, SDL_Renderer *renderer,
                              SDL_Window *window) {
-  return spawn_button(w, renderer, window, event_main_option, "Option\n", 256,
+  return spawn_button(w, renderer, window, event_main_option, "Options\n", 256,
                       192);
 }
 
