@@ -76,9 +76,16 @@ int main() {
   SDL_FreeSurface(test_bmp);
 
   World w = world_new();
-  Camera cam = {.x = 32, .y = 32, .zoom = 1};
+  Camera *camcam = malloc(sizeof(Camera));
+  *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
 
   init_world(&w);
+
+  Entity *cam = spawn_entity(&w);
+  KeyEvent *cammove = malloc(sizeof(KeyEvent));
+  *cammove = map_movement;
+  ecs_add_component(&w, cam, COMP_CAMERA, camcam);
+  ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 
   // Entity *test_e = spawn_entity(&w);
 
@@ -103,7 +110,7 @@ int main() {
 
   Entity *map = spawn_entity(&w);
   MapComponent *mc = malloc(sizeof(MapComponent));
-  *mc = (MapComponent){load_map_from_bmp("asset/test_map.bmp")};
+  *mc = (MapComponent){load_map_from_bmp("asset/map.bmp")};
   ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
   Background *back = spawn_backbackground(renderer, window);
 
@@ -157,7 +164,7 @@ int main() {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, back->sprite->texture, back->sprite->rect,
                    back->rect);
-    render(&w, renderer, &cam, window);
+    render(&w, renderer, camcam, window);
     render_ui(&w, renderer, window);
 
     SDL_RenderPresent(renderer);
