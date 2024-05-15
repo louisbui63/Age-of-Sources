@@ -84,7 +84,7 @@ Vec2 v2normalize(Vec2 a);
 Vec2 v2mul(float a, Vec2 b);
 //! performs a scalar product between `Vec2` `a` and `1/b`
 Vec2 v2div(Vec2 a, float b);
-//! returns the angle (in radian) between `a` and the `(1,0)` vector
+//! returns the angle (in radian) between `a` and the `(0,1)` vector
 float v2angle(Vec2 a);
 //! returns the length of a `Vec2`
 float v2len(Vec2 a);
