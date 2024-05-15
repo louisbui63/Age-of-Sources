@@ -7,6 +7,39 @@
 extern int RUNNING;
 extern char IS_FULLSCREEN;
 
+Clickable *spawn_main_quit(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window);
+
+void event_main_quit(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+Clickable *spawn_main_option(World *w, SDL_Renderer *renderer,
+                             SDL_Window *window);
+
+void event_main_option(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+Clickable *spawn_main_start(World *w, SDL_Renderer *renderer,
+                            SDL_Window *window);
+
+void event_main_start(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window);
+
+Clickable *spawn_optionmain_back(World *w, SDL_Renderer *renderer,
+                                 SDL_Window *window);
+
+void event_optionmain_back(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window);
+
+Background *spawn_optionmain_background(World *w, SDL_Renderer *renderer,
+                                        SDL_Window *window);
+
+void event_optionmain_fullscreen(World *w, SDL_Renderer *renderer,
+                                 SDL_Window *window);
+
+Clickable *spawn_optionmain_fullscreen(World *w, SDL_Renderer *renderer,
+                                       SDL_Window *window);
+
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
                         void (*event)(World *w, SDL_Renderer *renderer,
                                       SDL_Window *window),
@@ -42,6 +75,7 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
 void spawn_main_menu(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   spawn_main_quit(w, renderer, window);
   spawn_main_option(w, renderer, window);
+  spawn_main_start(w, renderer, window);
 }
 
 Clickable *spawn_main_quit(World *w, SDL_Renderer *renderer,
@@ -66,6 +100,13 @@ void event_main_option(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   // despawn_from_component(w, COMP_HOVERABLE);
   spawn_optionmain_menu(w, renderer, window);
 }
+
+Clickable *spawn_main_start(World *w, SDL_Renderer *renderer,
+                            SDL_Window *window) {
+  spawn_button(w, renderer, window, event_main_start, "Start", 256, 128);
+}
+
+void event_main_start(World *w, SDL_Renderer *renderer, SDL_Window *window) {}
 
 void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
