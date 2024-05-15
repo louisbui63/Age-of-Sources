@@ -59,3 +59,6 @@ VEC(void) vec_copy(VEC(void) vec);
 //! reverses`vec` (i.e. old_vec[i] = new_vec[n-1-i] where n is the length of
 //! vec)
 void vec_reverse(void *vec);
+
+//! Removes every elements of a `Vec`.
+void vec_clear(VEC(void) vec);

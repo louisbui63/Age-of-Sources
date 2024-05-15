@@ -13,7 +13,8 @@ void unit_component_free(void *temp) {
   Unit *unit = (Unit *)temp;
   free(unit->descr);
   free(unit->name);
-  sprite_component_free(unit->sprite);
+  // the sprite shouldn't be freed as it also has to be its own component
+  // sprite_component_free(unit->sprite);
   free(unit->path_to_sprite);
   free(unit);
 }
