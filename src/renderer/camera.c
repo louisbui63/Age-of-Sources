@@ -9,6 +9,7 @@
 #include "../data_structures/ecs.h"
 #include "../data_structures/map.h"
 #include "../data_structures/vec.h"
+#include "../selection.h"
 #include "sprite.h"
 
 Position world2screenspace(Position *p, Camera *cam) {
@@ -56,6 +57,12 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
     WARN("Unexpected number of maps found");
   }
 
+  mask = COMPF_SELECTOR;
+  VEC(EntityRef)
+  selecteds = ((Selector *)entity_get_component(
+                   w, get_entity(w, world_query(w, &mask)[0]), COMP_SELECTOR))
+                  ->selected;
+
   // render sprites
   mask = COMPF_POSITION | COMPF_SPRITE;
   er = world_query(w, &mask);
@@ -77,9 +84,19 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
         // occludes offscreen sprites
         if (wtl.x < WIN_W && wtl.y < WIN_H && wtr.x > 0 && wtr.y > 0) {
           _Pragma("omp critical") {
-            // the documentation refuses to tell us if it is safe but as far as
-            // I can tell it is (in fact, we might not even need omp critical,
-            // who knows ? (not me !))
+            for (uint j = 0; j < vec_len(selecteds); j++) {
+              if (selecteds[j] == ei) {
+                SDL_RenderCopy(rdr,
+                               get_texture("asset/sprites/select_ally_back.bmp",
+                                           rdr, window),
+                               0, &r);
+                break;
+              }
+            }
+
+            // the documentation refuses to tell us if it is safe but as far
+            // as I can tell it is (in fact, we might not even need omp
+            // critical, who knows ? (not me !))
             SDL_RenderCopy(rdr, s->texture, s->rect, &r);
           }
         }

@@ -30,6 +30,10 @@
 #define COMP_ANIMATOR 12
 #define COMPF_CAMERA (1 << 13)
 #define COMP_CAMERA 13
+#define COMPF_SELECTABLE (1 << 14)
+#define COMP_SELECTABLE 14
+#define COMPF_SELECTOR (1 << 15)
+#define COMP_SELECTOR 15
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.

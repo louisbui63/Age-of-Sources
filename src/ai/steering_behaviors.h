@@ -47,7 +47,7 @@ typedef enum {
   COMPLETE,
 } BehaviorStatus;
 
-//! Instructs `s` to seek `ŧarget`
+//! Instructs `s` to seek `target`
 BehaviorStatus behavior_seek(SteerManager *s, Vec2 target);
 //! Instructs `s` to avoid the obstacles in `obstacles`
 BehaviorStatus behavior_obstacle_avoidance(SteerManager *s,

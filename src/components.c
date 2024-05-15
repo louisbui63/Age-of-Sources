@@ -8,6 +8,7 @@
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
+#include "selection.h"
 #include "units/units.h"
 
 int init_world(World *w) {
@@ -17,6 +18,8 @@ int init_world(World *w) {
                                      COMPF_STEEROBSTACLE);
   register_system_requirement(w, COMPF_POSITION | COMPF_STEERMANAGER |
                                      COMPF_ANIMATOR);
+  register_system_requirement(w,
+                              COMPF_POSITION | COMPF_SPRITE | COMPF_SELECTABLE);
   register_component(w, Position);
   register_component(w, Sprite);
   register_component(w, KeyEvent);
@@ -31,5 +34,7 @@ int init_world(World *w) {
   register_component_callback(w, Text, text_component_free);
   register_component(w, Animator);
   register_component(w, Camera);
+  register_component(w, Selectable);
+  register_component_callback(w, Selector, selector_free);
   return SUCCESS;
 }

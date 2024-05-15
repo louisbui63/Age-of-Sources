@@ -2,7 +2,7 @@
 #pragma once
 
 //! This file is a template for the unit files, every data about the units must
-//! be put between `/*`and `*/` and nothing else will use this kind of
+//! be put inside multiline commentaries and nothing else will use this kind of
 //! commentary.
 
 //! The first text is the name of the unit. It must not be more than 255
@@ -11,7 +11,7 @@
 
 //! The second text is the hp of the unit, it must a be positive decimal number
 //! smaller or equal than 65535
-/*000*/
+/*001*/
 
 //! The third text is the b_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -47,15 +47,15 @@
 
 //! The elventh text is the w of the unit's sprite, it must a be positive
 //! decimal number smaller or equal than 65535
-/*000*/
+/*32*/
 
 //! The twelfth text is the h of the unit's sprite, it must a be positive
 //! decimal number smaller or equal than 65535
-/*000*/
+/*32*/
 
 //! The thirteenth text is the unit's sprite path, it must be less than 255
 //! characters long.
-/*path/to/sprite.bmp*/
+/*asset/sprites/tanuki_maid.bmp*/
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
