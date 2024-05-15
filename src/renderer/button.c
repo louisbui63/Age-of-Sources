@@ -5,7 +5,7 @@
 #include "button.h"
 
 extern int RUNNING;
-extern char IS_FULLSCRENN;
+extern char IS_FULLSCREEN;
 
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
                         void (*event)(World *w, SDL_Renderer *renderer,
@@ -119,11 +119,11 @@ void event_optionmain_fullscreen(__attribute__((unused)) World *w,
                                  SDL_Window *window) {
   SDL_DisplayMode dm;
   SDL_GetWindowDisplayMode(window, &dm);
-  if (IS_FULLSCRENN) {
+  if (IS_FULLSCREEN) {
     SDL_SetWindowFullscreen(window, 0);
     SDL_SetWindowSize(window, WIN_W, WIN_H);
   } else {
     SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
   }
-  IS_FULLSCRENN = !IS_FULLSCRENN;
+  IS_FULLSCREEN = !IS_FULLSCREEN;
 }
