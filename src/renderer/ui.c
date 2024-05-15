@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdint.h>
 
+#include "../audio/audio.h"
 #include "../components.h"
 #include "../data_structures/asset_manager.h"
 #include "../data_structures/vec.h"
@@ -43,7 +44,11 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
                                (Uint8)100);
       }
 
-      SDL_RenderCopy(rdr, text_texture, NULL, c->rect);
+      SDL_Rect t_rect;
+      TTF_SizeUTF8(font, c->text->str, &(t_rect.w), &(t_rect.h));
+      biggest_possible_rectangle_centered(c->rect, &t_rect, c->text->padding);
+
+      SDL_RenderCopy(rdr, text_texture, NULL, &t_rect);
       SDL_FreeSurface(surf);
       SDL_DestroyTexture(text_texture);
     }
@@ -152,3 +157,24 @@ Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window) {
 void null_click_event(__attribute__((unused)) World *w,
                       __attribute__((unused)) SDL_Renderer *renderer,
                       __attribute__((unused)) SDL_Window *window) {}
+
+void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
+                                         int padding) {
+  int ow = outer->w - 2 * padding;
+  int oh = outer->h - 2 * padding;
+  int iw = inner->w;
+  int ih = inner->h;
+  if ((1.0 * ow) / oh > (1.0 * iw) / ih) {
+    inner->h = oh;
+    inner->w = (oh * iw) / ih;
+  } else if ((1.0 * ow) / oh > (1.0 * iw) / ih) {
+    *inner = *outer;
+  } else {
+    inner->w = ow;
+    inner->h = (ow * ih) / iw;
+  }
+  iw = inner->w;
+  ih = inner->h;
+  inner->x = (ow + 2 * (outer->x + padding) - iw) / 2;
+  inner->y = (oh + 2 * (outer->y + padding) - ih) / 2;
+}

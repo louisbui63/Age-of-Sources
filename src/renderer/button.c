@@ -22,6 +22,7 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
   *click->text->color = (SDL_Color){.r = 0, .g = 255, .b = 0, .a = 255};
   click->text->str = malloc(strlen(t) + 1);
   strcpy(click->text->str, t);
+  click->text->padding = 5;
   click->rect->x = xp;
   click->rect->y = yp;
   click->rect->w = 100;
@@ -45,7 +46,7 @@ void spawn_main_menu(World *w, SDL_Renderer *renderer, SDL_Window *window) {
 
 Clickable *spawn_main_quit(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
-  return spawn_button(w, renderer, window, event_main_quit, "Exit\n", 256, 256);
+  return spawn_button(w, renderer, window, event_main_quit, "Exit", 256, 256);
 }
 
 void event_main_quit(__attribute__((unused)) World *w,
@@ -56,7 +57,7 @@ void event_main_quit(__attribute__((unused)) World *w,
 
 Clickable *spawn_main_option(World *w, SDL_Renderer *renderer,
                              SDL_Window *window) {
-  return spawn_button(w, renderer, window, event_main_option, "Options\n", 256,
+  return spawn_button(w, renderer, window, event_main_option, "Options", 256,
                       192);
 }
 
@@ -75,7 +76,7 @@ void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
 
 Clickable *spawn_optionmain_back(World *w, SDL_Renderer *renderer,
                                  SDL_Window *window) {
-  return spawn_button(w, renderer, window, event_optionmain_back, "Back\n", 256,
+  return spawn_button(w, renderer, window, event_optionmain_back, "Back", 256,
                       256);
 }
 
@@ -110,7 +111,7 @@ Background *spawn_optionmain_background(World *w, SDL_Renderer *renderer,
 Clickable *spawn_optionmain_fullscreen(World *w, SDL_Renderer *renderer,
                                        SDL_Window *window) {
   return spawn_button(w, renderer, window, event_optionmain_fullscreen,
-                      "Fullscreen\n", 100, 100);
+                      "Fullscreen", 100, 100);
 }
 
 void event_optionmain_fullscreen(__attribute__((unused)) World *w,

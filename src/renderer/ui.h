@@ -7,6 +7,7 @@
 typedef struct {
   char *str;
   SDL_Color *color;
+  int padding;
 } Text;
 
 //! Entities with this component are the background of the user interface
@@ -80,3 +81,6 @@ Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
 void null_click_event(__attribute__((unused)) World *w,
                       __attribute__((unused)) SDL_Renderer *renderer,
                       __attribute__((unused)) SDL_Window *window);
+
+void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
+                                         int padding);
