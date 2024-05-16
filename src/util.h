@@ -103,3 +103,7 @@ typedef enum {
   IN_GAMEMENU,
   IN_GAMEOPTION
 } Running;
+
+typedef struct {
+  SDL_Window *w;
+} Window;
