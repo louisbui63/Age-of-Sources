@@ -30,6 +30,8 @@
 #define COMP_ANIMATOR 12
 #define COMPF_CAMERA (1 << 13)
 #define COMP_CAMERA 13
+#define COMPF_WINDOW (1 << 14)
+#define COMP_WINDOW 14
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.
