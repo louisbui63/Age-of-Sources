@@ -15,6 +15,7 @@ void unit_component_free(void *temp) {
   free(unit->name);
   // the sprite shouldn't be freed as it also has to be its own component
   // sprite_component_free(unit->sprite);
+  // printf("`%p\n", unit->sprite->rect);
   free(unit->path_to_sprite);
   free(unit);
 }

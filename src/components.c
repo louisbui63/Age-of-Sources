@@ -4,6 +4,7 @@
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
 #include "input.h"
+#include "players.h"
 #include "renderer/anim.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
@@ -36,5 +37,6 @@ int init_world(World *w) {
   register_component(w, Camera);
   register_component(w, Selectable);
   register_component_callback(w, Selector, selector_free);
+  register_component(w, PlayerManager);
   return SUCCESS;
 }
