@@ -33,7 +33,7 @@ char *get_tile_file_name(int8_t id) {
   // return should be freed !!
   char *out = malloc(sizeof(int) * strlen("asset/sprites/tileXX.bmp0"));
   uint8_t u = *(uint8_t *)&id;
-  sprintf(out, "asset/sprites/tile%.2X.bmp", u);
+  // sprintf(out, "asset/sprites/tile%.2X.bmp", u);
   return out;
 }
 
