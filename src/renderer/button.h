@@ -15,3 +15,7 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
 
 //! Creates the main menu.
 void spawn_main_menu(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+//! Key_event that manages the escape button.
+void key_event_escape(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
+                      KeyState keystate);

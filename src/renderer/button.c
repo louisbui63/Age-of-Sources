@@ -306,3 +306,31 @@ void event_gameoption_back(World *w, SDL_Renderer *renderer,
 void spawn_game_ui(__attribute__((unused)) World *w,
                    __attribute__((unused)) SDL_Renderer *renderer,
                    __attribute__((unused)) SDL_Window *window) {}
+
+void key_event_escape(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
+                      KeyState keystate) {
+  if ((keystate == KEY_RELEASED) && (inputs_is_key_in(in, SDLK_ESCAPE))) {
+    Window *wind = entity_get_component(w, entity, COMP_WINDOW);
+
+    switch (RUNNING) {
+    case OPTIONMAIN:
+      event_optionmain_back(w, rdr, wind->w);
+      break;
+
+    case IN_GAME:
+      event_game_menu(w, rdr, wind->w);
+      break;
+
+    case IN_GAMEMENU:
+      event_gamemenu_resume(w, rdr, wind->w);
+      break;
+
+    case IN_GAMEOPTION:
+      event_gameoption_back(w, rdr, wind->w);
+      break;
+
+    default:
+      break;
+    }
+  }
+}
