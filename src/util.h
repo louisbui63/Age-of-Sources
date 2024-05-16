@@ -1,6 +1,8 @@
 //! @file util.h
 #pragma once
 
+#include <SDL2/SDL_video.h>
+
 #include "errors.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -92,3 +94,16 @@ float v2len(Vec2 a);
 Vec2 v2truncate(Vec2 a, float b);
 //! performs a dot product between two `Vec2`
 float v2dot(Vec2 a, Vec2 b);
+
+typedef enum {
+  STOP,
+  MAIN,
+  OPTIONMAIN,
+  IN_GAME,
+  IN_GAMEMENU,
+  IN_GAMEOPTION
+} Running;
+
+typedef struct {
+  SDL_Window *w;
+} Window;

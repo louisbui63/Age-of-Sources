@@ -38,5 +38,6 @@ int init_world(World *w) {
   register_component(w, Selectable);
   register_component_callback(w, Selector, selector_free);
   register_component(w, PlayerManager);
+  register_component_callback(w, Window, free_nothing);
   return SUCCESS;
 }

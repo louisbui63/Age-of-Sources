@@ -37,6 +37,8 @@
 #define COMP_SELECTOR 15
 #define COMPF_PLAYERMANAGER (1 << 16)
 #define COMP_PLAYERMANAGER 16
+#define COMPF_WINDOW (1 << 17)
+#define COMP_WINDOW 17
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.

@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdint.h>
 
+#include "../audio/audio.h"
 #include "../components.h"
 #include "../data_structures/asset_manager.h"
 #include "../data_structures/vec.h"
@@ -31,6 +32,8 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     SDL_RenderCopy(rdr, c->sprite->texture, c->sprite->rect, c->rect);
     if (c->text->str[0]) {
       TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 99);
+      SDL_Rect r = *(c->rect);
+      TTF_SizeUTF8(font, c->text->str, &(r.w), &(r.h));
       SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(font, c->text->str,
                                                          *c->text->color, 0);
       SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
@@ -40,7 +43,12 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
         SDL_SetTextureColorMod(text_texture, (Uint8)100, (Uint8)100,
                                (Uint8)100);
       }
-      SDL_RenderCopy(rdr, text_texture, NULL, c->rect);
+
+      SDL_Rect t_rect;
+      TTF_SizeUTF8(font, c->text->str, &(t_rect.w), &(t_rect.h));
+      biggest_possible_rectangle_centered(c->rect, &t_rect, c->text->padding);
+
+      SDL_RenderCopy(rdr, text_texture, NULL, &t_rect);
       SDL_FreeSurface(surf);
       SDL_DestroyTexture(text_texture);
     }
@@ -91,8 +99,10 @@ void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
     return;
   else if (keystate == KEY_PRESSED) {
     c->is_clicked = 1;
-  } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1))
+  } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1)) {
     c->is_clicked = 2;
+    play_audio("./asset/sfx/click.wav", 0);
+  }
 }
 
 void render_hoverable(SDL_Rect *rect, char *text) {
@@ -147,3 +157,24 @@ Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window) {
 void null_click_event(__attribute__((unused)) World *w,
                       __attribute__((unused)) SDL_Renderer *renderer,
                       __attribute__((unused)) SDL_Window *window) {}
+
+void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
+                                         int padding) {
+  int ow = outer->w - 2 * padding;
+  int oh = outer->h - 2 * padding;
+  int iw = inner->w;
+  int ih = inner->h;
+  if ((1.0 * ow) / oh > (1.0 * iw) / ih) {
+    inner->h = oh;
+    inner->w = (oh * iw) / ih;
+  } else if ((1.0 * ow) / oh > (1.0 * iw) / ih) {
+    *inner = *outer;
+  } else {
+    inner->w = ow;
+    inner->h = (ow * ih) / iw;
+  }
+  iw = inner->w;
+  ih = inner->h;
+  inner->x = (ow + 2 * (outer->x + padding) - iw) / 2;
+  inner->y = (oh + 2 * (outer->y + padding) - ih) / 2;
+}
