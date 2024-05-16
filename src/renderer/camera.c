@@ -98,7 +98,6 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
             // as I can tell it is (in fact, we might not even need omp
             // critical, who knows ? (not me !))
             SDL_RenderCopy(rdr, s->texture, s->rect, &r);
-            // printf("--%p", s->rect);
           }
         }
       }

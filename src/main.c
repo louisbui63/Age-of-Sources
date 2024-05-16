@@ -2,6 +2,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "./renderer/button.h"
@@ -102,7 +103,6 @@ int main() {
     Entity *e = spawn_entity(&w);
     Unit *u = parse("src/units/unit_tanuki.c", renderer, window);
     ecs_add_component(&w, e, COMP_UNIT, u);
-
     ecs_add_component(&w, e, COMP_SPRITE, u->sprite);
     Position *p = calloc(1, sizeof(Position));
     *p = (Position){100, 100};
