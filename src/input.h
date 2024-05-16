@@ -72,5 +72,9 @@ void inputs_update_key_in_from_scancode(Inputs *inputs, SDL_Scancode scancode,
 //! calls all the callbacks for the keyevent
 void inputs_run_callbacks(World *, SDL_Renderer *rdr, Inputs *, KeyState);
 
+//! Returns the mouse position in the scaled coordinates of the integer scaled
+//! window
+SDL_Point get_mouse_position(SDL_Renderer *rdr);
+
 //! Checks if the mouse is in the rectangle
 Uint8 mouse_in_rect(SDL_Renderer *rdr, SDL_Rect *rect);

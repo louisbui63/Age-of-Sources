@@ -39,6 +39,8 @@ inline void vec_pop(void *vec) { ((uint *)vec)[-1]--; }
 inline uint vec_len(void *vec) { return ((uint *)vec)[-1]; }
 static inline uint vec_data_size(void *vec) { return ((uint *)vec)[-3]; }
 
+inline void vec_clear(VEC(void) vec) { ((uint *)vec)[-1] = 0; }
+
 char u64_gt(void *a, void *b) { return *(uint64_t *)a > *(uint64_t *)b; }
 
 void vec_sort(void *v, char (*gt)(void *, void *)) {
