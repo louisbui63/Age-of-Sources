@@ -71,3 +71,6 @@ int hash_map_delete(HashMap *h, void *k);
 //! Returns the value associated with key `k`, or a null pointer if there is no
 //! such pair
 void *hash_map_get(HashMap *h, void *k);
+
+//! a `hash_map_free_callback` callback that dosn't free the values
+void hash_map_entry_free_keys(void *u);
