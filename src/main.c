@@ -20,8 +20,8 @@
 
 #include "audio/audio.h"
 
-int RUNNING = 1;
-char IS_FULLSCRENN = false;
+Running RUNNING = MAIN;
+char IS_FULLSCREEN = false;
 
 int main() {
   init_asset_manager();
@@ -85,6 +85,13 @@ int main() {
 
   init_world(&w);
 
+  Entity *wine = spawn_entity(&w);
+  Window wind = {.w = window};
+  KeyEvent *wink = malloc(sizeof(KeyEvent));
+  *wink = key_event_escape;
+  ecs_add_component(&w, wine, COMP_WINDOW, &wind);
+  ecs_add_component(&w, wine, COMP_KEY_EVENT, wink);
+
   Entity *cam = spawn_entity(&w);
   KeyEvent *cammove = malloc(sizeof(KeyEvent));
   *cammove = map_movement;
@@ -145,7 +152,7 @@ int main() {
   Background *back = spawn_backbackground(renderer, window);
 
   play_audio("asset/sfx/click.wav", 0);
-  for (; RUNNING;) {
+  for (; RUNNING != STOP;) {
     Uint32 start_time = SDL_GetTicks();
 
     Inputs *input_pressed = inputs_new();

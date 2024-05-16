@@ -34,6 +34,8 @@
 #define COMP_SELECTABLE 14
 #define COMPF_SELECTOR (1 << 15)
 #define COMP_SELECTOR 15
+#define COMPF_WINDOW (1 << 16)
+#define COMP_WINDOW 16
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.
