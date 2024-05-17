@@ -87,21 +87,32 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         VEC(EntityRef) mapv = world_query(w,&bf);
         Entity* emap = get_entity(w,mapv[0]);
         MapComponent* mapc = entity_get_component(w,emap,COMP_MAPCOMPONENT);
+
+
+        bf = COMPF_CAMERA;
+        VEC(EntityRef) camv = world_query(w,&bf);
+        Entity* ecam = get_entity(w,camv[0]);
+        Camera* cam = entity_get_component(w,ecam,COMP_CAMERA);
+
         for(uint j=0;j<vec_len(s->selected);j++){
           Entity* e = get_entity(w,s->selected[j]);
           SteerManager* stm = entity_get_component(w,e,COMP_STEERMANAGER);
           Position* p = entity_get_component(w,e,COMP_POSITION);
           if(stm != 0){
-            Vec2 p_vec2 = (Vec2){.x=p->x,.y=p->y};
+            Position ps = screen2worldspace(p, cam);
+            Vec2 p_vec2 = (Vec2){.x=ps.x,.y=ps.y};
             TilePosition tpstart = pos2tile(&p_vec2);
 
             SDL_Point mp = get_mouse_position(r);
-            Vec2 mp_vec2 = (Vec2){.x=mp.x,.y=mp.y};
+            Position mpp = (Position){.x=mp.x,.y=mp.y};
+            Position mps = screen2worldspace(&mpp, cam);
+            Vec2 mp_vec2 = (Vec2){.x=mps.x,.y=mps.y};
+
             TilePosition tpend = pos2tile(&mp_vec2);
 
             if(stm->current_path) path_free(stm->current_path);
             stm->current_path = pathfind_astar(mapc->map,UNIT_TEST,&tpstart,&tpend);
-            stm->max_speed = 15.;
+            stm->max_speed = 5.;
             stm->max_force = INFINITY;
           }
         }
