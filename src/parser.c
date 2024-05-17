@@ -43,7 +43,7 @@
   }
 
 Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
-  printf("$%s\n", path);
+  // printf("$%s\n", path);
   FILE *f = fopen(path, "r");
   char c;
   char c1;
