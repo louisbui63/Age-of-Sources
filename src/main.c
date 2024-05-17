@@ -6,8 +6,8 @@
 #include <stdlib.h>
 
 #include "./renderer/button.h"
-#include "ai/steering_behaviors.h"
 #include "ai/movement.h"
+#include "ai/steering_behaviors.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
@@ -227,6 +227,8 @@ int main() {
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
     if (RUNNING && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
+    else
+      sprintf(stderr, "this is lag.\n");
   }
 
   inputs_free(input_down);
