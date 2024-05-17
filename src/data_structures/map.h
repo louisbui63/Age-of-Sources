@@ -7,6 +7,10 @@
 typedef enum {
   TILE_PLAIN,
   TILE_FOREST,
+  TILE_SWAMP,
+  TILE_WATER,
+  TILE_MOUNTAIN,
+  TILE_GIGEMENT,
 
   TILE_NUMBER
 } TileTypes;
@@ -45,4 +49,8 @@ Map load_map_from_bmp(char *path);
 
 //! Returns the file name associated with a certain color. Return value should
 //! be freed.
-char *get_tile_file_name(int8_t id);
+char *get_tile_file_name(TileTypes tt);
+
+TileTypes pixel2tiletype(int8_t id);
+
+int8_t tiletype2pixel(TileTypes id);

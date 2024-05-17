@@ -52,6 +52,11 @@ Vec2 tile2pos(TilePosition *tp) {
                 tp->y * TILE_SIZE + (TILE_SIZE >> 1)};
 }
 
+TilePosition pos2tile(Vec2 *tp) {
+  return (TilePosition){(tp->x - (TILE_SIZE >> 1)) / TILE_SIZE ,
+                (tp->y - (TILE_SIZE >> 1)) / TILE_SIZE };
+}
+
 BehaviorStatus behavior_follow_path(SteerManager *s) {
   while (v2len(v2sub(tile2pos(s->current_path[0]), s->position)) < TILE_SIZE) {
     free(s->current_path[0]);

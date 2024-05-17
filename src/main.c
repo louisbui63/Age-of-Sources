@@ -7,6 +7,7 @@
 
 #include "./renderer/button.h"
 #include "ai/steering_behaviors.h"
+#include "ai/movement.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
@@ -205,6 +206,8 @@ int main() {
     inputs_run_callbacks(&w, renderer, input_pressed, KEY_PRESSED);
     inputs_run_callbacks(&w, renderer, input_down, KEY_DOWN);
     inputs_run_callbacks(&w, renderer, input_released, KEY_RELEASED);
+
+    move_units(&w);
 
     // free instant inputs
     inputs_free(input_pressed);
