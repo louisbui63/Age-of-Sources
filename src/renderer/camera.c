@@ -10,6 +10,7 @@
 #include "../data_structures/map.h"
 #include "../data_structures/vec.h"
 #include "../selection.h"
+#include "anim.h"
 #include "sprite.h"
 
 Position world2screenspace(Position *p, Camera *cam) {
@@ -94,10 +95,14 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
               }
             }
 
+            Bitflag flag = COMPF_ANIMATOR;
+            Animator *an = entity_get_component(
+                w, get_entity(w, world_query(w, &flag)[0]), COMP_ANIMATOR);
+
             // the documentation refuses to tell us if it is safe but as far
             // as I can tell it is (in fact, we might not even need omp
             // critical, who knows ? (not me !))
-            SDL_RenderCopy(rdr, s->texture, s->rect, &r);
+            SDL_RenderCopy(rdr, s->texture, an ? &an->current : s->rect, &r);
           }
         }
       }

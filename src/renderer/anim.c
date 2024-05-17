@@ -27,17 +27,18 @@ Animator animator_new(Unit *unit_kind) {
     abort();
   })
 
-  int max[3];
+  int max[3] = {0, 0, 0};
   SDL_Rect rct = *unit_kind->sprite->rect;
   int bs = surf->format->BytesPerPixel;
-  for (uint i = 0; i < 3; i++)
+  for (uint i = 0; i < 3; i++) {
     for (uint j = 0; j < 3; j++) {
       uint8_t *addr =
           (uint8_t *)surf->pixels + i * rct.h * surf->pitch + j * bs * rct.w;
+
       uint32_t color = 0;
 
       for (int b = 0; b < bs; b++)
-        *((uint8_t *)(&color) + b) = *addr + b;
+        *((uint8_t *)(&color) + b) = *(addr + b);
 
       if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
         // Oh god no please no
@@ -56,10 +57,13 @@ Animator animator_new(Unit *unit_kind) {
       SDL_GetRGBA(color, surf->format, &actual_color.r, &actual_color.g,
                   &actual_color.b, &actual_color.a);
       if (actual_color.r == 255 && actual_color.g == 0 && actual_color.b == 0 &&
-          actual_color.a == 255)
+          actual_color.a == 255) {
         break;
+      }
       max[i]++;
     }
+    max[i]--;
+  }
 
   SDL_FreeSurface(surf);
 

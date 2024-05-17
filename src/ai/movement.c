@@ -45,7 +45,8 @@ void move_units(World *w) {
         }
       }
       behavior_complete(stm);
-    }
+    } else
+      stm->velocity = (Vec2){0, 0};
 
     // _Pragma("omp barrier");
     Position *p = entity_get_component(w, e, COMP_POSITION);

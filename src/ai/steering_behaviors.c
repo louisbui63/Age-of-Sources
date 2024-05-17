@@ -53,8 +53,8 @@ Vec2 tile2pos(TilePosition *tp) {
 }
 
 TilePosition pos2tile(Vec2 *tp) {
-  return (TilePosition){(tp->x - (TILE_SIZE >> 1)) / TILE_SIZE ,
-                (tp->y - (TILE_SIZE >> 1)) / TILE_SIZE };
+  return (TilePosition){(tp->x - (TILE_SIZE >> 1)) / TILE_SIZE,
+                        (tp->y - (TILE_SIZE >> 1)) / TILE_SIZE};
 }
 
 BehaviorStatus behavior_follow_path(SteerManager *s) {
