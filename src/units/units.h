@@ -1,4 +1,4 @@
-//! @file entities.h
+//! @file units.h
 
 #pragma once
 

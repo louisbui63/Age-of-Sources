@@ -2,23 +2,30 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "./renderer/button.h"
+#include "ai/steering_behaviors.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
 #include "input.h"
+#include "parser.h"
+#include "players.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
+#include "selection.h"
+#include "units/unit_function.h"
 #include "util.h"
 
 #include "audio/audio.h"
 
-int RUNNING = 1;
+Running RUNNING = MAIN;
 char IS_FULLSCREEN = false;
+HashMap GRID_FUNCTION_MAP;
 
 int main() {
   init_asset_manager();
@@ -76,11 +83,20 @@ int main() {
   })
   SDL_FreeSurface(test_bmp);
 
+  set_grid_functions();
+
   World w = world_new();
   Camera *camcam = malloc(sizeof(Camera));
   *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
 
   init_world(&w);
+
+  Entity *wine = spawn_entity(&w);
+  Window wind = {.w = window};
+  KeyEvent *wink = malloc(sizeof(KeyEvent));
+  *wink = key_event_escape;
+  ecs_add_component(&w, wine, COMP_WINDOW, &wind);
+  ecs_add_component(&w, wine, COMP_KEY_EVENT, wink);
 
   Entity *cam = spawn_entity(&w);
   KeyEvent *cammove = malloc(sizeof(KeyEvent));
@@ -89,6 +105,39 @@ int main() {
   ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 
   // Entity *test_e = spawn_entity(&w);
+
+  {
+    Entity *e = spawn_entity(&w);
+    Unit *u = parse("src/units/unit_tanuki.c", renderer, window);
+    ecs_add_component(&w, e, COMP_UNIT, u);
+    ecs_add_component(&w, e, COMP_SPRITE, u->sprite);
+    Position *p = calloc(1, sizeof(Position));
+    *p = (Position){100, 100};
+    ecs_add_component(&w, e, COMP_POSITION, p);
+    SteerManager *stm = malloc(sizeof(SteerManager));
+    *stm = (SteerManager){
+        10, 10, 10, 10, 10, 0, (Vec2){0, 0}, (Vec2){100, 100}, (Vec2){0, 0}, 0};
+    ecs_add_component(&w, e, COMP_STEERMANAGER, stm);
+    Selectable *s = calloc(1, sizeof(Selectable));
+    ecs_add_component(&w, e, COMP_SELECTABLE, s);
+  }
+
+  {
+    Entity *e = spawn_entity(&w);
+    Selector *s = malloc(sizeof(Selector));
+    *s = (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0};
+    ecs_add_component(&w, e, COMP_SELECTOR, s);
+    KeyEvent *select_events = malloc(sizeof(KeyEvent));
+    *select_events = selection_event;
+    ecs_add_component(&w, e, COMP_KEY_EVENT, select_events);
+  }
+
+  for (uint i = 0; i < 2; i++) {
+    Entity *e = spawn_entity(&w);
+    PlayerManager *pm = malloc(sizeof(PlayerManager));
+    *pm = (PlayerManager){i, 0, 0};
+    ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
+  }
 
   Position *test_pos = malloc(sizeof(Position));
   *test_pos = (Position){.x = 155, .y = 250};
@@ -116,7 +165,7 @@ int main() {
   Background *back = spawn_backbackground(renderer, window);
 
   play_audio("asset/sfx/click.wav", 0);
-  for (; RUNNING;) {
+  for (; RUNNING != STOP;) {
     Uint32 start_time = SDL_GetTicks();
 
     Inputs *input_pressed = inputs_new();
@@ -167,6 +216,7 @@ int main() {
                    back->rect);
     render(&w, renderer, camcam, window);
     render_ui(&w, renderer, window);
+    draw_selection(&w, renderer, window);
 
     SDL_RenderPresent(renderer);
 
@@ -181,6 +231,7 @@ int main() {
   background_component_free(back);
 
   free_asset_store();
+  free_grid_functions();
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);

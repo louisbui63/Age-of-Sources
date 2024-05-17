@@ -45,7 +45,7 @@ void inputs_run_callbacks(World *w, SDL_Renderer *rdr, Inputs *in,
   }
 }
 
-Uint8 mouse_in_rect(SDL_Renderer *rdr, SDL_Rect *rect) {
+SDL_Point get_mouse_position(SDL_Renderer *rdr) {
   SDL_Point mouse_position;
   SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
   SDL_Rect view_rect;
@@ -54,7 +54,11 @@ Uint8 mouse_in_rect(SDL_Renderer *rdr, SDL_Rect *rect) {
   SDL_RenderGetScale(rdr, &sx, &sy);
   mouse_position.x = mouse_position.x / sx - view_rect.x;
   mouse_position.y = mouse_position.y / sy - view_rect.y;
+  return mouse_position;
+}
 
+Uint8 mouse_in_rect(SDL_Renderer *rdr, SDL_Rect *rect) {
+  SDL_Point mouse_position = get_mouse_position(rdr);
   if (SDL_PointInRect(&mouse_position, rect)) {
     return 1;
   } else {

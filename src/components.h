@@ -1,3 +1,4 @@
+//! @file components.h
 #pragma once
 
 #include "data_structures/ecs.h"
@@ -30,6 +31,14 @@
 #define COMP_ANIMATOR 12
 #define COMPF_CAMERA (1 << 13)
 #define COMP_CAMERA 13
+#define COMPF_SELECTABLE (1 << 14)
+#define COMP_SELECTABLE 14
+#define COMPF_SELECTOR (1 << 15)
+#define COMP_SELECTOR 15
+#define COMPF_PLAYERMANAGER (1 << 16)
+#define COMP_PLAYERMANAGER 16
+#define COMPF_WINDOW (1 << 17)
+#define COMP_WINDOW 17
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.

@@ -6,8 +6,9 @@
 #include "hash_map.h"
 #include <stdint.h>
 
-//! Note that this reference is only valid until the number of entities
-//! decreases
+//! A representation of an `Entity`. this note was left in its implementation :
+//! "Note that this reference is only valid until the number of entities
+//! decreases", but I'm pretty sure it's not true
 typedef uint64_t EntityRef;
 
 //! Used to store the component, its type and its id
