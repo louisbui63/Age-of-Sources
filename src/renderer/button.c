@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "../audio/audio.h"
 #include "../components.h"
 #include "../data_structures/asset_manager.h"
 #include "button.h"
@@ -73,6 +74,22 @@ Clickable *spawn_gamemenu_option(World *w, SDL_Renderer *renderer,
 
 Clickable *spawn_gameoption_back(World *w, SDL_Renderer *renderer,
                                  SDL_Window *window);
+
+void event_sound_p1(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+void event_sound_p16(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+void event_sound_m1(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+void event_sound_m16(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+char *str_sound_level(World *w, Entity *e);
+
+Actualised_Text *spawn_sound_level(World *w, SDL_Renderer *renderer,
+                                   SDL_Window *window);
+
+Background *spawn_sound_levelbg(World *w, SDL_Renderer *renderer,
+                                SDL_Window *window);
 
 Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
                         void (*event)(World *w, SDL_Renderer *renderer,
@@ -167,6 +184,7 @@ void event_optionmain_back(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
   despawn_from_component(w, COMPF_CLICKABLE);
   despawn_from_component(w, COMPF_BACKGROUND);
+  despawn_from_component(w, COMP_ACTUALISEDTEXT);
   spawn_main_menu(w, renderer, window);
   // printf("1\n");
 }
@@ -299,7 +317,7 @@ void event_gameoption_back(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
   despawn_from_component(w, COMPF_CLICKABLE);
   despawn_from_component(w, COMPF_BACKGROUND);
-  // despawn_from_component(w, COMP_HOVERABLE);
+  despawn_from_component(w, COMP_ACTUALISEDTEXT);
   event_game_menu(w, renderer, window);
 }
 
@@ -334,3 +352,66 @@ void key_event_escape(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
     }
   }
 }
+
+// void spawn_option_sound(World *w, SDL_Renderer *renderer, SDL_Window *window)
+// {
+//   spawn_sound_p1(w, renderer, window);
+//   spawn_sound_p16(w, renderer, window);
+//   spawn_sound_m1(w, renderer, window);
+//   spawn_sound_m16(w, renderer, window);
+//   spawn_sound_level(w, renderer, window);
+//   spaw_sound_levelbg(w, renderer, window);
+// }
+
+// Clickable *spawn_sound_p1(World *w, SDL_Renderer *renderer,
+//                           SDL_Window *window) {
+//   return spawn_button(w, renderer, window, event_sound_p1, "+ 1", 300, 80);
+// }
+
+// void event_sound_p1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+//   uint8_t v = get_volume();
+//   set_volume(min(v + 1, 128));
+// }
+
+// Clickable *spawn_sound_p16(World *w, SDL_Renderer *renderer,
+//                            SDL_Window *window) {
+//   return spawn_button(w, renderer, window, event_sound_p16, "+ 16", 300,
+//   110);
+// }
+
+// void event_sound_p16(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+//   uint8_t v = get_volume();
+//   set_volume(min(v + 16, 128));
+// }
+
+// Clickable *spawn_sound_m1(World *w, SDL_Renderer *renderer,
+//                           SDL_Window *window) {
+//   return spawn_button(w, renderer, window, event_sound_m1, "- 1", 500, 80);
+// }
+
+// void event_sound_m1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+//   uint8_t v = get_volume();
+//   set_volume(max(v - 1, 0));
+// }
+
+// Clickable *spawn_sound_m16(World *w, SDL_Renderer *renderer,
+//                            SDL_Window *window) {
+//   return spawn_button(w, renderer, window, event_sound_m16, "- 16", 300,
+//   110);
+// }
+
+// void event_sound_m1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+//   uint8_t v = get_volume();
+//   set_volume(max(v - 16, 0));
+// }
+
+// Actualised_Text *spawn_sound_level(World *w, SDL_Renderer *renderer,
+//                                    SDL_Window *window) {
+//   Entity *e = spawn_entity(w);
+//   Actualised_Text *t = malloc(sizeof(Actualised_Text));
+//   t->color = malloc(sizeof(SDL_Color));
+//   *(t->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+//   t->rect = malloc(sizeof(SDL_Rect));
+//   *(t->rect) = (SDL_Rect){.x = 400, .y = 100, .h = 20, .w = 100};
+//   t->get_text = str_sound_level
+// }

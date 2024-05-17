@@ -104,7 +104,7 @@ int main() {
   ecs_add_component(&w, cam, COMP_CAMERA, camcam);
   ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 
-  render_game_state(&w);
+  // render_game_state(&w);
 
   {
     Entity *e = spawn_entity(&w);
@@ -224,6 +224,9 @@ int main() {
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
     if (RUNNING && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
+
+    // SDL_Point p = get_mouse_position(renderer);
+    // printf("x = %d, y = %d\n", p.x, p.y);
   }
 
   inputs_free(input_down);
