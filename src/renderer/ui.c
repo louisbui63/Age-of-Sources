@@ -11,6 +11,8 @@
 #include "../data_structures/vec.h"
 #include "sprite.h"
 
+extern Running RUNNING;
+
 void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
   uint64_t mask = COMPF_BACKGROUND;
   VEC(EntityRef) er = world_query(w, &mask);
@@ -80,6 +82,26 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     if (mouse_in_rect(rdr, h->rect))
       render_hoverable(h->rect, h->text);
   }
+
+  mask = COMPF_ACTUALISEDTEXT;
+  er = world_query(w, &mask);
+  for (uint i = 0; i < vec_len(er); i++) {
+    Entity *e = get_entity(w, er[i]);
+    Actualised_Text *t = entity_get_component(w, e, COMP_ACTUALISEDTEXT);
+    TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 99);
+    SDL_Rect r = *(t->rect);
+    TTF_SizeUTF8(font, (t->get_text)(w, e), &(r.w), &(r.h));
+    SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(
+        font, (t->get_text)(w, e), *(t->color), 0);
+    SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
+    SDL_Rect t_rect;
+    TTF_SizeUTF8(font, (t->get_text)(w, e), &(t_rect.w), &(t_rect.h));
+    biggest_possible_rectangle_centered(t->rect, &t_rect, 0);
+
+    SDL_RenderCopy(rdr, text_texture, NULL, &t_rect);
+    SDL_FreeSurface(surf);
+    SDL_DestroyTexture(text_texture);
+  }
 }
 
 Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event) {
@@ -148,6 +170,7 @@ void text_component_free(void *temp) {
 void actualised_text_component_free(void *temp) {
   Actualised_Text *text = (Actualised_Text *)temp;
   free(text->rect);
+  free(text->color);
   free(text);
 }
 
@@ -183,4 +206,45 @@ void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
   ih = inner->h;
   inner->x = (ow + 2 * (outer->x + padding) - iw) / 2;
   inner->y = (oh + 2 * (outer->y + padding) - ih) / 2;
+}
+
+Actualised_Text *render_game_state(World *w) {
+  Entity *e = spawn_entity(w);
+  Actualised_Text *t = malloc(sizeof(Actualised_Text));
+  t->color = malloc(sizeof(SDL_Color));
+  *(t->color) = (SDL_Color){.r = 255, .g = 255, .b = 255, .a = 255};
+  t->rect = malloc(sizeof(SDL_Rect));
+  *(t->rect) = (SDL_Rect){.x = 0, .y = 0, .w = 150, .h = 20};
+  t->get_text = running_to_str;
+  ecs_add_component(w, e, COMP_ACTUALISEDTEXT, t);
+  return t;
+}
+
+char *running_to_str(__attribute__((unused)) World *w,
+                     __attribute__((unused)) Entity *e) {
+  switch (RUNNING) {
+  case STOP:
+    return "Stop          ";
+    break;
+
+  case MAIN:
+    return "Main          ";
+    break;
+
+  case OPTIONMAIN:
+    return "OptionMain    ";
+    break;
+
+  case IN_GAME:
+    return "In_Game       ";
+    break;
+
+  case IN_GAMEMENU:
+    return "In_GameMenu   ";
+    break;
+
+  case IN_GAMEOPTION:
+    return "In_GameOption ";
+    break;
+  }
 }

@@ -104,7 +104,7 @@ int main() {
   ecs_add_component(&w, cam, COMP_CAMERA, camcam);
   ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 
-  // Entity *test_e = spawn_entity(&w);
+  render_game_state(&w);
 
   {
     Entity *e = spawn_entity(&w);
