@@ -145,6 +145,12 @@ void text_component_free(void *temp) {
   free(text);
 }
 
+void actualised_text_component_free(void *temp) {
+  Actualised_Text *text = (Actualised_Text *)temp;
+  free(text->rect);
+  free(text);
+}
+
 Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window) {
   Background *back = malloc(sizeof(Background));
   back->sprite = malloc(sizeof(Sprite));

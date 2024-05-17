@@ -48,6 +48,7 @@ typedef struct {
 //! ressources.
 typedef struct {
   char *(*get_text)(World *w, Entity *e);
+  SDL_Rect *rect;
 } Actualised_Text;
 
 //! Renders any entity that has user interface related component
@@ -82,6 +83,8 @@ void background_component_free(void *temp);
 void clickable_component_free(void *temp);
 
 void text_component_free(void *temp);
+
+void actualised_text_component_free(void *temp);
 
 //! Creates a black background that will be rendered before everything else.
 Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
