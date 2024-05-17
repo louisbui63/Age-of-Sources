@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 #include "./renderer/button.h"
+#include "ai/movement.h"
 #include "ai/steering_behaviors.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
@@ -17,6 +18,7 @@
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
+#include "renderer/anim.h"
 #include "selection.h"
 #include "units/unit_function.h"
 #include "util.h"
@@ -120,6 +122,9 @@ int main() {
     ecs_add_component(&w, e, COMP_STEERMANAGER, stm);
     Selectable *s = calloc(1, sizeof(Selectable));
     ecs_add_component(&w, e, COMP_SELECTABLE, s);
+    Animator *a = malloc(sizeof(Animator));
+    *a = animator_new(u);
+    ecs_add_component(&w, e, COMP_ANIMATOR, a);
   }
 
   {
@@ -206,6 +211,9 @@ int main() {
     inputs_run_callbacks(&w, renderer, input_down, KEY_DOWN);
     inputs_run_callbacks(&w, renderer, input_released, KEY_RELEASED);
 
+    if(RUNNING == IN_GAME)
+      move_units(&w);
+
     // free instant inputs
     inputs_free(input_pressed);
     inputs_free(input_released);
@@ -222,8 +230,10 @@ int main() {
 
     // delay before next frame
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
-    if (RUNNING && dt != TARGET_FRAMETIME)
+    if (RUNNING != STOP && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
+    else if(RUNNING != STOP)
+      fprintf(stderr, "this is lag.\n");
   }
 
   inputs_free(input_down);

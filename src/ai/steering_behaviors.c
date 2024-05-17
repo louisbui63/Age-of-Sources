@@ -4,7 +4,7 @@
 BehaviorStatus behavior_seek(SteerManager *s, Vec2 target) {
 
   Vec2 target_vel =
-      v2mul(s->max_speed, v2normalize(v2sub(s->position, target)));
+      v2mul(s->max_speed, v2normalize(v2sub(target, s->position)));
   s->steering = v2sub(target_vel, s->velocity);
   return ONGOING;
 }
@@ -50,6 +50,11 @@ BehaviorStatus behavior_complete(SteerManager *s) {
 Vec2 tile2pos(TilePosition *tp) {
   return (Vec2){tp->x * TILE_SIZE + (TILE_SIZE >> 1),
                 tp->y * TILE_SIZE + (TILE_SIZE >> 1)};
+}
+
+TilePosition pos2tile(Vec2 *tp) {
+  return (TilePosition){(tp->x - (TILE_SIZE >> 1)) / TILE_SIZE,
+                        (tp->y - (TILE_SIZE >> 1)) / TILE_SIZE};
 }
 
 BehaviorStatus behavior_follow_path(SteerManager *s) {

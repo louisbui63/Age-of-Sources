@@ -49,7 +49,7 @@ void inputs_free(Inputs *);
 //! the state of a mouse button
 //! bool inputs_is_mouse_button_in(Inputs*,MouseButton)
 #define inputs_is_mouse_button_in(inputs, button)                              \
-  (((inputs)->mouse >> ((button) - 1)) & 1)
+  (((inputs)->mouse >> ((button)-1)) & 1)
 
 //! updates the state of a key using SDL_Scancode
 //! !!!!!!!!!! this does not take into account non QWERTY keyboards / remaps
@@ -66,8 +66,8 @@ void inputs_update_key_in_from_scancode(Inputs *inputs, SDL_Scancode scancode,
 //! updates the state of a mouse button
 //! MouseButton inputs_update_mouse_button_in(Input*,MouseButton,bool)
 #define inputs_update_mouse_button_in(inputs, button, new_val)                 \
-  ((inputs)->mouse = (((!!(new_val)) << ((button) - 1)) |                      \
-                      ((inputs)->mouse & (~(1 << ((button) - 1))))))
+  ((inputs)->mouse = (((!!(new_val)) << ((button)-1)) |                        \
+                      ((inputs)->mouse & (~(1 << ((button)-1))))))
 
 //! calls all the callbacks for the keyevent
 void inputs_run_callbacks(World *, SDL_Renderer *rdr, Inputs *, KeyState);
