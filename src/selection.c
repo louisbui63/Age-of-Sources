@@ -98,8 +98,8 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
           SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
           Position *p = entity_get_component(w, e, COMP_POSITION);
           if (stm != 0) {
-            Position ps = screen2worldspace(p, cam);
-            Vec2 p_vec2 = (Vec2){.x = ps.x, .y = ps.y};
+            //Position ps = screen2worldspace(p, cam);
+            Vec2 p_vec2 = (Vec2){.x = p->x, .y = p->y};
             TilePosition tpstart = pos2tile(&p_vec2);
 
             SDL_Point mp = get_mouse_position(r);
@@ -111,20 +111,22 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
 
             if (stm->current_path)
               path_free(stm->current_path);
+            stm->current_path = 0;
 
             Path p = pathfind_astar(mapc->map, UNIT_TEST, &tpstart, &tpend);
-            if (vec_len(p) > 1) {
-              free(p[0]);
-              vec_remove(p, 0);
+            if(p) {
+              if (vec_len(p) > 1) {
+                free(p[0]);
+                vec_remove(p, 0);
+              }
+              if (vec_len(p) > 1) {
+                free(p[0]);
+                vec_remove(p, 0);
+              }
+              stm->current_path = p;
+              stm->max_speed = 5.;
+              stm->max_force = INFINITY;
             }
-            if (vec_len(p) > 1) {
-              free(p[0]);
-              vec_remove(p, 0);
-            }
-
-            stm->current_path = p;
-            stm->max_speed = 5.;
-            stm->max_force = INFINITY;
           }
         }
       }
