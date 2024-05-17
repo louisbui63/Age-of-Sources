@@ -44,6 +44,12 @@ typedef struct {
   char *text;
 } Hoverable;
 
+//! Type used to render text that is not constant sur as hp, sound volume or
+//! ressources.
+typedef struct {
+  char *(*get_text)(World *w, Entity *e);
+} Actualised_Text;
+
 //! Renders any entity that has user interface related component
 void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi);
 

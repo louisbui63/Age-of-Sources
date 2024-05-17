@@ -86,7 +86,7 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
   click->text->color = malloc(sizeof(SDL_Color));
   click->is_clicked = 0;
   click->click_event = event;
-  *click->text->color = (SDL_Color){.r = 0, .g = 255, .b = 0, .a = 255};
+  *click->text->color = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
   click->text->str = malloc(strlen(t) + 1);
   strcpy(click->text->str, t);
   click->text->padding = 5;
