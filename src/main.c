@@ -2,6 +2,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "./renderer/button.h"
@@ -12,16 +13,19 @@
 #include "data_structures/map.h"
 #include "input.h"
 #include "parser.h"
+#include "players.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
 #include "selection.h"
+#include "units/unit_function.h"
 #include "util.h"
 
 #include "audio/audio.h"
 
 Running RUNNING = MAIN;
 char IS_FULLSCREEN = false;
+HashMap GRID_FUNCTION_MAP;
 
 int main() {
   init_asset_manager();
@@ -79,6 +83,8 @@ int main() {
   })
   SDL_FreeSurface(test_bmp);
 
+  set_grid_functions();
+
   World w = world_new();
   Camera *camcam = malloc(sizeof(Camera));
   *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
@@ -102,7 +108,7 @@ int main() {
 
   {
     Entity *e = spawn_entity(&w);
-    Unit *u = parse("src/units/unit_template.h", renderer, window);
+    Unit *u = parse("src/units/unit_tanuki.c", renderer, window);
     ecs_add_component(&w, e, COMP_UNIT, u);
     ecs_add_component(&w, e, COMP_SPRITE, u->sprite);
     Position *p = calloc(1, sizeof(Position));
@@ -119,11 +125,18 @@ int main() {
   {
     Entity *e = spawn_entity(&w);
     Selector *s = malloc(sizeof(Selector));
-    *s = (Selector){{0, 0}, {0, 0}, 0, vec_new(EntityRef)};
+    *s = (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0};
     ecs_add_component(&w, e, COMP_SELECTOR, s);
     KeyEvent *select_events = malloc(sizeof(KeyEvent));
     *select_events = selection_event;
     ecs_add_component(&w, e, COMP_KEY_EVENT, select_events);
+  }
+
+  for (uint i = 0; i < 2; i++) {
+    Entity *e = spawn_entity(&w);
+    PlayerManager *pm = malloc(sizeof(PlayerManager));
+    *pm = (PlayerManager){i, 0, 0};
+    ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
   }
 
   Position *test_pos = malloc(sizeof(Position));
@@ -203,6 +216,7 @@ int main() {
                    back->rect);
     render(&w, renderer, camcam, window);
     render_ui(&w, renderer, window);
+    draw_selection(&w, renderer, window);
 
     SDL_RenderPresent(renderer);
 
@@ -217,6 +231,7 @@ int main() {
   background_component_free(back);
 
   free_asset_store();
+  free_grid_functions();
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);

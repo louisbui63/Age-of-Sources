@@ -1,4 +1,4 @@
-//! @file steering_behavior.h
+//! @file movement.h
 #pragma once
 
 #include "../data_structures/ecs.h"
