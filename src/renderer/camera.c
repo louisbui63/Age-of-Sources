@@ -94,10 +94,19 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
               }
             }
 
+            void *g = entity_get_component(w, e, COMP_BUILDINGGHOST);
+
+            if (g)
+              SDL_SetTextureColorMod(s->texture, (Uint8)200, (Uint8)100,
+                                     (Uint8)100);
+
             // the documentation refuses to tell us if it is safe but as far
             // as I can tell it is (in fact, we might not even need omp
             // critical, who knows ? (not me !))
             SDL_RenderCopy(rdr, s->texture, s->rect, &r);
+            if (g)
+              SDL_SetTextureColorMod(s->texture, (Uint8)255, (Uint8)255,
+                                     (Uint8)255);
           }
         }
       }

@@ -39,6 +39,8 @@
 #define COMP_PLAYERMANAGER 16
 #define COMPF_WINDOW (1 << 17)
 #define COMP_WINDOW 17
+#define COMPF_BUILDINGGHOST (1 << 18)
+#define COMP_BUILDINGGHOST 18
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.

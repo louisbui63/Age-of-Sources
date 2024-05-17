@@ -1,8 +1,10 @@
 #include "selection.h"
 #include "components.h"
+#include "construction.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "input.h"
+#include "parser.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include <SDL2/SDL_rect.h>
@@ -32,7 +34,13 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
                      KeyState st) {
   Selector *s = entity_get_component(w, e, COMP_SELECTOR);
 
-  if (s->type == Normal)
+  if (inputs_is_key_in(i, SDLK_b)) {
+    char *un = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
+    strcpy(un, "src/units/unit_well.c");
+    set_building_selection(w, un);
+  }
+
+  if (s->type == Normal) {
     if (inputs_is_mouse_button_in(i, 1) && get_mouse_position(r).y < 270) {
       if (st == KEY_PRESSED) {
         s->is_selecting = 1;
@@ -73,6 +81,33 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         }
       }
     }
+  } else if (s->type == Building) {
+    if (inputs_is_key_in(i, SDLK_b) && st == KEY_PRESSED)
+      reset_selection_type(s);
+    else if (inputs_is_mouse_button_in(i, 1) && get_mouse_position(r).y < 270 &&
+             st == KEY_RELEASED) {
+      SDL_Point pt = get_mouse_position(r);
+      Bitflag flag = COMPF_WINDOW;
+      SDL_Window *window = entity_get_component(
+          w, get_entity(w, world_query(w, &flag)[0]), COMP_WINDOW);
+      {
+        Entity *e = spawn_entity(w);
+        Unit *u = parse(s->building, r, window);
+        // ecs_add_component(&w, e, COMP_UNIT, u);
+        BuildingGhost *bg = malloc(sizeof(BuildingGhost));
+        *bg = (BuildingGhost){u, 0, u->hp};
+        ecs_add_component(w, e, COMP_BUILDINGGHOST, bg);
+        ecs_add_component(w, e, COMP_SPRITE, u->sprite);
+        Position *p = calloc(1, sizeof(Position));
+        *p = (Position){pt.x, pt.y};
+        ecs_add_component(w, e, COMP_POSITION, p);
+        Selectable *s = calloc(1, sizeof(Selectable));
+        s->is_ghost = 1;
+        ecs_add_component(w, e, COMP_SELECTABLE, s);
+      }
+      reset_selection_type(s);
+    }
+  }
 }
 
 //! draws the selection box when required
