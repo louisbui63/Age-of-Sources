@@ -43,6 +43,8 @@
 #define COMP_ACTUALISEDTEXT 18
 #define COMPF_BUILDINGGHOST (1 << 19)
 #define COMP_BUILDINGGHOST 19
+#define COMPF_OWNERSHIP (1 << 20)
+#define COMP_OWNERSHIP 20
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.

@@ -46,8 +46,11 @@ typedef enum {
 
 //! returns the speed at which a unit of type `unit` should go on a tile of type
 //! `tile`
-// #define units_get_tile_speed(unit, tile) unit_speeds[unit][tile]
-
 double units_get_tile_speed(UnitTypes u, TileTypes t);
 
 void unit_component_free(void *uni);
+
+//! A component indicating to which player a unit is belonging
+typedef struct {
+  char owner;
+} Ownership;

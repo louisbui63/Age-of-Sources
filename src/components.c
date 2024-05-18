@@ -20,8 +20,8 @@ int init_world(World *w) {
                                      COMPF_STEEROBSTACLE);
   register_system_requirement(w, COMPF_POSITION | COMPF_STEERMANAGER |
                                      COMPF_ANIMATOR);
-  register_system_requirement(w,
-                              COMPF_POSITION | COMPF_SPRITE | COMPF_SELECTABLE);
+  register_system_requirement(w, COMPF_POSITION | COMPF_SPRITE |
+                                     COMPF_SELECTABLE | COMPF_OWNERSHIP);
   register_component(w, Position);
   register_component_callback(w, Sprite, sprite_component_free);
   register_component(w, KeyEvent);

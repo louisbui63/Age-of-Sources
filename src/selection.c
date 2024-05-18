@@ -74,10 +74,14 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         SDL_Rect sel_rect = {min(si.x, se.x), min(si.y, se.y),
                              max(se.x, si.x) - min(si.x, se.x),
                              max(se.y, si.y) - min(se.y, si.y)};
-        flag = COMPF_SELECTABLE | COMPF_POSITION | COMPF_SPRITE;
+        flag =
+            COMPF_SELECTABLE | COMPF_POSITION | COMPF_SPRITE | COMPF_OWNERSHIP;
         VEC(EntityRef) es = world_query(w, &flag);
         for (uint i = 0; i < vec_len(es); i++) {
           Entity *e = get_entity(w, es[i]);
+          Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
+          if (o->owner == 1)
+            continue;
           Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
           Position *p = entity_get_component(w, e, COMP_POSITION);
           if (SDL_PointInRect(&(SDL_Point){p->x, p->y}, &sel_rect) &&
@@ -90,7 +94,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
       }
     }
   } else if (s->type == Building && RUNNING == IN_GAME) {
-    if (inputs_is_key_in(i, SDLK_b) && st == KEY_PRESSED)
+    if (inputs_is_key_in(i, SDLK_ESCAPE) && st == KEY_PRESSED)
       reset_selection_type(s);
     else if (inputs_is_mouse_button_in(i, 1) && get_mouse_position(r).y < 270 &&
              st == KEY_RELEASED) {
@@ -100,8 +104,10 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
           w, get_entity(w, world_query(w, &flag)[0]), COMP_WINDOW);
       {
         Entity *e = spawn_entity(w);
+        // ownership can only be 0 if building is placed by the player
+        Ownership *o = calloc(1, sizeof(Ownership));
+        ecs_add_component(w, e, COMP_OWNERSHIP, o);
         Unit *u = parse(s->building, r, window);
-        // ecs_add_component(&w, e, COMP_UNIT, u);
         BuildingGhost *bg = malloc(sizeof(BuildingGhost));
         *bg = (BuildingGhost){u, 0, u->hp, 0};
         ecs_add_component(w, e, COMP_BUILDINGGHOST, bg);

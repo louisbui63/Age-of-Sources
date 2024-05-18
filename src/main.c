@@ -15,10 +15,10 @@
 #include "input.h"
 #include "parser.h"
 #include "players.h"
+#include "renderer/anim.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
-#include "renderer/anim.h"
 #include "selection.h"
 #include "units/unit_function.h"
 #include "util.h"
@@ -113,6 +113,8 @@ int main() {
     Unit *u = parse("src/units/unit_tanuki.c", renderer, window);
     ecs_add_component(&w, e, COMP_UNIT, u);
     ecs_add_component(&w, e, COMP_SPRITE, u->sprite);
+    Ownership *o = calloc(1, sizeof(Ownership));
+    ecs_add_component(&w, e, COMP_OWNERSHIP, o);
     Position *p = calloc(1, sizeof(Position));
     *p = (Position){100, 100};
     ecs_add_component(&w, e, COMP_POSITION, p);
@@ -211,7 +213,7 @@ int main() {
     inputs_run_callbacks(&w, renderer, input_down, KEY_DOWN);
     inputs_run_callbacks(&w, renderer, input_released, KEY_RELEASED);
 
-    if(RUNNING == IN_GAME)
+    if (RUNNING == IN_GAME)
       move_units(&w);
 
     // free instant inputs
@@ -232,7 +234,7 @@ int main() {
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
     if (RUNNING != STOP && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
-    else if(RUNNING != STOP)
+    else if (RUNNING != STOP)
       fprintf(stderr, "this is lag.\n");
   }
 
