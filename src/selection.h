@@ -7,6 +7,7 @@
 //! This component is a flag that marks something as selectable. A `Position`
 //! and a `Sprite` is still required so that we can now where and how big it is.
 typedef struct {
+  char is_ghost;
 } Selectable;
 
 //! The type of the ongoing selection, i.e wether it is used for unit selection
