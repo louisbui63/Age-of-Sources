@@ -14,4 +14,6 @@ typedef struct {
 
 void building_ghost_component_free(void *);
 
+//! Transforms a building's ghost into a proper building (typically, would be
+//! called when it's finished being constructed)
 void finish_construction(World *w, Entity *e);
