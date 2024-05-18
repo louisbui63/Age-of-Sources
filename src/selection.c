@@ -95,7 +95,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         Unit *u = parse(s->building, r, window);
         // ecs_add_component(&w, e, COMP_UNIT, u);
         BuildingGhost *bg = malloc(sizeof(BuildingGhost));
-        *bg = (BuildingGhost){u, 0, u->hp};
+        *bg = (BuildingGhost){u, 0, u->hp, 0};
         ecs_add_component(w, e, COMP_BUILDINGGHOST, bg);
         ecs_add_component(w, e, COMP_SPRITE, u->sprite);
         Position *p = calloc(1, sizeof(Position));

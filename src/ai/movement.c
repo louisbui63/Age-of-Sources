@@ -82,9 +82,9 @@ _Pragma("omp parallel") {
       Animator *an = entity_get_component(w, e, COMP_ANIMATOR);
       SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
       if (stm->velocity.x == 0 && stm->velocity.y == 0)
-        advance_anim_state(an, Idle);
+        advance_anim_state(an, Idle, -1);
       else
-        advance_anim_state(an, Moving);
+        advance_anim_state(an, Moving, stm->velocity.y < 0);
     }
   }
   _Pragma("omp barrier")

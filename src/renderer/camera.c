@@ -5,11 +5,13 @@
 #include <stdint.h>
 
 #include "../components.h"
+#include "../construction.h"
 #include "../data_structures/asset_manager.h"
 #include "../data_structures/ecs.h"
 #include "../data_structures/map.h"
 #include "../data_structures/vec.h"
 #include "../selection.h"
+#include "anim.h"
 #include "sprite.h"
 
 Position world2screenspace(Position *p, Camera *cam) {
@@ -94,17 +96,20 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
               }
             }
 
-            void *g = entity_get_component(w, e, COMP_BUILDINGGHOST);
-
-            if (g)
+            BuildingGhost *g = entity_get_component(w, e, COMP_BUILDINGGHOST);
+            char is_ghost = g && !g->construction_done;
+            if (is_ghost)
               SDL_SetTextureColorMod(s->texture, (Uint8)200, (Uint8)100,
                                      (Uint8)100);
+
+            Animator *a = entity_get_component(w, e, COMP_ANIMATOR);
+            char flip = (a && a->flipped) ? 2 : 0;
 
             // the documentation refuses to tell us if it is safe but as far
             // as I can tell it is (in fact, we might not even need omp
             // critical, who knows ? (not me !))
-            SDL_RenderCopy(rdr, s->texture, s->rect, &r);
-            if (g)
+            SDL_RenderCopyEx(rdr, s->texture, s->rect, &r, 0, 0, flip);
+            if (is_ghost)
               SDL_SetTextureColorMod(s->texture, (Uint8)255, (Uint8)255,
                                      (Uint8)255);
           }

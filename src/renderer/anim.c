@@ -1,11 +1,14 @@
 #include "anim.h"
 
-void advance_anim_state(Animator *a, AnimState as) {
+void advance_anim_state(Animator *a, AnimState as, char flipped) {
   if (as != Noop) {
     const int h = a->current.h;
     a->current.y = h * as;
     a->state = as;
   }
+
+  if (flipped != -1)
+    a->flipped = flipped;
 
   const int w = a->current.w;
   if (!(a->frame = (a->frame + 1) % ANIM_STEP)) {
@@ -65,6 +68,6 @@ Animator animator_new(Unit *unit_kind) {
 
   // Learn more about obscure C syntax just like this on my website at
   // uwu-segfault.eu/api/blahaj
-  return (Animator){0, rct, Idle, {max[0], max[1], max[2]}};
+  return (Animator){0, rct, Idle, {max[0], max[1], max[2]}, 0};
   // no, I don't intend to shitpost less
 }
