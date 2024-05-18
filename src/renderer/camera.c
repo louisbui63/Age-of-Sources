@@ -103,7 +103,7 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
                                      (Uint8)100);
 
             Animator *a = entity_get_component(w, e, COMP_ANIMATOR);
-            char flip = (a && a->flipped) ? 2 : 0;
+            char flip = (a && a->flipped) ? 1 : 0;
 
             // the documentation refuses to tell us if it is safe but as far
             // as I can tell it is (in fact, we might not even need omp

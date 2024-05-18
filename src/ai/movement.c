@@ -85,7 +85,7 @@ _Pragma("omp parallel") {
       if (stm->velocity.x == 0 && stm->velocity.y == 0)
         advance_anim_state(an, Idle, -1);
       else
-        advance_anim_state(an, Moving, stm->velocity.y < 0);
+        advance_anim_state(an, Moving, stm->velocity.x < 0);
     }
   }
   _Pragma("omp barrier")
