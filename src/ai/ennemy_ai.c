@@ -16,6 +16,10 @@ void ReconsiderAiState(World *w, AiState *ais) {
   }
 
   switch (*ais) {
+    // not gonna lie, game ai isn't my thing; I've got no idea if my metrics are
+    // relevant, the state machine is clearly overly simplistic (only 3 states,
+    // seriously?) and there is no way we will have time to playtest it enough
+    // that it gets even remotely good
   case Eco:
     if (is_ai_attacked())
       *ais = Defense;
