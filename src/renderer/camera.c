@@ -108,7 +108,8 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
             // the documentation refuses to tell us if it is safe but as far
             // as I can tell it is (in fact, we might not even need omp
             // critical, who knows ? (not me !))
-            SDL_RenderCopyEx(rdr, s->texture, s->rect, &r, 0, 0, flip);
+            SDL_RenderCopyEx(rdr, s->texture, a ? &a->current : s->rect, &r, 0,
+                             0, flip);
             if (is_ghost)
               SDL_SetTextureColorMod(s->texture, (Uint8)255, (Uint8)255,
                                      (Uint8)255);

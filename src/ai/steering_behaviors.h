@@ -61,3 +61,6 @@ BehaviorStatus behavior_follow_path(SteerManager *s);
 
 //! converts between tile position and world coordinates
 Vec2 tile2pos(TilePosition *tp);
+
+//! converts between tile position and world coordinates
+TilePosition pos2tile(Vec2 *tp);

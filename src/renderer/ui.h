@@ -44,6 +44,14 @@ typedef struct {
   char *text;
 } Hoverable;
 
+//! Type used to render text that is not constant sur as hp, sound volume or
+//! ressources.
+typedef struct {
+  char *(*get_text)(World *w, Entity *e);
+  SDL_Rect *rect;
+  SDL_Color *color;
+} Actualised_Text;
+
 //! Renders any entity that has user interface related component
 void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi);
 
@@ -77,6 +85,8 @@ void clickable_component_free(void *temp);
 
 void text_component_free(void *temp);
 
+void actualised_text_component_free(void *temp);
+
 //! Creates a black background that will be rendered before everything else.
 Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
 
@@ -88,3 +98,13 @@ void null_click_event(__attribute__((unused)) World *w,
 //! can fit into `outer` padded by `padding` pixels.
 void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
                                          int padding);
+
+//! Thiss function adds an `Actualised_Text`to the world that will show the game
+//! state in the upper left corner of the game.
+Actualised_Text *render_game_state(World *w);
+
+//! This function returns the string that corresponds to the name of the value
+//! of runnning, the argument are not used but there for type consistency.
+//! The string is padded with spaces at the end so that when the text is
+//! rendered they all begin at the same place
+char *running_to_str(World *w, Entity *e);
