@@ -74,16 +74,25 @@ Clickable *spawn_gamemenu_option(World *w, SDL_Renderer *renderer,
 
 Clickable *spawn_gameoption_back(World *w, SDL_Renderer *renderer,
                                  SDL_Window *window);
+void spawn_option_sound(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+Clickable *spawn_sound_p1(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
 void event_sound_p1(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
+Clickable *spawn_sound_p16(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window);
+
 void event_sound_p16(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+Clickable *spawn_sound_m1(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
 void event_sound_m1(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
-void event_sound_m16(World *w, SDL_Renderer *renderer, SDL_Window *window);
+Clickable *spawn_sound_m16(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window);
 
-char *str_sound_level(World *w, Entity *e);
+void event_sound_m16(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
 Actualised_Text *spawn_sound_level(World *w, SDL_Renderer *renderer,
                                    SDL_Window *window);
@@ -170,6 +179,7 @@ void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
   spawn_optionmain_back(w, renderer, window);
   spawn_option_background(w, renderer, window);
   spawn_option_fullscreen(w, renderer, window);
+  spawn_option_sound(w, renderer, window);
   RUNNING = OPTIONMAIN;
   // printf("2\n");
 }
@@ -353,65 +363,104 @@ void key_event_escape(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
   }
 }
 
-// void spawn_option_sound(World *w, SDL_Renderer *renderer, SDL_Window *window)
-// {
-//   spawn_sound_p1(w, renderer, window);
-//   spawn_sound_p16(w, renderer, window);
-//   spawn_sound_m1(w, renderer, window);
-//   spawn_sound_m16(w, renderer, window);
-//   spawn_sound_level(w, renderer, window);
-//   spaw_sound_levelbg(w, renderer, window);
-// }
+void spawn_option_sound(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  spawn_sound_p1(w, renderer, window);
+  spawn_sound_p16(w, renderer, window);
+  spawn_sound_m1(w, renderer, window);
+  spawn_sound_m16(w, renderer, window);
+  spawn_sound_level(w, renderer, window);
+  spawn_sound_levelbg(w, renderer, window);
+}
 
-// Clickable *spawn_sound_p1(World *w, SDL_Renderer *renderer,
-//                           SDL_Window *window) {
-//   return spawn_button(w, renderer, window, event_sound_p1, "+ 1", 300, 80);
-// }
+Clickable *spawn_sound_p1(World *w, SDL_Renderer *renderer,
+                          SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_sound_p1, "+ 1", 300, 80);
+}
 
-// void event_sound_p1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-//   uint8_t v = get_volume();
-//   set_volume(min(v + 1, 128));
-// }
+void event_sound_p1(__attribute__((unused)) World *w,
+                    __attribute__((unused)) SDL_Renderer *renderer,
+                    __attribute__((unused)) SDL_Window *window) {
+  uint8_t v = get_volume();
+  set_volume(min(v + 1, 128));
+}
 
-// Clickable *spawn_sound_p16(World *w, SDL_Renderer *renderer,
-//                            SDL_Window *window) {
-//   return spawn_button(w, renderer, window, event_sound_p16, "+ 16", 300,
-//   110);
-// }
+Clickable *spawn_sound_p16(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_sound_p16, "+ 16", 300, 110);
+}
 
-// void event_sound_p16(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-//   uint8_t v = get_volume();
-//   set_volume(min(v + 16, 128));
-// }
+void event_sound_p16(__attribute__((unused)) World *w,
+                     __attribute__((unused)) SDL_Renderer *renderer,
+                     __attribute__((unused)) SDL_Window *window) {
+  uint8_t v = get_volume();
+  set_volume(min(v + 16, 128));
+}
 
-// Clickable *spawn_sound_m1(World *w, SDL_Renderer *renderer,
-//                           SDL_Window *window) {
-//   return spawn_button(w, renderer, window, event_sound_m1, "- 1", 500, 80);
-// }
+Clickable *spawn_sound_m1(World *w, SDL_Renderer *renderer,
+                          SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_sound_m1, "- 1", 500, 80);
+}
 
-// void event_sound_m1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-//   uint8_t v = get_volume();
-//   set_volume(max(v - 1, 0));
-// }
+void event_sound_m1(__attribute__((unused)) World *w,
+                    __attribute__((unused)) SDL_Renderer *renderer,
+                    __attribute__((unused)) SDL_Window *window) {
+  uint8_t v = get_volume();
+  set_volume(max(v - 1, 0));
+}
 
-// Clickable *spawn_sound_m16(World *w, SDL_Renderer *renderer,
-//                            SDL_Window *window) {
-//   return spawn_button(w, renderer, window, event_sound_m16, "- 16", 300,
-//   110);
-// }
+Clickable *spawn_sound_m16(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_sound_m16, "- 16", 300, 110);
+}
 
-// void event_sound_m1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-//   uint8_t v = get_volume();
-//   set_volume(max(v - 16, 0));
-// }
+void event_sound_m16(__attribute__((unused)) World *w,
+                     __attribute__((unused)) SDL_Renderer *renderer,
+                     __attribute__((unused)) SDL_Window *window) {
+  uint8_t v = get_volume();
+  set_volume(max(v - 16, 0));
+}
 
-// Actualised_Text *spawn_sound_level(World *w, SDL_Renderer *renderer,
-//                                    SDL_Window *window) {
-//   Entity *e = spawn_entity(w);
-//   Actualised_Text *t = malloc(sizeof(Actualised_Text));
-//   t->color = malloc(sizeof(SDL_Color));
-//   *(t->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
-//   t->rect = malloc(sizeof(SDL_Rect));
-//   *(t->rect) = (SDL_Rect){.x = 400, .y = 100, .h = 20, .w = 100};
-//   t->get_text = str_sound_level
-// }
+Actualised_Text *spawn_sound_level(World *w,
+                                   __attribute__((unused))
+                                   SDL_Renderer *renderer,
+                                   __attribute__((unused)) SDL_Window *window) {
+  Entity *e = spawn_entity(w);
+  Actualised_Text *t = malloc(sizeof(Actualised_Text));
+  t->color = malloc(sizeof(SDL_Color));
+  *(t->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+  t->rect = malloc(sizeof(SDL_Rect));
+  *(t->rect) = (SDL_Rect){.x = 400, .y = 100, .h = 20, .w = 100};
+  t->get_text = str_sound_level;
+  ecs_add_component(w, e, COMP_ACTUALISEDTEXT, t);
+  return t;
+}
+
+char *str_sound_level(__attribute__((unused)) World *w,
+                      __attribute__((unused)) Entity *e) {
+  uint8_t v = get_volume();
+  char *t = "   /128";
+  t[2] = v % 10;
+  v /= 10;
+  if ((v / 10) != 0) {
+    t[0] = v / 10 + '0';
+    t[1] = v % 10 + '0';
+  } else if (v != 0) {
+    t[1] = v + '0';
+  }
+  return t;
+}
+
+Background *spawn_sound_levelbg(World *w, SDL_Renderer *renderer,
+                                SDL_Window *window) {
+  Background *bg = malloc(sizeof(Background));
+  bg->rect = malloc(sizeof(SDL_Rect));
+  *(bg->rect) = (SDL_Rect){.x = 400, .y = 100, .h = 20, .w = 100};
+  bg->sprite = malloc(sizeof(Sprite));
+  bg->sprite->rect = malloc(sizeof(SDL_Rect));
+  *(bg->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 20, .w = 100};
+  bg->sprite->texture =
+      get_texture("./asset/sprites/button.bmp", renderer, window);
+  Entity *e = spawn_entity(w);
+  ecs_add_component(w, e, COMP_ACTUALISEDTEXT, bg);
+  return bg;
+}
