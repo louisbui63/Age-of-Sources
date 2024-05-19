@@ -50,7 +50,7 @@ typedef struct {
   char *(*get_text)(World *w, Entity *e);
   SDL_Rect *rect;
   SDL_Color *color;
-} Actualised_Text;
+} ActualisedText;
 
 //! Renders any entity that has user interface related component
 void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi);
@@ -101,7 +101,7 @@ void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
 
 //! Thiss function adds an `Actualised_Text`to the world that will show the game
 //! state in the upper left corner of the game.
-Actualised_Text *render_game_state(World *w);
+ActualisedText *render_game_state(World *w);
 
 //! This function returns the string that corresponds to the name of the value
 //! of runnning, the argument are not used but there for type consistency.

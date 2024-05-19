@@ -39,7 +39,7 @@ int init_world(World *w) {
   register_component_callback(w, Selector, selector_free);
   register_component(w, PlayerManager);
   register_component_callback(w, Window, free_nothing);
-  register_component_callback(w, Actualised_Text,
+  register_component_callback(w, ActualisedText,
                               actualised_text_component_free);
   return SUCCESS;
 }

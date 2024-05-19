@@ -94,8 +94,8 @@ Clickable *spawn_sound_m16(World *w, SDL_Renderer *renderer,
 
 void event_sound_m16(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
-Actualised_Text *spawn_sound_level(World *w, SDL_Renderer *renderer,
-                                   SDL_Window *window);
+ActualisedText *spawn_sound_level(World *w, SDL_Renderer *renderer,
+                                  SDL_Window *window);
 
 Background *spawn_sound_levelbg(World *w, SDL_Renderer *renderer,
                                 SDL_Window *window);
@@ -194,7 +194,7 @@ void event_optionmain_back(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
   despawn_from_component(w, COMPF_CLICKABLE);
   despawn_from_component(w, COMPF_BACKGROUND);
-  despawn_from_component(w, COMP_ACTUALISEDTEXT);
+  despawn_from_component(w, COMPF_ACTUALISEDTEXT);
   spawn_main_menu(w, renderer, window);
   // printf("1\n");
 }
@@ -327,7 +327,7 @@ void event_gameoption_back(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
   despawn_from_component(w, COMPF_CLICKABLE);
   despawn_from_component(w, COMPF_BACKGROUND);
-  despawn_from_component(w, COMP_ACTUALISEDTEXT);
+  despawn_from_component(w, COMPF_ACTUALISEDTEXT);
   event_game_menu(w, renderer, window);
 }
 
@@ -420,12 +420,12 @@ void event_sound_m16(__attribute__((unused)) World *w,
   set_volume(max(v - 16, 0));
 }
 
-Actualised_Text *spawn_sound_level(World *w,
-                                   __attribute__((unused))
-                                   SDL_Renderer *renderer,
-                                   __attribute__((unused)) SDL_Window *window) {
+ActualisedText *spawn_sound_level(World *w,
+                                  __attribute__((unused))
+                                  SDL_Renderer *renderer,
+                                  __attribute__((unused)) SDL_Window *window) {
   Entity *e = spawn_entity(w);
-  Actualised_Text *t = malloc(sizeof(Actualised_Text));
+  ActualisedText *t = malloc(sizeof(ActualisedText));
   t->color = malloc(sizeof(SDL_Color));
   *(t->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
   t->rect = malloc(sizeof(SDL_Rect));
@@ -461,6 +461,6 @@ Background *spawn_sound_levelbg(World *w, SDL_Renderer *renderer,
   bg->sprite->texture =
       get_texture("./asset/sprites/button.bmp", renderer, window);
   Entity *e = spawn_entity(w);
-  ecs_add_component(w, e, COMP_ACTUALISEDTEXT, bg);
+  ecs_add_component(w, e, COMP_BACKGROUND, bg);
   return bg;
 }
