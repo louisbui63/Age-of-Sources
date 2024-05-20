@@ -92,8 +92,8 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     SDL_Rect r = *(t->rect);
     char *text = (t->get_text)(w, e);
     TTF_SizeUTF8(font, text, &(r.w), &(r.h));
-    SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(
-        font, (t->get_text)(w, e), *(t->color), 0);
+    SDL_Surface *surf =
+        TTF_RenderText_Blended_Wrapped(font, text, *(t->color), 0);
     SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
     SDL_Rect t_rect;
     TTF_SizeUTF8(font, text, &(t_rect.w), &(t_rect.h));
