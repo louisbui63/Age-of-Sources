@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "../components.h"
+#include "../construction.h"
 #include "../data_structures/asset_manager.h"
 #include "../renderer/sprite.h"
 #include "units.h"
@@ -52,12 +53,31 @@ Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
               .s_dam = ut->s_dam,
               .s_def = ut->s_def,
               .sp = ut->sp,
-              .sprite = s};
+              .sprite = s,
+              .t = t};
 
   Position *pp = calloc(1, sizeof(Position));
   *pp = p;
   ecs_add_component(w, e, COMP_POSITION, pp);
   ecs_add_component(w, e, COMP_SPRITE, u->sprite);
   ecs_add_component(w, e, COMP_UNIT, u);
-  return u;
+  return e;
 }
+
+// Entity *spawn_ghost(World *w, Selector *s, SDL_Renderer *r, SDL_Window
+// *window,
+//                     SDL_Point pt) {
+//   Entity *e = spawn_entity(w);
+//   UnitT *u = parse(s->building, r, window);
+//   // ecs_add_component(&w, e, COMP_UNIT, u);
+//   BuildingGhost *bg = malloc(sizeof(BuildingGhost));
+//   *bg = (BuildingGhost){u, 0, u->hp, 0};
+//   ecs_add_component(w, e, COMP_BUILDINGGHOST, bg);
+//   ecs_add_component(w, e, COMP_SPRITE, u->sprite);
+//   Position *p = calloc(1, sizeof(Position));
+//   *p = (Position){pt.x, pt.y};
+//   ecs_add_component(w, e, COMP_POSITION, p);
+//   Selectable *sa = calloc(1, sizeof(Selectable));
+//   sa->is_ghost = 1;
+//   ecs_add_component(w, e, COMP_SELECTABLE, s);
+// }

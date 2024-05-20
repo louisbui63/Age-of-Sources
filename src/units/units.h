@@ -7,6 +7,15 @@
 #include "../data_structures/map.h"
 #include "../renderer/camera.h"
 #include "../renderer/sprite.h"
+#include "../selection.h"
+
+//! an `enum` containing all the units for the game
+typedef enum {
+  WELL, // funny name :)
+  BASE_SOLDIER,
+  UNIT_NUMBER,
+  UNIT_TEST
+} UnitTypes;
 
 //! The body type describes every unit and building in the game.
 //! Name matches the body's name, it must not be more than 255 characters long
@@ -37,6 +46,7 @@ typedef struct {
   Sprite *sprite;       // Sprite of the unit
   char *path_to_sprite; // Path to the sprite of the unit
   char *descr;          // Description
+  UnitTypes t;
 } Unit;
 
 typedef struct {
@@ -54,13 +64,6 @@ typedef struct {
   char *path_to_sprite; // Path to the sprite of the unit
   char *descr;          // Description
 } UnitT;
-
-//! an `enum` containing all the units for the game
-typedef enum {
-  WELL, // funny name :)
-  BASE_SOLDIER,
-  UNIT_NUMBER
-} UnitTypes;
 
 //! returns the speed at which a unit of type `unit` should go on a tile of type
 //! `tile`

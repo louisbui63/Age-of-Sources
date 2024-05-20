@@ -252,7 +252,8 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
     u = parse("src/units/unit_tanuki.c", renderer, window);
     break;
 
-  case UNIT_NUMBER:
+  default:
+    u = parse("src/units/unit_tanuki.c", renderer, window);
     break;
   }
 
@@ -265,7 +266,7 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
 }
 
 void *get_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
-  void *u = hash_map_get(&ASSET_STORE, t);
+  void *u = hash_map_get(&ASSET_STORE, &t);
   if (!u) {
     return load_unit(t, renderer, window);
   }
