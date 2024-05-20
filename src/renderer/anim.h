@@ -3,7 +3,6 @@
 
 #include "../units/units.h"
 #include "../util.h"
-#include "SDL2/SDL.h"
 
 //! The number of renderer frames for which each animation frame is displayed
 #define ANIM_STEP 20
@@ -21,11 +20,14 @@ typedef struct {
   AnimState state;
   //! `max` indicates the last frame for each animation that is still valid
   int max[3];
+  //! wether the sprite must be vertically flipped
+  char flipped;
 } Animator;
 
 //! Runs an animation step on the animator, changing the frame if required, and
-//! changing the state if `as` isn't `Noop`
-void advance_anim_state(Animator *a, AnimState as);
+//! changing the state if `as` isn't `Noop`. Also changes the flipped status of
+//! the Animator if `flipped != -1`
+void advance_anim_state(Animator *a, AnimState as, char flipped);
 
 //! Builds a new animator for a specific unit
 Animator animator_new(Unit *unit_kind);

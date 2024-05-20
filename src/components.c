@@ -1,6 +1,7 @@
 #include "components.h"
 
 #include "ai/steering_behaviors.h"
+#include "construction.h"
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
 #include "input.h"
@@ -41,5 +42,6 @@ int init_world(World *w) {
   register_component_callback(w, Window, free_nothing);
   register_component_callback(w, ActualisedText,
                               actualised_text_component_free);
+  register_component_callback(w, BuildingGhost, building_ghost_component_free);
   return SUCCESS;
 }

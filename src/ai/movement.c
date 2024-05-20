@@ -32,7 +32,7 @@ void move_units(World *w) {
     Entity *e = get_entity(w, ei);
     // vary filters here
     SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
-    if (vec_len(stm->current_path)) {
+    if (stm->current_path && vec_len(stm->current_path)) {
       behavior_follow_path(stm);
       if (behavior_obstacle_avoidance(stm, obs) == INTERRUPTED) {
         // We must adapt the path if we find obstacles on the path
@@ -45,7 +45,8 @@ void move_units(World *w) {
         }
       }
       behavior_complete(stm);
-    }
+    } else
+      stm->velocity = (Vec2){0, 0};
 
     // _Pragma("omp barrier");
     Position *p = entity_get_component(w, e, COMP_POSITION);
@@ -82,9 +83,9 @@ _Pragma("omp parallel") {
       Animator *an = entity_get_component(w, e, COMP_ANIMATOR);
       SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
       if (stm->velocity.x == 0 && stm->velocity.y == 0)
-        advance_anim_state(an, Idle);
+        advance_anim_state(an, Idle, -1);
       else
-        advance_anim_state(an, Moving);
+        advance_anim_state(an, Moving, stm->velocity.x < 0);
     }
   }
   _Pragma("omp barrier")

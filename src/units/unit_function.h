@@ -9,6 +9,7 @@
 typedef void (*GridFunction)(World *, int);
 
 void tanuki_grid(World *w, int slot);
+void well_grid(World *w, int slot);
 
 extern HashMap GRID_FUNCTION_MAP;
 
@@ -18,6 +19,12 @@ inline void set_grid_functions() {
   char *k = malloc(sizeof(char) * (strlen("Tanuki") + 1));
   strcpy(k, "Tanuki");
   GridFunction *v = malloc(sizeof(GridFunction));
+  *v = tanuki_grid;
+  hash_map_insert(&GRID_FUNCTION_MAP, k, v);
+
+  k = malloc(sizeof(char) * (strlen("Well") + 1));
+  strcpy(k, "Well");
+  v = malloc(sizeof(GridFunction));
   *v = tanuki_grid;
   hash_map_insert(&GRID_FUNCTION_MAP, k, v);
 }
