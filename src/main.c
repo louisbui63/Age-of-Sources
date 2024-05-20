@@ -93,6 +93,8 @@ int main() {
 
   init_world(&w);
 
+  set_volume(64);
+
   Entity *wine = spawn_entity(&w);
   Window wind = {.w = window};
   KeyEvent *wink = malloc(sizeof(KeyEvent));
@@ -106,7 +108,7 @@ int main() {
   ecs_add_component(&w, cam, COMP_CAMERA, camcam);
   ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 
-  render_game_state(&w);
+  // render_game_state(&w);
 
   spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100});
 
