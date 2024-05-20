@@ -12,7 +12,7 @@
 //! an `enum` containing all the units for the game
 typedef enum {
   UNIT_TEST, // funny name :)
-  WELL, 
+  WELL,
   BASE_SOLDIER,
   UNIT_NUMBER
 } UnitTypes;
