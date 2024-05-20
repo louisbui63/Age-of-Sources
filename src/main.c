@@ -93,6 +93,8 @@ int main() {
 
   init_world(&w);
 
+  set_volume(64);
+
   Entity *wine = spawn_entity(&w);
   Window wind = {.w = window};
   KeyEvent *wink = malloc(sizeof(KeyEvent));
