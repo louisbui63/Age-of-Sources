@@ -2,6 +2,7 @@
 #pragma once
 #include "data_structures/ecs.h"
 #include "input.h"
+#include "units/units.h"
 #include <SDL2/SDL.h>
 
 //! This component is a flag that marks something as selectable. A `Position`
@@ -25,6 +26,7 @@ typedef struct {
   char is_selecting;
   VEC(EntityRef) selected;
   char *building;
+  UnitTypes building_utype;
 } Selector;
 
 //! A `KeyEvent` that manages selections
@@ -34,7 +36,8 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
 //! draws the selection box when required
 void draw_selection(World *w, SDL_Renderer *rdr, SDL_Window *window);
 
-//! Switches the selector to `Building` type for a specified `building`
-void set_building_selection(World *w, char *building);
+//! Switches the selector to `Building` type for a specified `building` and its
+//! UnitTypes `but`
+void set_building_selection(World *w, char *building, UnitTypes but);
 
 void selector_free(void *s);

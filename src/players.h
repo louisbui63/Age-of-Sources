@@ -5,5 +5,7 @@
 typedef struct {
   int id;
   int water;
+  int dwater;
   int clay;
+  int dclay;
 } PlayerManager;
