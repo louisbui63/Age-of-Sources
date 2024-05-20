@@ -90,13 +90,15 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     ActualisedText *t = entity_get_component(w, e, COMP_ACTUALISEDTEXT);
     TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 99);
     SDL_Rect r = *(t->rect);
-    TTF_SizeUTF8(font, (t->get_text)(w, e), &(r.w), &(r.h));
-    SDL_Surface *surf = TTF_RenderText_Blended_Wrapped(
-        font, (t->get_text)(w, e), *(t->color), 0);
+    char *text = (t->get_text)(w, e);
+    TTF_SizeUTF8(font, text, &(r.w), &(r.h));
+    SDL_Surface *surf =
+        TTF_RenderText_Blended_Wrapped(font, text, *(t->color), 0);
     SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
     SDL_Rect t_rect;
-    TTF_SizeUTF8(font, (t->get_text)(w, e), &(t_rect.w), &(t_rect.h));
+    TTF_SizeUTF8(font, text, &(t_rect.w), &(t_rect.h));
     biggest_possible_rectangle_centered(t->rect, &t_rect, 0);
+    free(text);
 
     SDL_RenderCopy(rdr, text_texture, NULL, &t_rect);
     SDL_FreeSurface(surf);
