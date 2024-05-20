@@ -19,8 +19,7 @@ void actionnate(World *w, Actionnable *ac) {
     if (bg->progress > bg->max) {
       finish_construction(w, e);
       ac->act = Lazy;
-    } else
-      finish_construction(w, e);
+    }
   } break;
   case Attack:
   case Produce:
