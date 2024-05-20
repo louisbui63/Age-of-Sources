@@ -10,6 +10,7 @@ typedef struct {
   int progress;
   int max;
   char construction_done;
+  UnitTypes unit_type;
 } BuildingGhost;
 
 void building_ghost_component_free(void *);

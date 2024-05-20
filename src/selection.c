@@ -1,4 +1,5 @@
 #include "selection.h"
+#include "actionnable.h"
 #include "ai/steering_behaviors.h"
 #include "components.h"
 #include "construction.h"
@@ -19,7 +20,7 @@ void reset_selection_type(Selector *s) {
   SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
 }
 
-void set_building_selection(World *w, char *building) {
+void set_building_selection(World *w, char *building, UnitTypes but) {
   Bitflag flag = COMPF_SELECTOR;
   VEC(EntityRef) es = world_query(w, &flag);
   // I'm not responsible if you somehow end up with two selectors and so it
@@ -33,6 +34,7 @@ void set_building_selection(World *w, char *building) {
   sl->is_selecting = 0;
   sl->type = Building;
   sl->building = building;
+  sl->building_utype = but;
   SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR));
 }
 
@@ -43,7 +45,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
   if (inputs_is_key_in(i, SDLK_b)) {
     char *un = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
     strcpy(un, "src/units/unit_well.c");
-    set_building_selection(w, un);
+    set_building_selection(w, un, WELL);
   }
 
   if (s->type == Normal && RUNNING == IN_GAME) {
@@ -110,11 +112,18 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         // ownership can only be 0 if building is placed by the player
         Ownership *o = calloc(1, sizeof(Ownership));
         ecs_add_component(w, e, COMP_OWNERSHIP, o);
-        UnitT *u = parse(s->building, r, window);
+        // UnitT *u = parse(s->building, r, window);
+        UnitT *u = get_unit(s->building_utype, r, window);
         BuildingGhost *bg = malloc(sizeof(BuildingGhost));
-        *bg = (BuildingGhost){u, 0, u->hp, 0};
+        *bg = (BuildingGhost){u, 0, u->hp, 0, s->building_utype};
         ecs_add_component(w, e, COMP_BUILDINGGHOST, bg);
-        ecs_add_component(w, e, COMP_SPRITE, u->sprite);
+
+        Sprite *sp = malloc(sizeof(Sprite));
+        sp->rect = malloc(sizeof(SDL_Rect));
+        *(sp->rect) = *(u->sprite->rect);
+        sp->texture = u->sprite->texture;
+
+        ecs_add_component(w, e, COMP_SPRITE, sp);
         Position *p = calloc(1, sizeof(Position));
         *p = (Position){pt.x, pt.y};
         ecs_add_component(w, e, COMP_POSITION, p);
@@ -137,18 +146,51 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
       Entity *ecam = get_entity(w, camv[0]);
       Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
 
+      SDL_Point mp = get_mouse_position(r);
+      Position mpp = (Position){.x = mp.x, .y = mp.y};
+      Position mps = screen2worldspace(&mpp, cam);
+
+      EntityRef action_target = UINT64_MAX;
+
+      // HERE TOO:
+      Bitflag flag = COMPF_SELECTABLE | COMPF_POSITION | COMPF_SPRITE |
+                     COMPF_OWNERSHIP | COMPF_BUILDINGGHOST;
+      VEC(EntityRef) es = world_query(w, &flag);
+      for (uint i = 0; i < vec_len(es); i++) {
+        Entity *e = get_entity(w, es[i]);
+        Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
+        if (o->owner == 1)
+          continue;
+        Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
+        Position *p = entity_get_component(w, e, COMP_POSITION);
+        if (SDL_PointInRect(&(SDL_Point){mps.x, mps.y},
+                            &(SDL_Rect){sp->rect->x + p->x, sp->rect->y + p->y,
+                                        sp->rect->w, sp->rect->h})) {
+          action_target = es[i];
+          break;
+        }
+      }
+
       for (uint j = 0; j < vec_len(s->selected); j++) {
         Entity *e = get_entity(w, s->selected[j]);
         SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
         Position *p = entity_get_component(w, e, COMP_POSITION);
         if (stm != 0) {
+
+          // HERE
+          Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
+          if (ac && action_target != UINT64_MAX) {
+            ac->act = Build;
+            ac->target = action_target;
+          } else if (ac) {
+            ac->act = Lazy;
+            ac->target = UINT64_MAX;
+          }
+
           // Position ps = screen2worldspace(p, cam);
           Vec2 p_vec2 = (Vec2){.x = p->x, .y = p->y};
           TilePosition tpstart = pos2tile(&p_vec2);
 
-          SDL_Point mp = get_mouse_position(r);
-          Position mpp = (Position){.x = mp.x, .y = mp.y};
-          Position mps = screen2worldspace(&mpp, cam);
           Vec2 mp_vec2 = (Vec2){.x = mps.x, .y = mps.y};
 
           TilePosition tpend = pos2tile(&mp_vec2);

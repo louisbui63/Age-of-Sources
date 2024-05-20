@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include "../actionnable.h"
 #include "../ai/steering_behaviors.h"
 #include "../components.h"
 #include "../data_structures/asset_manager.h"
@@ -27,7 +28,7 @@ void unit_component_free(void *temp) {
 void unitt_free(UnitT *unit) {
   free(unit->descr);
   free(unit->name);
-  // sprite_component_free(unit->sprite);
+  sprite_component_free(unit->sprite);
   free(unit->path_to_sprite);
   free(unit);
 }
@@ -57,6 +58,9 @@ Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
               .sprite = s,
               .t = t};
 
+  Actionnable *ac = malloc(sizeof(Actionnable));
+  *ac = (Actionnable){Lazy, UINT64_MAX};
+  ecs_add_component(w, e, COMP_ACTIONNABLE, ac);
   Ownership *o = malloc(sizeof(Ownership));
   *o = (Ownership){owner};
   ecs_add_component(w, e, COMP_OWNERSHIP, o);

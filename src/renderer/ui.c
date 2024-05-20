@@ -87,7 +87,7 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
   er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
-    Actualised_Text *t = entity_get_component(w, e, COMP_ACTUALISEDTEXT);
+    ActualisedText *t = entity_get_component(w, e, COMP_ACTUALISEDTEXT);
     TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 99);
     SDL_Rect r = *(t->rect);
     TTF_SizeUTF8(font, (t->get_text)(w, e), &(r.w), &(r.h));
@@ -168,7 +168,7 @@ void text_component_free(void *temp) {
 }
 
 void actualised_text_component_free(void *temp) {
-  Actualised_Text *text = (Actualised_Text *)temp;
+  ActualisedText *text = (ActualisedText *)temp;
   free(text->rect);
   free(text->color);
   free(text);
@@ -208,9 +208,9 @@ void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
   inner->y = (oh + 2 * (outer->y + padding) - ih) / 2;
 }
 
-Actualised_Text *render_game_state(World *w) {
+ActualisedText *render_game_state(World *w) {
   Entity *e = spawn_entity(w);
-  Actualised_Text *t = malloc(sizeof(Actualised_Text));
+  ActualisedText *t = malloc(sizeof(ActualisedText));
   t->color = malloc(sizeof(SDL_Color));
   *(t->color) = (SDL_Color){.r = 255, .g = 255, .b = 255, .a = 255};
   t->rect = malloc(sizeof(SDL_Rect));

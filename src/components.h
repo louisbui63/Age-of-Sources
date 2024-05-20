@@ -45,6 +45,8 @@
 #define COMP_BUILDINGGHOST 19
 #define COMPF_OWNERSHIP (1 << 20)
 #define COMP_OWNERSHIP 20
+#define COMPF_ACTIONNABLE (1 << 21)
+#define COMP_ACTIONNABLE 21
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.
