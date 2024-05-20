@@ -43,5 +43,6 @@ int init_world(World *w) {
   register_component_callback(w, Actualised_Text,
                               actualised_text_component_free);
   register_component_callback(w, BuildingGhost, building_ghost_component_free);
+  register_component(w, Ownership);
   return SUCCESS;
 }

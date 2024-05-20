@@ -27,6 +27,9 @@ void set_building_selection(World *w, char *building) {
   Entity *e = get_entity(w, es[0]);
   Selector *sl = entity_get_component(w, e, COMP_SELECTOR);
 
+  if (sl->type == Building)
+    free(sl->building);
+
   sl->is_selecting = 0;
   sl->type = Building;
   sl->building = building;
@@ -207,6 +210,10 @@ void draw_selection(World *w, SDL_Renderer *rdr, SDL_Window *window) {
 }
 
 void selector_free(void *s) {
-  vec_free(((Selector *)s)->selected);
+  Selector *se = s;
+
+  if (se->type == Building)
+    free(se->building);
+  vec_free(se->selected);
   free(s);
 }
