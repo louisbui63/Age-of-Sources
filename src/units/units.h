@@ -13,8 +13,8 @@
 typedef enum {
   WELL, // funny name :)
   BASE_SOLDIER,
-  UNIT_NUMBER,
-  UNIT_TEST
+  UNIT_TEST,
+  UNIT_NUMBER
 } UnitTypes;
 
 //! The body type describes every unit and building in the game.
@@ -63,6 +63,7 @@ typedef struct {
   Sprite *sprite;       // Sprite of the unit
   char *path_to_sprite; // Path to the sprite of the unit
   char *descr;          // Description
+  UnitTypes t;
 } UnitT;
 
 //! returns the speed at which a unit of type `unit` should go on a tile of type

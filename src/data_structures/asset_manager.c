@@ -246,14 +246,17 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
   switch (t) {
   case WELL:
     u = parse("src/units/unit_well.c", renderer, window);
+    u->t = t;
     break;
 
   case BASE_SOLDIER:
     u = parse("src/units/unit_tanuki.c", renderer, window);
+    u->t = t;
     break;
 
   default:
     u = parse("src/units/unit_tanuki.c", renderer, window);
+    u->t = t;
     break;
   }
 

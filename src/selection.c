@@ -148,7 +148,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             path_free(stm->current_path);
           stm->current_path = 0;
 
-          Path p = pathfind_astar(mapc->map, UNIT_TEST, &tpstart, &tpend);
+          Path p = pathfind_astar(mapc->map, UNIT_NUMBER, &tpstart, &tpend);
           if (p) {
             if (vec_len(p) > 1) {
               free(p[0]);
