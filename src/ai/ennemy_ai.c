@@ -2,6 +2,8 @@
 #include "../components.h"
 #include "../players.h"
 
+char is_ai_attacked() { return 0; }
+
 void ReconsiderAiState(World *w, AiState *ais) {
   Bitflag flag = COMPF_PLAYERMANAGER;
   VEC(EntityRef) ps = world_query(w, &flag);
@@ -23,7 +25,7 @@ void ReconsiderAiState(World *w, AiState *ais) {
   case Eco:
     if (is_ai_attacked())
       *ais = Defense;
-    if (pm1->dclay + pm1->dwater > pm0->dclay + pm0->dwater)
+    if (pm1->dclay + pm1->dwater * 1.2 > pm0->dclay + pm0->dwater)
       *ais = Offense;
     break;
   case Offense:
