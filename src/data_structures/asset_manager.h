@@ -48,4 +48,9 @@ void *get_font(char *t, Uint8 size);
 
 int drop_font(char *font, Uint8 size);
 
+void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window);
+
+void *get_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window);
+
+int drop_unit(UnitTypes *t);
 void free_asset_store();

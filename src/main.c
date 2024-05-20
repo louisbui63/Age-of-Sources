@@ -15,10 +15,10 @@
 #include "input.h"
 #include "parser.h"
 #include "players.h"
+#include "renderer/anim.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
-#include "renderer/anim.h"
 #include "selection.h"
 #include "units/unit_function.h"
 #include "util.h"
@@ -109,13 +109,8 @@ int main() {
   render_game_state(&w);
 
   {
-    Entity *e = spawn_entity(&w);
-    Unit *u = parse("src/units/unit_tanuki.c", renderer, window);
-    ecs_add_component(&w, e, COMP_UNIT, u);
-    ecs_add_component(&w, e, COMP_SPRITE, u->sprite);
-    Position *p = calloc(1, sizeof(Position));
-    *p = (Position){100, 100};
-    ecs_add_component(&w, e, COMP_POSITION, p);
+    Entity *e =
+        spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100});
     SteerManager *stm = malloc(sizeof(SteerManager));
     *stm = (SteerManager){
         10, 10, 10, 10, 10, 0, (Vec2){0, 0}, (Vec2){100, 100}, (Vec2){0, 0}, 0};
@@ -123,6 +118,7 @@ int main() {
     Selectable *s = calloc(1, sizeof(Selectable));
     ecs_add_component(&w, e, COMP_SELECTABLE, s);
     Animator *a = malloc(sizeof(Animator));
+    Unit *u = entity_get_component(&w, e, COMP_UNIT);
     *a = animator_new(u);
     ecs_add_component(&w, e, COMP_ANIMATOR, a);
   }
@@ -211,7 +207,7 @@ int main() {
     inputs_run_callbacks(&w, renderer, input_down, KEY_DOWN);
     inputs_run_callbacks(&w, renderer, input_released, KEY_RELEASED);
 
-    if(RUNNING == IN_GAME)
+    if (RUNNING == IN_GAME)
       move_units(&w);
 
     // free instant inputs
@@ -232,7 +228,7 @@ int main() {
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
     if (RUNNING != STOP && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
-    else if(RUNNING != STOP)
+    else if (RUNNING != STOP)
       fprintf(stderr, "this is lag.\n");
   }
 

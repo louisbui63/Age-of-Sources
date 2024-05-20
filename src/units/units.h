@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "../data_structures/map.h"
+#include "../renderer/camera.h"
 #include "../renderer/sprite.h"
 
 //! The body type describes every unit and building in the game.
@@ -71,4 +72,5 @@ void unit_component_free(void *uni);
 
 void unitt_free(UnitT *u);
 
-Unit *spawn_unit(UnitTypes t);
+Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
+                   SDL_Window *window, Position p);

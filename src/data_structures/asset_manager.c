@@ -273,7 +273,7 @@ void *get_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
   return ((Rc *)u)->ref;
 }
 
-int drop_unit(char *t) {
+int drop_unit(UnitTypes *t) {
   void *tex = hash_map_get(&ASSET_STORE, t);
   if (!tex) {
     return ASSET_NOT_FOUND;

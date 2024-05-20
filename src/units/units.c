@@ -1,7 +1,10 @@
-#include "units.h"
-#include "../renderer/sprite.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "../components.h"
+#include "../data_structures/asset_manager.h"
+#include "../renderer/sprite.h"
+#include "units.h"
 
 double units_get_tile_speed(UnitTypes u, TileTypes t) {
   // double unit_test_speeds[TILE_NUMBER] = {1., 1., 1., 0., 0., 1.};
@@ -22,13 +25,19 @@ void unit_component_free(void *temp) {
 void unitt_free(UnitT *unit) {
   free(unit->descr);
   free(unit->name);
-  sprite_component_free(unit->sprite);
+  // sprite_component_free(unit->sprite);
   free(unit->path_to_sprite);
   free(unit);
 }
 
-Unit *spawn_unit(UnitTypes t) {
-  UnitT *ut = get_unit(t);
+Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
+                   SDL_Window *window, Position p) {
+  Entity *e = spawn_entity(w);
+  UnitT *ut = get_unit(t, renderer, window);
+  Sprite *s = malloc(sizeof(Sprite));
+  s->rect = malloc(sizeof(SDL_Rect));
+  *(s->rect) = *(ut->sprite->rect);
+  s->texture = ut->sprite->texture;
   Unit *u = malloc(sizeof(Unit));
   *u = (Unit){.b_dam = ut->b_dam,
               .b_def = ut->b_def,
@@ -42,7 +51,13 @@ Unit *spawn_unit(UnitTypes t) {
               .rg = ut->rg,
               .s_dam = ut->s_dam,
               .s_def = ut->s_def,
-              .sprite = ut->sprite,
-              .sp = ut->sp};
+              .sp = ut->sp,
+              .sprite = s};
+
+  Position *pp = calloc(1, sizeof(Position));
+  *pp = p;
+  ecs_add_component(w, e, COMP_POSITION, pp);
+  ecs_add_component(w, e, COMP_SPRITE, u->sprite);
+  ecs_add_component(w, e, COMP_UNIT, u);
   return u;
 }
