@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../ai/steering_behaviors.h"
 #include "../components.h"
 #include "../construction.h"
 #include "../data_structures/asset_manager.h"
+#include "../renderer/anim.h"
 #include "../renderer/sprite.h"
+#include "../selection.h"
 #include "units.h"
 
 double units_get_tile_speed(UnitTypes u, TileTypes t) {
@@ -61,6 +64,22 @@ Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
   ecs_add_component(w, e, COMP_POSITION, pp);
   ecs_add_component(w, e, COMP_SPRITE, u->sprite);
   ecs_add_component(w, e, COMP_UNIT, u);
+  Selectable *se = calloc(1, sizeof(Selectable));
+  ecs_add_component(w, e, COMP_SELECTABLE, se);
+  Animator *a = malloc(sizeof(Animator));
+  *a = animator_new(u);
+  ecs_add_component(w, e, COMP_ANIMATOR, a);
+
+  SteerManager *stm = malloc(sizeof(SteerManager));
+  switch (t) {
+
+  default:
+    *stm = (SteerManager){
+        10, 10, 10, 10, 10, 0, (Vec2){0, 0}, (Vec2){100, 100}, (Vec2){0, 0}, 0};
+    break;
+  }
+
+  ecs_add_component(w, e, COMP_STEERMANAGER, stm);
   return e;
 }
 
@@ -69,7 +88,7 @@ Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
 //                     SDL_Point pt) {
 //   Entity *e = spawn_entity(w);
 //   UnitT *u = parse(s->building, r, window);
-//   // ecs_add_component(&w, e, COMP_UNIT, u);
+//   // ecs_add_component(w, e, COMP_UNIT, u);
 //   BuildingGhost *bg = malloc(sizeof(BuildingGhost));
 //   *bg = (BuildingGhost){u, 0, u->hp, 0};
 //   ecs_add_component(w, e, COMP_BUILDINGGHOST, bg);

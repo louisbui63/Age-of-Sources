@@ -108,20 +108,7 @@ int main() {
 
   render_game_state(&w);
 
-  {
-    Entity *e =
-        spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100});
-    SteerManager *stm = malloc(sizeof(SteerManager));
-    *stm = (SteerManager){
-        10, 10, 10, 10, 10, 0, (Vec2){0, 0}, (Vec2){100, 100}, (Vec2){0, 0}, 0};
-    ecs_add_component(&w, e, COMP_STEERMANAGER, stm);
-    Selectable *s = calloc(1, sizeof(Selectable));
-    ecs_add_component(&w, e, COMP_SELECTABLE, s);
-    Animator *a = malloc(sizeof(Animator));
-    Unit *u = entity_get_component(&w, e, COMP_UNIT);
-    *a = animator_new(u);
-    ecs_add_component(&w, e, COMP_ANIMATOR, a);
-  }
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100});
 
   {
     Entity *e = spawn_entity(&w);
