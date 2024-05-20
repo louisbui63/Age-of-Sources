@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "../units/units.h"
 #include "hash_map.h"
 
 //! Stores and manages the textures used in the game

@@ -24,6 +24,7 @@
 typedef struct {
   char *name;
   uint16_t hp;          // Health Point
+  uint16_t max_hp;      // Maximum Health Point
   uint16_t b_dam;       // Blunt damage
   uint16_t p_dam;       // Piercing damage
   uint16_t s_dam;       // Special damage
@@ -37,10 +38,26 @@ typedef struct {
   char *descr;          // Description
 } Unit;
 
+typedef struct {
+  char *name;
+  uint16_t hp;          // Health Point
+  uint16_t b_dam;       // Blunt damage
+  uint16_t p_dam;       // Piercing damage
+  uint16_t s_dam;       // Special damage
+  uint16_t b_def;       // Blunt defence
+  uint16_t p_def;       // Piecing defence
+  uint16_t s_def;       // Special defence
+  uint16_t rg;          // Range
+  uint16_t sp;          // Speed
+  Sprite *sprite;       // Sprite of the unit
+  char *path_to_sprite; // Path to the sprite of the unit
+  char *descr;          // Description
+} UnitT;
+
 //! an `enum` containing all the units for the game
 typedef enum {
-  UNIT_TEST, // funny name :)
-
+  WELL, // funny name :)
+  BASE_SOLDIER,
   UNIT_NUMBER
 } UnitTypes;
 
@@ -51,3 +68,7 @@ typedef enum {
 double units_get_tile_speed(UnitTypes u, TileTypes t);
 
 void unit_component_free(void *uni);
+
+void unitt_free(UnitT *u);
+
+Unit *spawn_unit(UnitTypes t);
