@@ -110,7 +110,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         // ownership can only be 0 if building is placed by the player
         Ownership *o = calloc(1, sizeof(Ownership));
         ecs_add_component(w, e, COMP_OWNERSHIP, o);
-        Unit *u = parse(s->building, r, window);
+        UnitT *u = parse(s->building, r, window);
         BuildingGhost *bg = malloc(sizeof(BuildingGhost));
         *bg = (BuildingGhost){u, 0, u->hp, 0};
         ecs_add_component(w, e, COMP_BUILDINGGHOST, bg);

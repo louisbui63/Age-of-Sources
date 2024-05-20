@@ -4,7 +4,7 @@
 void building_ghost_component_free(void *a) {
   BuildingGhost *bg = a;
   if (!bg->construction_done)
-    unit_component_free(bg->u);
+    unitt_free(bg->u);
   free(a);
 }
 

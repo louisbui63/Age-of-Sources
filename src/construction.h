@@ -6,7 +6,7 @@
 
 //! A component that serves as a building currently being built
 typedef struct {
-  Unit *u;
+  UnitT *u;
   int progress;
   int max;
   char construction_done;
