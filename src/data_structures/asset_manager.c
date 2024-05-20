@@ -6,12 +6,14 @@
 #include <stdlib.h>
 
 #include "../errors.h"
+#include "../parser.h"
+#include "../renderer/camera.h"
 #include "../util.h"
 #include "hash_map.h"
 
 HashMap ASSET_STORE;
 
-typedef enum { TEXTURE, SFX, MUSIC, TTF } AssetKind;
+typedef enum { TEXTURE, SFX, MUSIC, TTF, UNIT } AssetKind;
 
 //! A reference counter for the assets. Should only be used through the API
 //! available in `asset_manager.h`
@@ -39,6 +41,8 @@ void hmase_free(void *u) {
   case TTF:
     TTF_CloseFont(((Rc *)w->value)->ref);
     break;
+  case UNIT:
+    unitt_free(((Rc *)w->value)->ref);
   }
   free(w->value);
   free(u);
@@ -107,7 +111,7 @@ int drop_texture(char *t) {
   if (!((Rc *)tex)->locked) {
     if (!--((Rc *)tex)->counter) {
       return hash_map_delete_callback(&ASSET_STORE, t, hmase_free);
-    }
+    } // the sprite shouldn't be freed as it also has to be its own component
   }
   return SUCCESS;
 }
@@ -232,4 +236,56 @@ int drop_font(char *font, Uint8 size) {
   int f = drop_font_aux(t);
   free(t);
   return f;
+}
+
+void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
+  UnitT *u;
+  UnitTypes *key = malloc(sizeof(UnitTypes));
+  *key = t;
+
+  switch (t) {
+  case WELL:
+    u = parse("src/units/unit_well.c", renderer, window);
+    u->t = t;
+    break;
+
+  case BASE_SOLDIER:
+    u = parse("src/units/unit_tanuki.c", renderer, window);
+    u->t = t;
+    break;
+
+  default:
+    u = parse("src/units/unit_tanuki.c", renderer, window);
+    u->t = t;
+    break;
+  }
+
+  Rc *val = malloc(sizeof(Rc));
+  *val = (Rc){.ref = u, .counter = 0, .kd = UNIT, .locked = 0};
+
+  hash_map_insert(&ASSET_STORE, key, val);
+
+  return u;
+}
+
+void *get_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
+  void *u = hash_map_get(&ASSET_STORE, &t);
+  if (!u) {
+    return load_unit(t, renderer, window);
+  }
+  ((Rc *)u)->counter++;
+  return ((Rc *)u)->ref;
+}
+
+int drop_unit(UnitTypes *t) {
+  void *tex = hash_map_get(&ASSET_STORE, t);
+  if (!tex) {
+    return ASSET_NOT_FOUND;
+  }
+  if (!((Rc *)tex)->locked) {
+    if (!--((Rc *)tex)->counter) {
+      return hash_map_delete_callback(&ASSET_STORE, t, hmase_free);
+    }
+  }
+  return SUCCESS;
 }

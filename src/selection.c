@@ -100,7 +100,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
           w, get_entity(w, world_query(w, &flag)[0]), COMP_WINDOW);
       {
         Entity *e = spawn_entity(w);
-        Unit *u = parse(s->building, r, window);
+        UnitT *u = parse(s->building, r, window);
         // ecs_add_component(&w, e, COMP_UNIT, u);
         BuildingGhost *bg = malloc(sizeof(BuildingGhost));
         *bg = (BuildingGhost){u, 0, u->hp, 0};
