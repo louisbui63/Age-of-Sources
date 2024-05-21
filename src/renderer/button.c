@@ -503,3 +503,16 @@ void event_sound_test(__attribute__((unused)) World *w,
                       __attribute__((unused)) SDL_Window *window) {
   play_audio("./asset/sfx/yahoo.wav", 0);
 }
+
+void render_vec(World *w, VEC(Clickable *) vec) {
+  int n = vec_len(vec);
+  int bx = 0;
+  int by = 0;
+  for (int i = 0; i < n; i++) {
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    vec[i]->rect->x = bx + (i % 3) * 32;
+    vec[i]->rect->y = by + (i / 3) * 32;
+    spawn_clickable(w, vec[i], key_event);
+  }
+}

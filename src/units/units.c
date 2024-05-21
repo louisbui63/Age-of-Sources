@@ -1,7 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "../renderer/sprite.h"
 #include "units.h"
+#include "../renderer/sprite.h"
+#include "../renderer/ui.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 double units_get_tile_speed(UnitTypes u, TileTypes t) {
   // double unit_test_speeds[TILE_NUMBER] = {1., 1., 1., 0., 0., 1.};
@@ -18,3 +19,5 @@ void unit_component_free(void *temp) {
   free(unit->path_to_sprite);
   free(unit);
 }
+
+VEC(Clickable *) unit_actions(UnitTypes t) {}
