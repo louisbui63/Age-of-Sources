@@ -68,3 +68,11 @@ BehaviorStatus behavior_follow_path(SteerManager *s) {
     behavior_seek(s, tile2pos(s->current_path[0]));
   return ONGOING;
 }
+
+void steer_manager_component_free(void *a) {
+  SteerManager *stm = a;
+  if (stm->current_path)
+    path_free(stm->current_path);
+
+  free(a);
+}

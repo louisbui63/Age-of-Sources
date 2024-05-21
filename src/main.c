@@ -7,15 +7,12 @@
 
 #include "./renderer/button.h"
 #include "ai/movement.h"
-#include "ai/steering_behaviors.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
 #include "input.h"
-#include "parser.h"
 #include "players.h"
-#include "renderer/anim.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
@@ -110,29 +107,13 @@ int main() {
 
   // render_game_state(&w);
 
-  {
-    Entity *e = spawn_entity(&w);
-    Unit *u = parse("src/units/unit_tanuki.c", renderer, window);
-    ecs_add_component(&w, e, COMP_UNIT, u);
-    ecs_add_component(&w, e, COMP_SPRITE, u->sprite);
-    Position *p = calloc(1, sizeof(Position));
-    *p = (Position){100, 100};
-    ecs_add_component(&w, e, COMP_POSITION, p);
-    SteerManager *stm = malloc(sizeof(SteerManager));
-    *stm = (SteerManager){
-        10, 10, 10, 10, 10, 0, (Vec2){0, 0}, (Vec2){100, 100}, (Vec2){0, 0}, 0};
-    ecs_add_component(&w, e, COMP_STEERMANAGER, stm);
-    Selectable *s = calloc(1, sizeof(Selectable));
-    ecs_add_component(&w, e, COMP_SELECTABLE, s);
-    Animator *a = malloc(sizeof(Animator));
-    *a = animator_new(u);
-    ecs_add_component(&w, e, COMP_ANIMATOR, a);
-  }
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100}, 0);
 
   {
     Entity *e = spawn_entity(&w);
     Selector *s = malloc(sizeof(Selector));
-    *s = (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0};
+    *s =
+        (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0, UNIT_TEST};
     ecs_add_component(&w, e, COMP_SELECTOR, s);
     KeyEvent *select_events = malloc(sizeof(KeyEvent));
     *select_events = selection_event;
@@ -142,7 +123,7 @@ int main() {
   for (uint i = 0; i < 2; i++) {
     Entity *e = spawn_entity(&w);
     PlayerManager *pm = malloc(sizeof(PlayerManager));
-    *pm = (PlayerManager){i, 0, 0};
+    *pm = (PlayerManager){i, 0, 0, 0, 0};
     ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
   }
 
