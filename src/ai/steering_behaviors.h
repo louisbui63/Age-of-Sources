@@ -64,3 +64,5 @@ Vec2 tile2pos(TilePosition *tp);
 
 //! converts between tile position and world coordinates
 TilePosition pos2tile(Vec2 *tp);
+
+void steer_manager_component_free(void *a);

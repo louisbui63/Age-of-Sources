@@ -1,4 +1,5 @@
 #include "movement.h"
+#include "../actionnable.h"
 #include "../components.h"
 #include "../data_structures/bitflag.h"
 #include "../renderer/anim.h"
@@ -82,9 +83,14 @@ _Pragma("omp parallel") {
       Entity *e = get_entity(w, ei);
       Animator *an = entity_get_component(w, e, COMP_ANIMATOR);
       SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
-      if (stm->velocity.x == 0 && stm->velocity.y == 0)
-        advance_anim_state(an, Idle, -1);
-      else
+      if (stm->velocity.x == 0 && stm->velocity.y == 0) {
+        Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
+        if (ac && ac->act != Lazy) {
+          advance_anim_state(an, Attacking, -1);
+          actionnate(w, ac);
+        } else
+          advance_anim_state(an, Idle, -1);
+      } else
         advance_anim_state(an, Moving, stm->velocity.x < 0);
     }
   }

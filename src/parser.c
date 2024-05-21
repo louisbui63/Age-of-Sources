@@ -42,7 +42,7 @@
     br->field = tempint;                                                       \
   }
 
-Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
+UnitT *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   // printf("$%s\n", path);
   FILE *f = fopen(path, "r");
   char c;
@@ -52,7 +52,7 @@ Unit *parse(char *path, SDL_Renderer *renderer, SDL_Window *window) {
   uint64_t overf;
   int tempint = 0;
   int i;
-  Unit *br = malloc(sizeof(Unit));
+  UnitT *br = malloc(sizeof(Unit));
   SDL_Rect *rec = calloc(1, sizeof(SDL_Rect));
   Sprite *spr = malloc(sizeof(Sprite));
   spr->rect = rec;

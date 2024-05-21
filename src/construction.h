@@ -6,10 +6,11 @@
 
 //! A component that serves as a building currently being built
 typedef struct {
-  Unit *u;
+  UnitT *u;
   int progress;
   int max;
   char construction_done;
+  UnitTypes unit_type;
 } BuildingGhost;
 
 void building_ghost_component_free(void *);

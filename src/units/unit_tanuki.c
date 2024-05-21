@@ -65,6 +65,6 @@ void tanuki_grid(World *w, int slot) {
   if (slot == 0) {
     char *c = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
     strcpy(c, "src/units/unit_well.c");
-    set_building_selection(w, c);
+    set_building_selection(w, c, WELL);
   }
 }
