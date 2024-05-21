@@ -165,7 +165,9 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         Position *p = entity_get_component(w, e, COMP_POSITION);
         if (SDL_PointInRect(&(SDL_Point){mps.x, mps.y},
                             &(SDL_Rect){sp->rect->x + p->x, sp->rect->y + p->y,
-                                        sp->rect->w, sp->rect->h})) {
+                                        sp->rect->w, sp->rect->h}) &&
+            !((BuildingGhost *)entity_get_component(w, e, COMP_BUILDINGGHOST))
+                 ->construction_done) {
           action_target = es[i];
           break;
         }
