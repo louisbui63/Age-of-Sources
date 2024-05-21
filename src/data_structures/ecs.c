@@ -54,7 +54,7 @@ void world_free(World *w) {
 
 int register_component_inner_callback(World *w, int size,
                                       void (*callback)(void *)) {
-  if (w->last_component >= sizeof(Bitflag)) {
+  if (w->last_component >= sizeof(Bitflag) * 8) {
     return -1;
   }
   vec_push(w->component_sizes, size);
@@ -109,7 +109,7 @@ Entity *spawn_entity(World *w) {
   }
 
   if (vec_len(w->entity_sparsity)) {
-    uint loc = vec_last(w->entity_sparsity);
+    uint64_t loc = vec_last(w->entity_sparsity);
     vec_pop(w->entity_sparsity);
     w->entities[loc] = (Entity){
         loc,
@@ -127,7 +127,7 @@ Entity *spawn_entity(World *w) {
 }
 
 void ecs_add_component(World *w, Entity *e, int cid, void *c) {
-  uint emp;
+  uint64_t emp;
   uint8_t new = 1;
   if (vec_len(w->component_sparsity)) {
     emp = vec_last(w->component_sparsity);
@@ -217,10 +217,13 @@ void despawn_entity(World *w, Entity *e) {
   vec_free(e->components);
   e->components = 0;
 }
+
 Entity *get_entity(World *w, EntityRef ref) { return &w->entities[ref]; }
+
 VEC(EntityRef) world_query(World *w, Bitflag *b) {
   return *(VEC(EntityRef) *)hash_map_get(&w->entity_map, b);
 }
+
 VEC(EntityRef) * world_query_mut(World *w, Bitflag *b) {
   return (VEC(EntityRef) *)hash_map_get(&w->entity_map, b);
 }
@@ -229,4 +232,12 @@ void *entity_get_component(World *w, Entity *e, int type) {
   if (e->components[type] == UINT64_MAX)
     return 0;
   return w->components[e->components[type]].component;
+}
+
+void despawn_from_component(World *w, Bitflag b) {
+  EntityRef **err = world_query_mut(w, &b);
+  while (vec_len(*err) > 0) {
+    Entity *e = get_entity(w, *err[0]);
+    despawn_entity(w, e);
+  }
 }

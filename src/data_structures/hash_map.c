@@ -17,6 +17,12 @@ void hash_map_entry_free(void *u) {
   free(u);
 }
 
+void hash_map_entry_free_keys(void *u) {
+  HashMapEntry *w = u;
+  free(w->key);
+  free(u);
+}
+
 uint64_t hash_str(void *str) {
   // plynomial rolling hash
   // adapted from TN++ SWERC training

@@ -5,10 +5,13 @@
 #include <stdint.h>
 
 #include "../components.h"
+#include "../construction.h"
 #include "../data_structures/asset_manager.h"
 #include "../data_structures/ecs.h"
 #include "../data_structures/map.h"
 #include "../data_structures/vec.h"
+#include "../selection.h"
+#include "anim.h"
 #include "sprite.h"
 
 Position world2screenspace(Position *p, Camera *cam) {
@@ -56,13 +59,21 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
     WARN("Unexpected number of maps found");
   }
 
+  mask = COMPF_SELECTOR;
+  VEC(EntityRef)
+  selecteds = ((Selector *)entity_get_component(
+                   w, get_entity(w, world_query(w, &mask)[0]), COMP_SELECTOR))
+                  ->selected;
+
   // render sprites
   mask = COMPF_POSITION | COMPF_SPRITE;
   er = world_query(w, &mask);
+  VEC(EntityRef) cer = vec_copy(er);
+  vec_sort(cer, u64_gt);
   _Pragma("omp parallel") {
-    _Pragma("omp for") {
-      for (uint i = 0; i < vec_len(er); i++) {
-        EntityRef ei = er[i];
+    _Pragma("omp for ordered schedule(static, 1)") {
+      for (uint i = 0; i < vec_len(cer); i++) {
+        EntityRef ei = cer[i];
         Entity *e = get_entity(w, ei);
         Sprite *s = entity_get_component(w, e, COMP_SPRITE);
         Position *p = entity_get_component(w, e, COMP_POSITION);
@@ -76,15 +87,70 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
             .x = wtl.x, .y = wtl.y, .w = wtr.x - wtl.x, .h = wtr.y - wtl.y};
         // occludes offscreen sprites
         if (wtl.x < WIN_W && wtl.y < WIN_H && wtr.x > 0 && wtr.y > 0) {
-          _Pragma("omp critical") {
-            // the documentation refuses to tell us if it is safe but as far as
-            // I can tell it is (in fact, we might not even need omp critical,
-            // who knows ? (not me !))
-            SDL_RenderCopy(rdr, s->texture, s->rect, &r);
+          _Pragma("omp ordered") {
+            for (uint j = 0; j < vec_len(selecteds); j++) {
+              if (selecteds[j] == ei) {
+                SDL_RenderCopy(rdr,
+                               get_texture("asset/sprites/select_ally_back.bmp",
+                                           rdr, window),
+                               0, &r);
+                break;
+              }
+            }
+
+            BuildingGhost *g = entity_get_component(w, e, COMP_BUILDINGGHOST);
+            char is_ghost = g && !g->construction_done;
+            if (is_ghost)
+              SDL_SetTextureColorMod(s->texture, (Uint8)200, (Uint8)100,
+                                     (Uint8)100);
+
+            Animator *a = entity_get_component(w, e, COMP_ANIMATOR);
+            char flip = (a && a->flipped) ? 1 : 0;
+
+            // the documentation refuses to tell us if it is safe but as far
+            // as I can tell it is (in fact, we might not even need omp
+            // critical, who knows ? (not me !))
+            SDL_RenderCopyEx(rdr, s->texture, a ? &a->current : s->rect, &r, 0,
+                             0, flip);
+            if (is_ghost)
+              SDL_SetTextureColorMod(s->texture, (Uint8)255, (Uint8)255,
+                                     (Uint8)255);
           }
         }
       }
     }
     _Pragma("omp barrier")
+  }
+}
+
+void map_movement(World *w, SDL_Renderer *, Entity *e, Inputs *i, KeyState st) {
+  int x = 0, y = 0;
+  if (st == KEY_DOWN) {
+    if (inputs_is_key_in(i, SDLK_DOWN))
+      y++;
+    if (inputs_is_key_in(i, SDLK_UP))
+      y--;
+    if (inputs_is_key_in(i, SDLK_RIGHT))
+      x++;
+    if (inputs_is_key_in(i, SDLK_LEFT))
+      x--;
+  }
+  if (x || y) {
+    Camera *c = entity_get_component(w, e, COMP_CAMERA);
+    c->x += 16 * x;
+    c->y += 16 * y;
+    c->x = c->x < 0 ? 0
+                    : (c->x > TILE_SIZE * 400 - WIN_W ? TILE_SIZE * 400 - WIN_W
+                                                      : c->x);
+    c->y = c->y < 0 ? 0
+                    : (c->y > TILE_SIZE * 400 - WIN_H ? TILE_SIZE * 400 - WIN_H
+                                                      : c->y);
+  }
+  if (st == KEY_PRESSED && inputs_is_key_in(i, SDLK_COMMA)) {
+    Camera *c = entity_get_component(w, e, COMP_CAMERA);
+    if (c->zoom == 1)
+      c->zoom = 2;
+    else
+      c->zoom = 1;
   }
 }

@@ -4,34 +4,56 @@
 #include "../input.h"
 #include "sprite.h"
 
+//! Type that corresponds to the text that should be rendered on entities such
+//! as `Clickable`and `Hoverable`.
+typedef struct {
+  char *str;
+  SDL_Color *color;
+  int padding;
+} Text;
+
 //! Entities with this component are the background of the user interface
 typedef struct {
   Sprite *sprite;
   SDL_Rect *rect;
 } Background;
 
-//! Entities with this component start an action when clicked on
+//! Entities with this type start an action when clicked on.
+//! The value of is_clicked depends if and how it is clicked on,
+//! when is_clicked is equal to one it means the left click is pressed on over
+//! the clickable and that either it was already equal to one before or that it
+//! was being clicked on.
+//! If it is equal to two, it means the value was one and the click was released
+//! while over it. It activates the clickable's click_event.
 typedef struct {
   Sprite *sprite;
   SDL_Rect *rect;
+  Text *text;
   Uint8 is_clicked;
-  char *text;
+  void (*click_event)(World *w, SDL_Renderer *renderer, SDL_Window *window);
 } Clickable;
 
-//! Component that corresponds to the minimap
+//! Type that corresponds to the minimap
 typedef struct {
-  Sprite *sprite;
   SDL_Rect *rect;
 } Minimap;
 
-//! Entities with this component show text when hovered
+//! Type with this component show text when hovered
 typedef struct {
   SDL_Rect *rect;
   char *text;
 } Hoverable;
 
+//! Type used to render text that is not constant sur as hp, sound volume or
+//! ressources.
+typedef struct {
+  char *(*get_text)(World *w, Entity *e);
+  SDL_Rect *rect;
+  SDL_Color *color;
+} ActualisedText;
+
 //! Renders any entity that has user interface related component
-void render_ui(World *w, SDL_Renderer *rdr);
+void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi);
 
 //! Adds a clickable to the world
 Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event);
@@ -52,3 +74,37 @@ void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
 //! This function is used to render the entities associated with a hoverable
 //! component
 void render_hoverable(SDL_Rect *rect, char *text);
+
+void hoverable_component_free(void *tmp);
+
+void minimap_component_free(void *temp);
+
+void background_component_free(void *temp);
+
+void clickable_component_free(void *temp);
+
+void text_component_free(void *temp);
+
+void actualised_text_component_free(void *temp);
+
+//! Creates a black background that will be rendered before everything else.
+Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
+
+void null_click_event(__attribute__((unused)) World *w,
+                      __attribute__((unused)) SDL_Renderer *renderer,
+                      __attribute__((unused)) SDL_Window *window);
+
+//! Change `inner` so that it becomes the biggest rectangle of same ratio that
+//! can fit into `outer` padded by `padding` pixels.
+void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
+                                         int padding);
+
+//! Thiss function adds an `Actualised_Text`to the world that will show the game
+//! state in the upper left corner of the game.
+ActualisedText *render_game_state(World *w);
+
+//! This function returns the string that corresponds to the name of the value
+//! of runnning, the argument are not used but there for type consistency.
+//! The string is padded with spaces at the end so that when the text is
+//! rendered they all begin at the same place
+char *running_to_str(World *w, Entity *e);
