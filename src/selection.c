@@ -126,6 +126,12 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         ecs_add_component(w, e, COMP_SPRITE, sp);
         Position *p = calloc(1, sizeof(Position));
         *p = (Position){pt.x, pt.y};
+        Bitflag bf = COMPF_CAMERA;
+        VEC(EntityRef) camv = world_query(w, &bf);
+        Entity *ecam = get_entity(w, camv[0]);
+        Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
+        Position pworld = screen2worldspace(p,cam);
+        *p = pworld;
         ecs_add_component(w, e, COMP_POSITION, p);
         Selectable *s = calloc(1, sizeof(Selectable));
         s->is_ghost = 1;
@@ -165,7 +171,9 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         Position *p = entity_get_component(w, e, COMP_POSITION);
         if (SDL_PointInRect(&(SDL_Point){mps.x, mps.y},
                             &(SDL_Rect){sp->rect->x + p->x, sp->rect->y + p->y,
-                                        sp->rect->w, sp->rect->h})) {
+                                        sp->rect->w, sp->rect->h}) &&
+            !((BuildingGhost *)entity_get_component(w, e, COMP_BUILDINGGHOST))
+                 ->construction_done) {
           action_target = es[i];
           break;
         }

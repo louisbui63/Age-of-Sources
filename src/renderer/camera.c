@@ -68,12 +68,10 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
   // render sprites
   mask = COMPF_POSITION | COMPF_SPRITE;
   er = world_query(w, &mask);
-  VEC(EntityRef) cer = vec_copy(er);
-  vec_sort(cer, u64_gt);
   _Pragma("omp parallel") {
     _Pragma("omp for ordered schedule(static, 1)") {
-      for (uint i = 0; i < vec_len(cer); i++) {
-        EntityRef ei = cer[i];
+      for (uint i = 0; i < vec_len(er); i++) {
+        EntityRef ei = er[i];
         Entity *e = get_entity(w, ei);
         Sprite *s = entity_get_component(w, e, COMP_SPRITE);
         Position *p = entity_get_component(w, e, COMP_POSITION);
