@@ -21,4 +21,6 @@ typedef struct {
   EntityRef target;
 } Actionnable;
 
-void actionnate(World *w, Actionnable *ac);
+//! performs the action specified in `ac` on the target. Returns 1 if an action
+//! is being performed, 0 otherwise
+char actionnate(World *w, Actionnable *ac, Entity *se);

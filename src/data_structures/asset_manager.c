@@ -254,6 +254,11 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
     u->t = t;
     break;
 
+  case BASE_FISH:
+    u = parse("src/units/unit_fish.c", renderer, window);
+    u->t = t;
+    break;
+
   default:
     u = parse("src/units/unit_tanuki.c", renderer, window);
     u->t = t;

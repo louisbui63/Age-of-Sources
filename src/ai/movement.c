@@ -86,8 +86,8 @@ _Pragma("omp parallel") {
       if (stm->velocity.x == 0 && stm->velocity.y == 0) {
         Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
         if (ac && ac->act != Lazy) {
-          advance_anim_state(an, Attacking, -1);
-          actionnate(w, ac);
+          if (actionnate(w, ac, e))
+            advance_anim_state(an, Attacking, -1);
         } else
           advance_anim_state(an, Idle, -1);
       } else
