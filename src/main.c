@@ -108,6 +108,7 @@ int main() {
   // render_game_state(&w);
 
   spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100}, 0);
+  spawn_unit(&w, BASE_FISH, renderer, window, (Position){200, 200}, 1);
 
   {
     Entity *e = spawn_entity(&w);

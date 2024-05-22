@@ -6,7 +6,6 @@
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "input.h"
-#include "parser.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include <SDL2/SDL_rect.h>
@@ -130,7 +129,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         VEC(EntityRef) camv = world_query(w, &bf);
         Entity *ecam = get_entity(w, camv[0]);
         Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
-        Position pworld = screen2worldspace(p,cam);
+        Position pworld = screen2worldspace(p, cam);
         *p = pworld;
         ecs_add_component(w, e, COMP_POSITION, p);
         Selectable *s = calloc(1, sizeof(Selectable));
@@ -156,7 +155,8 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
       Position mpp = (Position){.x = mp.x, .y = mp.y};
       Position mps = screen2worldspace(&mpp, cam);
 
-      EntityRef action_target = UINT64_MAX;
+      EntityRef action_btarget = UINT64_MAX;
+      EntityRef action_atarget = UINT64_MAX;
 
       // HERE TOO:
       Bitflag flag = COMPF_SELECTABLE | COMPF_POSITION | COMPF_SPRITE |
@@ -174,8 +174,28 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
                                         sp->rect->w, sp->rect->h}) &&
             !((BuildingGhost *)entity_get_component(w, e, COMP_BUILDINGGHOST))
                  ->construction_done) {
-          action_target = es[i];
+          action_btarget = es[i];
           break;
+        }
+      }
+      if (action_btarget == UINT64_MAX) {
+        Bitflag flag = COMPF_SELECTABLE | COMPF_POSITION | COMPF_SPRITE |
+                       COMPF_OWNERSHIP | COMPF_UNIT;
+        VEC(EntityRef) es = world_query(w, &flag);
+        for (uint i = 0; i < vec_len(es); i++) {
+          Entity *e = get_entity(w, es[i]);
+          Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
+          if (o->owner == 0)
+            continue;
+          Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
+          Position *p = entity_get_component(w, e, COMP_POSITION);
+          if (SDL_PointInRect(&(SDL_Point){mps.x, mps.y},
+                              &(SDL_Rect){sp->rect->x + p->x,
+                                          sp->rect->y + p->y, sp->rect->w,
+                                          sp->rect->h})) {
+            action_atarget = es[i];
+            break;
+          }
         }
       }
 
@@ -187,9 +207,12 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
 
           // HERE
           Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
-          if (ac && action_target != UINT64_MAX) {
+          if (ac && action_btarget != UINT64_MAX) {
             ac->act = Build;
-            ac->target = action_target;
+            ac->target = action_btarget;
+          } else if (ac && action_atarget != UINT64_MAX) {
+            ac->act = Attack;
+            ac->target = action_atarget;
           } else if (ac) {
             ac->act = Lazy;
             ac->target = UINT64_MAX;
