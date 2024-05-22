@@ -80,7 +80,7 @@ Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
 
   default:
     *stm = (SteerManager){
-        10, 10, 10, 10, 10, 0, (Vec2){0, 0}, (Vec2){100, 100}, (Vec2){0, 0}, 0};
+        10, 10, 10, 10, 10, 0, (Vec2){0, 0}, (Vec2){p.x, p.y}, (Vec2){0, 0}, 0};
     break;
   }
 
