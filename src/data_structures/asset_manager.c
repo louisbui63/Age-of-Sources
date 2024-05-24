@@ -7,7 +7,6 @@
 
 #include "../errors.h"
 #include "../parser.h"
-#include "../renderer/camera.h"
 #include "../util.h"
 #include "hash_map.h"
 
