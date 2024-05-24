@@ -36,11 +36,16 @@ void event_optionmain_back(World *w, SDL_Renderer *renderer,
 Background *spawn_option_background(World *w, SDL_Renderer *renderer,
                                     SDL_Window *window);
 
+Clickable *spawn_option_fullscreen(World *w, SDL_Renderer *renderer,
+                                   SDL_Window *window);
+
 void event_option_fullscreen(World *w, SDL_Renderer *renderer,
                              SDL_Window *window);
 
-Clickable *spawn_option_fullscreen(World *w, SDL_Renderer *renderer,
-                                   SDL_Window *window);
+Clickable *spawn_option_music(World *w, SDL_Renderer *renderer,
+                              SDL_Window *window);
+
+void event_option_music(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
 void event_gamemenu_resume(World *w, SDL_Renderer *renderer,
                            SDL_Window *window);
@@ -205,6 +210,7 @@ void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
   spawn_option_background(w, renderer, window);
   spawn_option_fullscreen(w, renderer, window);
   spawn_option_sound(w, renderer, window);
+  spawn_option_music(w, renderer, window);
   RUNNING = OPTIONMAIN;
 }
 
@@ -246,7 +252,7 @@ Background *spawn_option_background(World *w, SDL_Renderer *renderer,
 Clickable *spawn_option_fullscreen(World *w, SDL_Renderer *renderer,
                                    SDL_Window *window) {
   return spawn_button(w, renderer, window, event_option_fullscreen,
-                      "Fullscreen", (WIN_W - 500) / 2 + (500 - 100) / 2,
+                      "Fullscreen", (WIN_W - 500) / 2 + (500 - 300) / 2,
                       (WIN_H - 200) / 2 - WIN_H / 8 + 2 * (210 - 3 * 30) / 3 +
                           45);
 }
@@ -263,6 +269,20 @@ void event_option_fullscreen(__attribute__((unused)) World *w,
     SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
   }
   IS_FULLSCREEN = !IS_FULLSCREEN;
+}
+
+Clickable *spawn_option_music(World *w, SDL_Renderer *renderer,
+                              SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_option_music, "Music",
+                      (WIN_W - 500) / 2 + (500 - 300) / 2 + 2 * 100,
+                      (WIN_H - 200) / 2 - WIN_H / 8 + 2 * (210 - 3 * 30) / 3 +
+                          45);
+}
+
+void event_option_music(__attribute__((unused)) World *w,
+                        __attribute__((unused)) SDL_Renderer *renderer,
+                        __attribute__((unused)) SDL_Window *window) {
+  toggle_music();
 }
 
 void event_game_menu(World *w, SDL_Renderer *renderer, SDL_Window *window) {
@@ -428,7 +448,7 @@ char *get_water(World *w, __attribute__((unused)) Entity *e) {
   int i = 4;
   wi = wi / 10;
   while ((i >= 0) && (wi)) {
-    tmp[i++] = '0' + wi % 10;
+    tmp[i--] = '0' + wi % 10;
     wi = wi / 10;
   }
   return tmp;
