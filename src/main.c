@@ -12,6 +12,7 @@
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
 #include "input.h"
+#include "player.h"
 #include "players.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
@@ -79,18 +80,15 @@ int main() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     abort();
-  })
-  SDL_FreeSurface(test_bmp);
-
-  set_grid_functions();
-
-  World w = world_new();
-  Camera *camcam = malloc(sizeof(Camera));
-  *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
+    unit_beaverx = 32, .y = 32, .zoom = 1};
 
   init_world(&w);
 
   set_volume(64);
+
+  Entity *rende = spawn_entity(&w);
+  Renderer rendd = {.r = renderer};
+  ecs_add_component(&w, rende, COMP_RENDERER, &rendd);
 
   Entity *wine = spawn_entity(&w);
   Window wind = {.w = window};
@@ -101,7 +99,7 @@ int main() {
 
   Entity *cam = spawn_entity(&w);
   KeyEvent *cammove = malloc(sizeof(KeyEvent));
-  *cammove = map_movement;
+  *cammove = map_movemunit_beaverent;
   ecs_add_component(&w, cam, COMP_CAMERA, camcam);
   ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 
@@ -212,8 +210,10 @@ int main() {
 
     SDL_RenderPresent(renderer);
 
-    // delay before next frame
-    dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
+    update
+
+        // delay before next frame
+        dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
     if (RUNNING != STOP && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
     else if (RUNNING != STOP)

@@ -1,7 +1,7 @@
-#include "../selection.h"
-#include "unit_function.h"
 #include "../components.h"
 #include "../players.h"
+#include "../selection.h"
+#include "unit_function.h"
 
 //! This file is a template for the unit files, every data about the units must
 //! be put inside multiline commentaries and nothing else will use this kind of
@@ -65,7 +65,7 @@
 
 Entity *FORUM_ENTITY;
 
-void forum_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window){
+void forum_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   Bitflag flag = COMPF_PLAYERMANAGER;
   VEC(EntityRef) ps = world_query(w, &flag);
   PlayerManager *pm0 =
@@ -77,18 +77,19 @@ void forum_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window){
     pm0 = pm1;
     pm1 = tmp;
   }
+  printf("%d\n", pm0->water);
   // water&clay 5/s
-  if(pm0->water >= 5*10 && pm0->clay >= 5*10){
-    pm0->water-=5*10;
-    pm0->clay-=5*10;
+  if (pm0->water >= 5 * 10 && pm0->clay >= 5 * 10 * 0) {
+    pm0->water -= 5 * 10;
+    pm0->clay -= 5 * 10 * 0;
     char *c = malloc(sizeof(char) * (strlen("src/units/unit_tanuki.c") + 1));
     strcpy(c, "src/units/unit_tanuki.c");
-    Position *p = entity_get_component(w,FORUM_ENTITY,COMP_POSITION);
-    spawn_unit(w,BASE_SOLDIER,renderer,window,*p,0);
+    Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
+    spawn_unit(w, BASE_SOLDIER, renderer, window, *p, 0);
   }
 }
 
-void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window){
+void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   Bitflag flag = COMPF_PLAYERMANAGER;
   VEC(EntityRef) ps = world_query(w, &flag);
   PlayerManager *pm0 =
@@ -101,22 +102,22 @@ void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window){
     pm1 = tmp;
   }
 
-  if(pm0->water >= 5*10){
-    pm0->water-=5*10;
+  if (pm0->water >= 5 * 10) {
+    pm0->water -= 5 * 10;
     char *c = malloc(sizeof(char) * (strlen("src/units/unit_beaver.c") + 1));
     strcpy(c, "src/units/unit_beaver.c");
-    Position *p = entity_get_component(w,FORUM_ENTITY,COMP_POSITION);
-    spawn_unit(w,BEAVER,renderer,window,*p,0);
+    Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
+    spawn_unit(w, BEAVER, renderer, window, *p, 0);
   }
 }
 
 ClickEvent forum_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
   FORUM_ENTITY = e;
-  switch(slot){
-    case 0:
-      return forum_slot_0;
-    case 1:
-      return forum_slot_1;
+  switch (slot) {
+  case 0:
+    return forum_slot_0;
+  case 1:
+    return forum_slot_1;
   }
   return empty_click_event;
 }
