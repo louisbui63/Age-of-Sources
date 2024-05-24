@@ -165,6 +165,8 @@ int main() {
 
   int slow_tick = 0;
 
+  Mix_PlayMusic(get_audio("asset/sfx/music.ogg", 1), -1);
+
   for (; RUNNING != STOP;) {
     Uint32 start_time = SDL_GetTicks();
 
