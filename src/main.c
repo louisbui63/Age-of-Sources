@@ -114,6 +114,8 @@ int main() {
   // render_game_state(&w);
 
   spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100}, 0);
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){120, 100}, 0);
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 120}, 0);
   spawn_unit(&w, BASE_FISH, renderer, window, (Position){200, 200}, 1);
 
   {
@@ -130,7 +132,7 @@ int main() {
   for (uint i = 0; i < 2; i++) {
     Entity *e = spawn_entity(&w);
     PlayerManager *pm = malloc(sizeof(PlayerManager));
-    *pm = (PlayerManager){i, 0, 0, 0, 0};
+    *pm = (PlayerManager){i, 0, 0, 0, 0, 1.0, 1.0};
     ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
   }
 
@@ -224,12 +226,15 @@ int main() {
     if (RUNNING == IN_GAME) {
       slow_tick = (slow_tick + 1) % 60;
       // load balancing for the dummies
+      // idealy this would be done with some kind of thread-safe queue
       if (slow_tick == 0) {
         update_ressources(&w);
       } else if (slow_tick == 15) {
         take_ai_action(&w, &ais, renderer, window);
       } else if (slow_tick == 30) {
         reconsider_ai_state(&w, &ais);
+      } else if (slow_tick == 45) {
+        ai_defends_itself(&w);
       }
     }
 

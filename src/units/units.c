@@ -64,6 +64,7 @@ Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
   s->rect = malloc(sizeof(SDL_Rect));
   *(s->rect) = *(ut->sprite->rect);
   s->texture = ut->sprite->texture;
+  // printf("%s\n", ut->path_to_sprite);
   Unit *u = malloc(sizeof(Unit));
   *u = (Unit){.b_dam = ut->b_dam,
               .b_def = ut->b_def,

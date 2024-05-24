@@ -9,6 +9,8 @@ typedef struct {
   int dwater;
   int clay;
   int dclay;
+  float damage_multiplier;
+  float construct_multiplier;
 } PlayerManager;
 
 //! A component that flags an entity as a source of water for its owner

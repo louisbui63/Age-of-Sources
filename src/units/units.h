@@ -16,6 +16,7 @@ typedef enum {
   UWELL,
   UFURNACE,
   UFORUM,
+  UCASERN,
   BEAVER,
   UBEAVER,
   BASE_SOLDIER,
