@@ -110,7 +110,7 @@ void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window){
   }
 }
 
-ClickEvent forum_grid(World *w, int slot, Entity *e) {
+ClickEvent forum_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
   FORUM_ENTITY = e;
   switch(slot){
     case 0:
