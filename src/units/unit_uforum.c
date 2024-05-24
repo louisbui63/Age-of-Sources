@@ -63,6 +63,8 @@
 //! characters long.
 /**/
 
-ClickEvent uforum_grid(__attribute__((unused)) World *w, __attribute__((unused)) int slot, __attribute__((unused)) Entity *e) {
+ClickEvent uforum_grid(__attribute__((unused)) World *w,
+                       __attribute__((unused)) int slot,
+                       __attribute__((unused)) Entity *e) {
   return empty_click_event;
 }

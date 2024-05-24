@@ -17,10 +17,29 @@
 //   TOWER,
 //   KONBINI,
 //   HOUSE,
-//   BASE_SOLDIER,
+//   FORT,
+//   FORUM,
+//   UWELL,
+//   UFURNACE,
+//   UCASERN,
+//   UTOWER,
+//   UKONBINI,
+//   UHOUSE,
+//   UFORT,
+//   UFORUM,
 //   BEAVER,
+//   UBEAVER,
+//   BASE_SOLDIER,
 //   BASE_FISH,
-//   BASE_FLYING,
+//   MAID,
+//   FROG,
+//   SHRIMP,
+//   HIPPO,
+//   NARVAL,
+//   PINGU,
+//   SAMURAI,
+//   SECU,
+//   T34,
 //   UNIT_NUMBER
 // } UnitTypes;
 
@@ -37,12 +56,36 @@
 
 double units_get_tile_speed(UnitTypes u, TileTypes t) {
   double unit_speeds[UNIT_NUMBER][TILE_NUMBER] = {
-      {1., 1., 1., 0., 0., 1.}, {1, 1, 1, 0, 0, 1},
-      {0, 0, 0, 0, 0, 1},       {1, 1, 1, 0, 0, 1},
-      {1, 1, 1, 0, 0, 1},       {1, 1, 1, 0, 0, 1},
-      {1, 1, 1, 0, 0, 1},       {1., 1., 1., 0., 0., 1.},
-      {1., 1., 1., 0., 0., 1.}, {0.75, 0.75, 0.75, 1.25, 0., 0.75},
-      {1., 1., 1., 1., 1., 1.},
+      {1., 1., 1., 0., 0., 1.}, // UNIT_TEST
+      {1, 1, 1, 0, 0, 1}, // WELL
+      {0, 0, 0, 0, 0, 1}, // FURNACE
+      {1, 1, 1, 0, 0, 1}, // CASERN
+      {1, 1, 1, 0, 0, 1}, // TOWER
+      {1, 1, 1, 0, 0, 1}, // KONBINI
+      {1, 1, 1, 0, 0, 1}, // HOUSE
+      {1, 1, 1, 0, 0, 1}, // FORT
+      {1, 1, 1, 0, 0, 1}, // FORUM
+      {1, 1, 1, 0, 0, 1}, // UWELL
+      {0, 0, 0, 0, 0, 1}, // UFURNACE
+      {1, 1, 1, 0, 0, 1}, // UCASERN
+      {1, 1, 1, 0, 0, 1}, // UTOWER
+      {1, 1, 1, 0, 0, 1}, // UKONBINI
+      {1, 1, 1, 0, 0, 1}, // UHOUSE
+      {1, 1, 1, 0, 0, 1}, // UFORT
+      {1, 1, 1, 0, 0, 1}, // UFORUM
+      {1., 1., 1., 0., 0., 1.}, //   BEAVER
+      {1., 1., 1., 0., 0., 1.}, //   UBEAVER
+      {1., 1., 1., 0., 0., 1.}, //   BASE_SOLDIER
+      {0.75, 0.75, 0.75, 1.25, 0., 0.75}, // BASE_FISH
+      {1., 1., 1., 1., 1., 1.}, // MAID
+      {1., 1., 1., 0., 0., 1.}, //   FROG
+      {1., 1., 1., 0., 0., 1.}, //   SHRIMP
+      {1, 1, 1, 0.75, 0., 1.}, //   HIPPO
+      {1., 1., 1., 0., 0., 1.}, //   NARVAL
+      {1., 1., 1., 1.25, 0., 1.}, //   PINGU
+      {1., 1., 1., 0., 0., 1.}, //   SAMURAI
+      {1., 1., 1., 0., 0., 1.}, //   SECU
+      {1., 1., 1., 0., 0., 1.}, //   T34
   };
   return unit_speeds[u][t];
 }
