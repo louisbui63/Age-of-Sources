@@ -87,6 +87,9 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
           Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
           if (o->owner == 1)
             continue;
+          BuildingGhost *bg = entity_get_component(w, e, COMP_BUILDINGGHOST);
+          if (bg && !bg->construction_done)
+            continue;
           Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
           Position *p = entity_get_component(w, e, COMP_POSITION);
           if (SDL_PointInRect(&(SDL_Point){p->x - (int)(sp->rect->w / 2),
