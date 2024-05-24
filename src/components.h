@@ -47,6 +47,8 @@
 #define COMP_OWNERSHIP 20
 #define COMPF_ACTIONNABLE (1 << 21)
 #define COMP_ACTIONNABLE 21
+#define COMP_RENDERER 22
+#define COMPF_RENDERER (1 << 22)
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.

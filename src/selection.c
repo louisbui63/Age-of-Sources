@@ -9,6 +9,7 @@
 #include "parser.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
+#include "renderer/ui.h"
 #include <SDL2/SDL_rect.h>
 
 extern Running RUNNING;
@@ -186,7 +187,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             ac->act = Lazy;
             ac->target = UINT64_MAX;
           }
-
+          /* constant-expression */
           // Position ps = screen2worldspace(p, cam);
           Vec2 p_vec2 = (Vec2){.x = p->x, .y = p->y};
           TilePosition tpstart = pos2tile(&p_vec2);
@@ -258,4 +259,198 @@ void selector_free(void *s) {
     free(se->building);
   vec_free(se->selected);
   free(s);
+}
+
+void actualise_grid_coordinates(int *x, int *y, int i) {
+  *x = (i % 3) * 32;
+  *y = (i / 3) * 32;
+}
+
+void render_unit_grid(UnitTypes t, World *w, Entity *e) {
+  int i = 0;
+  int x = 0;
+  int y = 0;
+  Clickable *c;
+  SDL_Window *w = get_window(w);
+  SDL_Renderer *r = get_renderer(w);
+  switch (t) {
+  case BEAVER:
+
+    // Forum
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = beaver_grid(w, i, e);
+    c->text == malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/forum.bmp", r, w);
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    // Well
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = beaver_grid(w, i, e);
+    c->text == malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/well.bmp", r, w);
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    // Furnace
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = beaver_grid(w, i, e);
+    c->text == malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/furnace.bmp", r, w);
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    // Casern
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = beaver_grid(w, i, e);
+    c->text == malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/casern.bmp", r, w);
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    // Tower
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = beaver_grid(w, i, e);
+    c->text == malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/tanuki_tower.bmp", r, w);
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    // Konbini
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = beaver_grid(w, i, e);
+    c->text == malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/konbini_tanuki.bmp", r, w);
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    // House
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = beaver_grid(w, i, e);
+    c->text == malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/tanuki_house.bmp", r, w);
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+    break;
+
+  case FORUM:
+
+    // BEAVER
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = beaver_grid(w, i, e);
+    c->text == malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/tanuki_beaver.bmp", r, w);
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    // Tanuki
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = beaver_grid(w, i, e);
+    c->text == malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/tanuki.bmp", r, w);
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+  default:
+    break;
+  }
 }

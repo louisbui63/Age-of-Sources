@@ -107,4 +107,16 @@ Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
 //   ecs_add_component(w, e, COMP_SELECTABLE, s);
 // }
 
-VEC(Clickable *) unit_actions(UnitTypes t) {}
+// VEC(Clickable *) unit_actions(UnitTypes t) {
+//   VEC(Clickable *) vec = vec_new(Clickable *);
+//   switch (t) {
+//   case BUILDER_TANUKI:
+//     Clickable *c = malloc(sizeof(Clickable));
+//     c->click_event
+//     break;
+
+//   default:
+//     break;
+//   }
+//   return vec;
+// }

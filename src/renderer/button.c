@@ -515,4 +515,5 @@ void render_vec(World *w, VEC(Clickable *) vec) {
     vec[i]->rect->y = by + (i / 3) * 32;
     spawn_clickable(w, vec[i], key_event);
   }
+  vec_free(vec);
 }
