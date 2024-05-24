@@ -140,11 +140,13 @@ void map_movement(World *w, SDL_Renderer *, Entity *e, Inputs *i, KeyState st) {
     c->x += 16 * x;
     c->y += 16 * y;
     c->x = c->x < 0 ? 0
-                    : (c->x > TILE_SIZE * 400 - WIN_W ? TILE_SIZE * 400 - WIN_W
-                                                      : c->x);
+                    : (c->x > TILE_SIZE * 400 - WIN_W * c->zoom
+                           ? TILE_SIZE * 400 - WIN_W * c->zoom
+                           : c->x);
     c->y = c->y < 0 ? 0
-                    : (c->y > TILE_SIZE * 400 - WIN_H ? TILE_SIZE * 400 - WIN_H
-                                                      : c->y);
+                    : (c->y > TILE_SIZE * 400 - (WIN_H - 90) * c->zoom
+                           ? TILE_SIZE * 400 - (WIN_H - 90) * c->zoom
+                           : c->y);
   }
   if (st == KEY_PRESSED && inputs_is_key_in(i, SDLK_COMMA)) {
     Camera *c = entity_get_component(w, e, COMP_CAMERA);
