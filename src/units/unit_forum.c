@@ -17,27 +17,27 @@
 
 //! The third text is the b_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*1000*/
 
 //! The fourth text is the p_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*1000*/
 
 //! The fifth text is the s_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*1000*/
 
 //! The sixth text is the b_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*50*/
+/*100*/
 
 //! The seventh text is the p_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*50*/
+/*100*/
 
 //! The eigth text is the s_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*50*/
+/*150*/
 
 //! The ninth text is the rg of the unit, it must a be positive decimal
 //! number smaller or equal than 65535

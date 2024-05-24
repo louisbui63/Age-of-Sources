@@ -1,4 +1,6 @@
 #include "steering_behaviors.h"
+#include "../components.h"
+#include "../units/units.h"
 #include <math.h>
 
 BehaviorStatus behavior_seek(SteerManager *s, Vec2 target) {
@@ -35,11 +37,17 @@ BehaviorStatus behavior_obstacle_avoidance(SteerManager *s,
   return ONGOING;
 }
 
-BehaviorStatus behavior_complete(SteerManager *s) {
+BehaviorStatus behavior_complete(World *w, Unit* u, SteerManager *s) {
   Vec2 steering_force = v2truncate(s->steering, s->max_force);
   Vec2 acceleration = v2div(steering_force, s->mass);
   s->velocity = v2truncate(v2add(s->velocity, acceleration), s->max_speed);
-  s->position = v2add(s->position, s->velocity);
+
+  TilePosition tp = pos2tile(&s->position);
+  Bitflag bf = COMPF_MAPCOMPONENT;
+  VEC(EntityRef) mapv = world_query(w, &bf);
+  Entity *emap = get_entity(w, mapv[0]);
+  MapComponent *mapc = entity_get_component(w, emap, COMP_MAPCOMPONENT);
+  s->position = v2add(s->position, v2mul(units_get_tile_speed(u->t,mapc->map[tp.x][tp.y]),s->velocity));
 
   if (v2len(s->velocity))
     s->rotation = v2angle(s->velocity);

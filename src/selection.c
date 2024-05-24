@@ -111,7 +111,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
   } else if (s->type == Building && RUNNING == IN_GAME) {
     if (inputs_is_key_in(i, SDLK_ESCAPE) && st == KEY_PRESSED)
       reset_selection_type(s);
-    else if (inputs_is_mouse_button_in(i, 1) && get_mouse_position(r).y < 270 &&
+    else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) && get_mouse_position(r).y < 270 &&
              st == KEY_RELEASED) {
 
       SDL_Point pt = get_mouse_position(r);
@@ -254,7 +254,8 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             path_free(stm->current_path);
           stm->current_path = 0;
 
-          Path p = pathfind_astar(mapc->map, UNIT_TEST, &tpstart, &tpend);
+          Unit *u = entity_get_component(w,e,COMP_UNIT);
+          Path p = pathfind_astar(mapc->map, u->t, &tpstart, &tpend);
           if (p) {
             if (vec_len(p) > 1) {
               free(p[0]);
