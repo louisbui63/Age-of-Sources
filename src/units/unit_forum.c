@@ -77,7 +77,6 @@ void forum_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window) {
     pm0 = pm1;
     pm1 = tmp;
   }
-  printf("%d\n", pm0->water);
   // water&clay 5/s
   if (pm0->water >= 5 * 10 && pm0->clay >= 5 * 10) {
     pm0->water -= 5 * 10;

@@ -206,7 +206,6 @@ void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
   spawn_option_fullscreen(w, renderer, window);
   spawn_option_sound(w, renderer, window);
   RUNNING = OPTIONMAIN;
-  // printf("2\n");
 }
 
 Clickable *spawn_optionmain_back(World *w, SDL_Renderer *renderer,
@@ -221,7 +220,6 @@ void event_optionmain_back(World *w, SDL_Renderer *renderer,
   despawn_from_component(w, COMPF_BACKGROUND);
   despawn_from_component(w, COMPF_ACTUALISEDTEXT);
   spawn_main_menu(w, renderer, window);
-  // printf("1\n");
 }
 
 Background *spawn_option_background(World *w, SDL_Renderer *renderer,
@@ -272,6 +270,7 @@ void event_game_menu(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   despawn_from_component(w, COMPF_BACKGROUND);
   despawn_from_component(w, COMPF_CLICKABLE);
   despawn_from_component(w, COMPF_HOVERABLE);
+  despawn_from_component(w, COMPF_ACTUALISEDTEXT);
   // This function is unused because of the poor quality of the result.
   // spawn_gamemenu_background(w, renderer, window);
   spawn_gamemenu_resume(w, renderer, window);
@@ -359,19 +358,18 @@ void event_gameoption_back(World *w, SDL_Renderer *renderer,
 }
 
 void spawn_game_ui(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-  printf("1\n");
   spawn_game_background(w, renderer, window);
-  // spawn_game_ressources(w, renderer, window);
+  spawn_game_ressources(w, renderer, window);
 }
 
 Background *spawn_game_background(World *w, SDL_Renderer *renderer,
                                   SDL_Window *window) {
   Background *back = malloc(sizeof(Background));
-  back->sprite = malloc(sizeof(Sprite));
   back->rect = malloc(sizeof(SDL_Rect));
-  *(back->rect) = (SDL_Rect){.x = 270, .y = 0, .h = 90, .w = 640};
+  *(back->rect) = (SDL_Rect){.x = 0, .y = 270, .h = 90, .w = 640};
+  back->sprite = malloc(sizeof(Sprite));
   back->sprite->rect = malloc(sizeof(SDL_Rect));
-  *(back->sprite->rect) = (SDL_Rect){.x = 270, .y = 0, .h = 90, .w = 640};
+  (back->sprite->rect) = NULL;
   back->sprite->texture =
       get_texture("asset/sprites/ingamebackground.bmp", renderer, window);
   Entity *e = spawn_entity(w);
@@ -379,28 +377,29 @@ Background *spawn_game_background(World *w, SDL_Renderer *renderer,
   return back;
 }
 
-void spawn_game_ressources(World *w, SDL_Renderer *renderer,
-                           SDL_Window *window) {
+void spawn_game_ressources(World *w,
+                           __attribute__((unused)) SDL_Renderer *renderer,
+                           __attribute__((unused)) SDL_Window *window) {
   ActualisedText *wa = malloc(sizeof(ActualisedText));
   wa->color = malloc(sizeof(SDL_Color));
   *(wa->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
   wa->rect = malloc(sizeof(SDL_Rect));
-  *(wa->rect) = (SDL_Rect){.x = 290, .y = 20, .h = 16, .w = 100};
+  *(wa->rect) = (SDL_Rect){.x = 15, .y = 285, .h = 16, .w = 100};
   wa->get_text = get_water;
+  Entity *ew = spawn_entity(w);
+  ecs_add_component(w, ew, COMP_ACTUALISEDTEXT, wa);
+
   ActualisedText *cl = malloc(sizeof(ActualisedText));
   cl->color = malloc(sizeof(SDL_Color));
   *(cl->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
   cl->rect = malloc(sizeof(SDL_Rect));
-  *(cl->rect) = (SDL_Rect){.x = 290, .y = 20, .h = 16, .w = 100};
+  *(cl->rect) = (SDL_Rect){.x = 15, .y = 285 + 22, .h = 16, .w = 100};
   cl->get_text = get_clay;
-  // ActualisedText *wa = malloc(sizeof(ActualisedText));
-  // wa->color = malloc(sizeof(SDL_Color));
-  // *(wa->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
-  // wa->rect = malloc(sizeof(SDL_Rect));
-  // wa->get_text = get_water;
+  Entity *ec = spawn_entity(w);
+  ecs_add_component(w, ec, COMP_ACTUALISEDTEXT, cl);
 }
 
-char *get_water(World *w, Entity *e) {
+char *get_water(World *w, __attribute__((unused)) Entity *e) {
   Bitflag flag = COMPF_PLAYERMANAGER;
   VEC(EntityRef) ps = world_query(w, &flag);
   PlayerManager *pm0 =
@@ -413,11 +412,13 @@ char *get_water(World *w, Entity *e) {
     pm1 = tmp;
   }
   int wi = pm0->water;
-  char *tmp = malloc(9);
-  tmp[9] = 0;
-  tmp[8] = ' ';
-  tmp[7] = 0x43;
-  tmp[6] = 0xf0;
+  char *tmp = malloc(12);
+  tmp[11] = 0;
+  tmp[10] = ' ';
+  tmp[9] = 0x83;
+  tmp[8] = 0x81;
+  tmp[7] = 0xef;
+  tmp[6] = ' ';
   tmp[5] = '0' + wi % 10;
   tmp[4] = ' ';
   tmp[3] = ' ';
@@ -433,7 +434,7 @@ char *get_water(World *w, Entity *e) {
   return tmp;
 }
 
-char *get_clay(World *w, Entity *e) {
+char *get_clay(World *w, __attribute__((unused)) Entity *e) {
   Bitflag flag = COMPF_PLAYERMANAGER;
   VEC(EntityRef) ps = world_query(w, &flag);
   PlayerManager *pm0 =
@@ -444,11 +445,14 @@ char *get_clay(World *w, Entity *e) {
     PlayerManager *tmp = pm0;
     pm0 = pm1;
     pm1 = tmp;
-  }
-  int wi = pm0->water;
-  char *tmp = malloc(9);
-  tmp[8] = 0;
-  tmp[7] = ' ';
+  } // ef92b7
+  int wi = pm0->clay;
+  char *tmp = malloc(12);
+  tmp[11] = 0;
+  tmp[10] = ' ';
+  tmp[9] = 0xb7;
+  tmp[8] = 0x92;
+  tmp[7] = 0xef;
   tmp[6] = ' ';
   tmp[5] = '0' + wi % 10;
   tmp[4] = ' ';

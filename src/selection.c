@@ -58,6 +58,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
           vec_clear(s->selected);
           SDL_Point p = get_mouse_position(r);
           s->start = (Vec2){p.x, p.y};
+          despawn_from_component(w, COMPF_CLICKABLE);
         } else {
           SDL_Point p = get_mouse_position(r);
           s->start = (Vec2){p.x, p.y};
@@ -313,16 +314,16 @@ void selector_free(void *s) {
 
 void actualise_grid_coordinates(int *x, int *y, int i) {
   int n = 5; // This is the length of a line in the ui
-  *x = (i % n) * 32;
-  *y = (i / n) * 32;
+  *x = 135 + (i % n) * 32;
+  *y = 270 + 15 + (i / n) * 32;
 }
 
 void render_unit_grid(World *w, Entity *e) {
   UnitTypes t = ((Unit *)entity_get_component(w, e, COMP_UNIT))->t;
   despawn_from_component(w, COMPF_CLICKABLE);
   int i = 0;
-  int x = 0;
-  int y = 0;
+  int x = 135;
+  int y = 270 + 15;
   Clickable *c;
   SDL_Window *wi = get_window(w);
   SDL_Renderer *r = get_renderer(w);
@@ -497,12 +498,13 @@ void render_unit_grid(World *w, Entity *e) {
     actualise_grid_coordinates(&x, &y, i);
     c = malloc(sizeof(Clickable));
     c->rect = malloc(sizeof(SDL_Rect));
-    *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
     c->click_event = forum_grid(w, i, e);
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
+    c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
     *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
