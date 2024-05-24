@@ -65,6 +65,9 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
                    w, get_entity(w, world_query(w, &mask)[0]), COMP_SELECTOR))
                   ->selected;
 
+  SDL_Texture *bck =
+      get_texture("asset/sprites/select_ally_back.bmp", rdr, window);
+
   // render sprites
   mask = COMPF_POSITION | COMPF_SPRITE;
   er = world_query(w, &mask);
@@ -81,17 +84,16 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
         Position wtl = world2screenspace(p, cam);
         Position wtr = world2screenspace(
             &(Position){.x = p->x + tr.x, .y = p->y + tr.y}, cam);
-        SDL_Rect r = {
-            .x = wtl.x, .y = wtl.y, .w = wtr.x - wtl.x, .h = wtr.y - wtl.y};
+        SDL_Rect r = {.x = wtl.x - (int)(s->rect->w / 2),
+                      .y = wtl.y - (int)(s->rect->h / 2),
+                      .w = wtr.x - wtl.x,
+                      .h = wtr.y - wtl.y};
         // occludes offscreen sprites
         if (wtl.x < WIN_W && wtl.y < WIN_H && wtr.x > 0 && wtr.y > 0) {
           _Pragma("omp ordered") {
             for (uint j = 0; j < vec_len(selecteds); j++) {
               if (selecteds[j] == ei) {
-                SDL_RenderCopy(rdr,
-                               get_texture("asset/sprites/select_ally_back.bmp",
-                                           rdr, window),
-                               0, &r);
+                SDL_RenderCopy(rdr, bck, 0, &r);
                 break;
               }
             }

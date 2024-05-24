@@ -62,11 +62,8 @@
 //! characters long.
 /*A place to get drinkable water from*/
 
-void well_grid(__attribute__((unused)) World *w,
-               __attribute__((unused)) int slot) {
-  // if (slot == 0) {
-  //   char *c = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
-  //   strcpy(c, "src/units/unit_well.c");
-  //   set_building_selection(w, c);
-  // }
+ClickEvent well_grid(__attribute__((unused)) World *w,
+                     __attribute__((unused)) int slot,
+                     __attribute__((unused)) Entity *e) {
+  return empty_click_event;
 }

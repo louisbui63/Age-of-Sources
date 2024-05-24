@@ -14,6 +14,7 @@
 extern Running RUNNING;
 
 void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
+
   uint64_t mask = COMPF_BACKGROUND;
   VEC(EntityRef) er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
@@ -93,7 +94,7 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     char *text = (t->get_text)(w, e);
     TTF_SizeUTF8(font, text, &(r.w), &(r.h));
     SDL_Surface *surf =
-        TTF_RenderText_Blended_Wrapped(font, text, *(t->color), 0);
+        TTF_RenderUTF8_Blended_Wrapped(font, text, *(t->color), 0);
     SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
     SDL_Rect t_rect;
     TTF_SizeUTF8(font, text, &(t_rect.w), &(t_rect.h));
@@ -224,29 +225,47 @@ ActualisedText *render_game_state(World *w) {
 
 char *running_to_str(__attribute__((unused)) World *w,
                      __attribute__((unused)) Entity *e) {
+  char *t = malloc(strlen("Stop          ") + 1);
   switch (RUNNING) {
   case STOP:
-    return "Stop          ";
+    strcpy(t, "Stop          ");
     break;
 
   case MAIN:
-    return "Main          ";
+    strcpy(t, "Main          ");
     break;
 
   case OPTIONMAIN:
-    return "OptionMain    ";
+    strcpy(t, "OptionMain    ");
     break;
 
   case IN_GAME:
-    return "In_Game       ";
+    strcpy(t, "In_Game       ");
     break;
 
   case IN_GAMEMENU:
-    return "In_GameMenu   ";
+    strcpy(t, "In_GameMenu   ");
     break;
 
   case IN_GAMEOPTION:
-    return "In_GameOption ";
+    strcpy(t, "In_GameOption ");
     break;
   }
+  return t;
+}
+
+SDL_Renderer *get_renderer(World *w) {
+  uint64_t mask = COMPF_RENDERER;
+  VEC(EntityRef) er = world_query(w, &mask);
+  Entity *e = get_entity(w, er[0]);
+  Renderer *r = entity_get_component(w, e, COMP_RENDERER);
+  return r->r;
+}
+
+SDL_Window *get_window(World *w) {
+  uint64_t mask = COMPF_WINDOW;
+  VEC(EntityRef) er = world_query(w, &mask);
+  Entity *e = get_entity(w, er[0]);
+  Window *wi = entity_get_component(w, e, COMP_WINDOW);
+  return wi->w;
 }

@@ -39,7 +39,7 @@
 
 //! The ninth text is the rg of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*5*/
 
 //! The tenth text is the sp of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -61,10 +61,8 @@
 //! characters long.
 /*A cute furball that can also build stuff*/
 
-void tanuki_grid(World *w, int slot) {
-  if (slot == 0) {
-    char *c = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
-    strcpy(c, "src/units/unit_well.c");
-    set_building_selection(w, c, WELL);
-  }
+ClickEvent tanuki_grid(__attribute__((unused)) World *w,
+                       __attribute__((unused)) int slot,
+                       __attribute__((unused)) Entity *e) {
+  return empty_click_event;
 }

@@ -1,6 +1,7 @@
 //! @file util.h
 #pragma once
 
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
 #include "errors.h"
@@ -107,3 +108,7 @@ typedef enum {
 typedef struct {
   SDL_Window *w;
 } Window;
+
+typedef struct {
+  SDL_Renderer *r;
+} Renderer;

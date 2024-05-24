@@ -11,5 +11,8 @@ Error play_audio(char *path, char is_music);
 //! than that is clamped.
 void set_volume(uint8_t volume);
 
-//! Returns the current volume of the audio
+//! Returns the current volume of the audio.
 uint8_t get_volume();
+
+//! Starts and stops the music.
+void toggle_music();

@@ -214,6 +214,9 @@ Path pathfind_astar(Map m, UnitTypes u, TilePosition *src, TilePosition *dest) {
         free(neigh[i]);
       }
       vec_free(neigh);
+    } else {
+      free(pqe->value);
+      free(pqe);
     }
   }
   pqueue_free_callback(open, free);

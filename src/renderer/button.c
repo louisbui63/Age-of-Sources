@@ -3,6 +3,7 @@
 #include "../audio/audio.h"
 #include "../components.h"
 #include "../data_structures/asset_manager.h"
+#include "../players.h"
 #include "button.h"
 
 extern Running RUNNING;
@@ -35,11 +36,16 @@ void event_optionmain_back(World *w, SDL_Renderer *renderer,
 Background *spawn_option_background(World *w, SDL_Renderer *renderer,
                                     SDL_Window *window);
 
+Clickable *spawn_option_fullscreen(World *w, SDL_Renderer *renderer,
+                                   SDL_Window *window);
+
 void event_option_fullscreen(World *w, SDL_Renderer *renderer,
                              SDL_Window *window);
 
-Clickable *spawn_option_fullscreen(World *w, SDL_Renderer *renderer,
-                                   SDL_Window *window);
+Clickable *spawn_option_music(World *w, SDL_Renderer *renderer,
+                              SDL_Window *window);
+
+void event_option_music(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
 void event_gamemenu_resume(World *w, SDL_Renderer *renderer,
                            SDL_Window *window);
@@ -50,6 +56,16 @@ void event_gamemenu_option(World *w, SDL_Renderer *renderer,
 void event_gamemenu_quit(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
 void spawn_game_ui(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+Background *spawn_game_background(World *w, SDL_Renderer *renderer,
+                                  SDL_Window *window);
+
+void spawn_game_ressources(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window);
+
+char *get_water(World *w, Entity *e);
+
+char *get_clay(World *w, Entity *e);
 
 void spawn_gameoption_menu(World *w, SDL_Renderer *renderer,
                            SDL_Window *window);
@@ -184,6 +200,7 @@ void event_main_start(World *w, __attribute__((unused)) SDL_Renderer *renderer,
                       __attribute__((unused)) SDL_Window *window) {
   RUNNING = IN_GAME;
   despawn_from_component(w, COMPF_CLICKABLE);
+  spawn_game_ui(w, renderer, window);
   // Entity *e = spawn_entity(w);
 }
 
@@ -193,8 +210,8 @@ void spawn_optionmain_menu(World *w, SDL_Renderer *renderer,
   spawn_option_background(w, renderer, window);
   spawn_option_fullscreen(w, renderer, window);
   spawn_option_sound(w, renderer, window);
+  spawn_option_music(w, renderer, window);
   RUNNING = OPTIONMAIN;
-  // printf("2\n");
 }
 
 Clickable *spawn_optionmain_back(World *w, SDL_Renderer *renderer,
@@ -209,7 +226,6 @@ void event_optionmain_back(World *w, SDL_Renderer *renderer,
   despawn_from_component(w, COMPF_BACKGROUND);
   despawn_from_component(w, COMPF_ACTUALISEDTEXT);
   spawn_main_menu(w, renderer, window);
-  // printf("1\n");
 }
 
 Background *spawn_option_background(World *w, SDL_Renderer *renderer,
@@ -236,7 +252,7 @@ Background *spawn_option_background(World *w, SDL_Renderer *renderer,
 Clickable *spawn_option_fullscreen(World *w, SDL_Renderer *renderer,
                                    SDL_Window *window) {
   return spawn_button(w, renderer, window, event_option_fullscreen,
-                      "Fullscreen", (WIN_W - 500) / 2 + (500 - 100) / 2,
+                      "Fullscreen", (WIN_W - 500) / 2 + (500 - 300) / 2,
                       (WIN_H - 200) / 2 - WIN_H / 8 + 2 * (210 - 3 * 30) / 3 +
                           45);
 }
@@ -255,11 +271,26 @@ void event_option_fullscreen(__attribute__((unused)) World *w,
   IS_FULLSCREEN = !IS_FULLSCREEN;
 }
 
+Clickable *spawn_option_music(World *w, SDL_Renderer *renderer,
+                              SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_option_music, "Music",
+                      (WIN_W - 500) / 2 + (500 - 300) / 2 + 2 * 100,
+                      (WIN_H - 200) / 2 - WIN_H / 8 + 2 * (210 - 3 * 30) / 3 +
+                          45);
+}
+
+void event_option_music(__attribute__((unused)) World *w,
+                        __attribute__((unused)) SDL_Renderer *renderer,
+                        __attribute__((unused)) SDL_Window *window) {
+  toggle_music();
+}
+
 void event_game_menu(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   RUNNING = IN_GAMEMENU;
   despawn_from_component(w, COMPF_BACKGROUND);
   despawn_from_component(w, COMPF_CLICKABLE);
   despawn_from_component(w, COMPF_HOVERABLE);
+  despawn_from_component(w, COMPF_ACTUALISEDTEXT);
   // This function is unused because of the poor quality of the result.
   // spawn_gamemenu_background(w, renderer, window);
   spawn_gamemenu_resume(w, renderer, window);
@@ -346,9 +377,117 @@ void event_gameoption_back(World *w, SDL_Renderer *renderer,
   event_game_menu(w, renderer, window);
 }
 
-void spawn_game_ui(__attribute__((unused)) World *w,
-                   __attribute__((unused)) SDL_Renderer *renderer,
-                   __attribute__((unused)) SDL_Window *window) {}
+void spawn_game_ui(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  spawn_game_background(w, renderer, window);
+  spawn_game_ressources(w, renderer, window);
+}
+
+Background *spawn_game_background(World *w, SDL_Renderer *renderer,
+                                  SDL_Window *window) {
+  Background *back = malloc(sizeof(Background));
+  back->rect = malloc(sizeof(SDL_Rect));
+  *(back->rect) = (SDL_Rect){.x = 0, .y = 270, .h = 90, .w = 640};
+  back->sprite = malloc(sizeof(Sprite));
+  back->sprite->rect = malloc(sizeof(SDL_Rect));
+  (back->sprite->rect) = NULL;
+  back->sprite->texture =
+      get_texture("asset/sprites/ingamebackground.bmp", renderer, window);
+  Entity *e = spawn_entity(w);
+  ecs_add_component(w, e, COMP_BACKGROUND, back);
+  return back;
+}
+
+void spawn_game_ressources(World *w,
+                           __attribute__((unused)) SDL_Renderer *renderer,
+                           __attribute__((unused)) SDL_Window *window) {
+  ActualisedText *wa = malloc(sizeof(ActualisedText));
+  wa->color = malloc(sizeof(SDL_Color));
+  *(wa->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+  wa->rect = malloc(sizeof(SDL_Rect));
+  *(wa->rect) = (SDL_Rect){.x = 15, .y = 285, .h = 16, .w = 100};
+  wa->get_text = get_water;
+  Entity *ew = spawn_entity(w);
+  ecs_add_component(w, ew, COMP_ACTUALISEDTEXT, wa);
+
+  ActualisedText *cl = malloc(sizeof(ActualisedText));
+  cl->color = malloc(sizeof(SDL_Color));
+  *(cl->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+  cl->rect = malloc(sizeof(SDL_Rect));
+  *(cl->rect) = (SDL_Rect){.x = 15, .y = 285 + 22, .h = 16, .w = 100};
+  cl->get_text = get_clay;
+  Entity *ec = spawn_entity(w);
+  ecs_add_component(w, ec, COMP_ACTUALISEDTEXT, cl);
+}
+
+char *get_water(World *w, __attribute__((unused)) Entity *e) {
+  Bitflag flag = COMPF_PLAYERMANAGER;
+  VEC(EntityRef) ps = world_query(w, &flag);
+  PlayerManager *pm0 =
+      entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
+  PlayerManager *pm1 =
+      entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
+  if (pm0->id == 1) {
+    PlayerManager *tmp = pm0;
+    pm0 = pm1;
+    pm1 = tmp;
+  }
+  int wi = pm0->water;
+  char *tmp = malloc(12);
+  tmp[11] = 0;
+  tmp[10] = ' ';
+  tmp[9] = 0x83;
+  tmp[8] = 0x81;
+  tmp[7] = 0xef;
+  tmp[6] = ' ';
+  tmp[5] = '0' + wi % 10;
+  tmp[4] = ' ';
+  tmp[3] = ' ';
+  tmp[2] = ' ';
+  tmp[1] = ' ';
+  tmp[0] = ' ';
+  int i = 4;
+  wi = wi / 10;
+  while ((i >= 0) && (wi)) {
+    tmp[i--] = '0' + wi % 10;
+    wi = wi / 10;
+  }
+  return tmp;
+}
+
+char *get_clay(World *w, __attribute__((unused)) Entity *e) {
+  Bitflag flag = COMPF_PLAYERMANAGER;
+  VEC(EntityRef) ps = world_query(w, &flag);
+  PlayerManager *pm0 =
+      entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
+  PlayerManager *pm1 =
+      entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
+  if (pm0->id == 1) {
+    PlayerManager *tmp = pm0;
+    pm0 = pm1;
+    pm1 = tmp;
+  } // ef92b7
+  int wi = pm0->clay;
+  char *tmp = malloc(12);
+  tmp[11] = 0;
+  tmp[10] = ' ';
+  tmp[9] = 0xb7;
+  tmp[8] = 0x92;
+  tmp[7] = 0xef;
+  tmp[6] = ' ';
+  tmp[5] = '0' + wi % 10;
+  tmp[4] = ' ';
+  tmp[3] = ' ';
+  tmp[2] = ' ';
+  tmp[1] = ' ';
+  tmp[0] = ' ';
+  int i = 4;
+  wi = wi / 10;
+  while ((i >= 0) && (wi)) {
+    tmp[i++] = '0' + wi % 10;
+    wi = wi / 10;
+  }
+  return tmp;
+}
 
 void key_event_escape(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
                       KeyState keystate) {
@@ -502,4 +641,18 @@ void event_sound_test(__attribute__((unused)) World *w,
                       __attribute__((unused)) SDL_Renderer *renderer,
                       __attribute__((unused)) SDL_Window *window) {
   play_audio("./asset/sfx/yahoo.wav", 0);
+}
+
+void render_vec(World *w, VEC(Clickable *) vec) {
+  int n = vec_len(vec);
+  int bx = 0;
+  int by = 0;
+  for (int i = 0; i < n; i++) {
+    KeyEvent *key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    vec[i]->rect->x = bx + (i % 3) * 32;
+    vec[i]->rect->y = by + (i / 3) * 32;
+    spawn_clickable(w, vec[i], key_event);
+  }
+  vec_free(vec);
 }

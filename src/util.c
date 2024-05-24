@@ -1,4 +1,5 @@
 #include "util.h"
+#include "components.h"
 
 #include <math.h>
 #include <string.h>
