@@ -3,21 +3,21 @@
 #include "../selection.h"
 #include "unit_function.h"
 
-//! This file is a template for the unit files, every data about the units
-//! must be put inside multiline commentaries and nothing else will use this
-//! kind of commentary.
+//! This file is a template for the unit files, every data about the units must
+//! be put inside multiline commentaries and nothing else will use this kind of
+//! commentary.
 
 //! The first text is the name of the unit. It must not be more than 255
 //! characters long.
-/*Forum*/
+/*Beaver*/
 
-//! The second text is the hp of the unit, it must a be positive decimal
-//! number smaller or equal than 65535
-/*2000*/
+//! The second text is the hp of the unit, it must a be positive decimal number
+//! smaller or equal than 65535
+/*75*/
 
 //! The third text is the b_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*1*/
 
 //! The fourth text is the p_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -29,19 +29,19 @@
 
 //! The sixth text is the b_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*50*/
+/*4*/
 
 //! The seventh text is the p_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*50*/
+/*4*/
 
 //! The eigth text is the s_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*50*/
+/*4*/
 
 //! The ninth text is the rg of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*2*/
 
 //! The tenth text is the sp of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -63,9 +63,9 @@
 //! characters long.
 /*The community center of the Tanuki civilization*/
 
-Entity *FORUM_ENTITY;
+Entity *BEAVER_ENTITY;
 
-void forum_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+void beaver_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   Bitflag flag = COMPF_PLAYERMANAGER;
   VEC(EntityRef) ps = world_query(w, &flag);
   PlayerManager *pm0 =
@@ -77,19 +77,18 @@ void forum_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window) {
     pm0 = pm1;
     pm1 = tmp;
   }
-  printf("%d\n", pm0->water);
   // water&clay 5/s
   if (pm0->water >= 5 * 10 && pm0->clay >= 5 * 10) {
     pm0->water -= 5 * 10;
     pm0->clay -= 5 * 10;
     char *c = malloc(sizeof(char) * (strlen("src/units/unit_tanuki.c") + 1));
     strcpy(c, "src/units/unit_tanuki.c");
-    Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
+    Position *p = entity_get_component(w, BEAVER_ENTITY, COMP_POSITION);
     spawn_unit(w, BASE_SOLDIER, renderer, window, *p, 0);
   }
 }
 
-void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+void beaver_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   Bitflag flag = COMPF_PLAYERMANAGER;
   VEC(EntityRef) ps = world_query(w, &flag);
   PlayerManager *pm0 =
@@ -104,23 +103,20 @@ void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
 
   if (pm0->water >= 5 * 10) {
     pm0->water -= 5 * 10;
-    if (pm0->water >= 5 * 10) {
-      pm0->water -= 5 * 10;
-      char *c = malloc(sizeof(char) * (strlen("src/units/unit_beaver.c") + 1));
-      strcpy(c, "src/units/unit_beaver.c");
-      Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
-      spawn_unit(w, BEAVER, renderer, window, *p, 0);
-    }
+    char *c = malloc(sizeof(char) * (strlen("src/units/unit_beaver.c") + 1));
+    strcpy(c, "src/units/unit_beaver.c");
+    Position *p = entity_get_component(w, BEAVER_ENTITY, COMP_POSITION);
+    spawn_unit(w, BEAVER, renderer, window, *p, 0);
   }
+}
 
-  ClickEvent forum_grid(__attribute__((unused)) World * w, int slot,
-                        Entity *e) {
-    FORUM_ENTITY = e;
-    switch (slot) {
-    case 0:
-      return forum_slot_0;
-    case 1:
-      return forum_slot_1;
-    }
-    return empty_click_event;
+ClickEvent beaver_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
+  BEAVER_ENTITY = e;
+  switch (slot) {
+  case 0:
+    return beaver_slot_0;
+  case 1:
+    return beaver_slot_1;
   }
+  return empty_click_event;
+}

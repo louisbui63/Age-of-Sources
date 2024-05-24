@@ -1,5 +1,6 @@
 //! @file ennemy_ai.h
 #include "../data_structures/ecs.h"
+#include <SDL2/SDL_render.h>
 
 //! The current state the ai is in, i.e., which behavior it should adopt. This
 //! is essentially a finite state machine
@@ -13,7 +14,11 @@ typedef enum {
 } AiState;
 
 //! Reconsiders the current `AiState` depending on the current state of the game
-void ReconsiderAiState(World *w, AiState *ais);
+void reconsider_ai_state(World *w, AiState *ais);
 
 //! Returns true iff ai is being attacked
-char is_ai_attacked();
+char is_ai_attacked(World *w);
+
+//! Cause the ai to act
+void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
+                    SDL_Window *window);

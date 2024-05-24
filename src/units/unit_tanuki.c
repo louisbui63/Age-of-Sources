@@ -61,6 +61,8 @@
 //! characters long.
 /*A cute furball that can also build stuff*/
 
-ClickEvent tanuki_grid(__attribute__((unused)) World *w, __attribute__((unused)) int slot, __attribute__((unused)) Entity *e) {
+ClickEvent tanuki_grid(__attribute__((unused)) World *w,
+                       __attribute__((unused)) int slot,
+                       __attribute__((unused)) Entity *e) {
   return empty_click_event;
 }

@@ -61,6 +61,7 @@
 /*A fish that desperately tries to survive outside the water*/
 
 ClickEvent fish_grid(__attribute__((unused)) World *w,
-               __attribute__((unused)) int slot, __attribute__((unused)) Entity *e) {
-                return empty_click_event;
-               }
+                     __attribute__((unused)) int slot,
+                     __attribute__((unused)) Entity *e) {
+  return empty_click_event;
+}
