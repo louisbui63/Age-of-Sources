@@ -220,7 +220,7 @@ int main() {
 
     if (previous_state != RUNNING) {
       if (previous_state == MAIN && RUNNING == IN_GAME) {
-        new_game(&w, renderer, window);
+        new_game(&w, renderer, window, camcam);
         in_game = 1;
       } else if (RUNNING == MAIN && previous_state == IN_GAMEMENU) {
         revert_game(&w);
