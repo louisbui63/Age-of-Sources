@@ -3,12 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../renderer/ui.h"
 #include "../data_structures/ecs.h"
 #include "../data_structures/hash_map.h"
+#include "../renderer/ui.h"
 
-typedef ClickEvent (*GridFunction)(World *, int, Entity*);
-
+typedef ClickEvent (*GridFunction)(World *, int, Entity *);
 
 void empty_click_event(World *w, SDL_Renderer *renderer, SDL_Window *window);
 

@@ -18,7 +18,8 @@ typedef struct {
   SDL_Rect *rect;
 } Background;
 
-typedef void (*ClickEvent)(World *w, SDL_Renderer *renderer, SDL_Window *window);
+typedef void (*ClickEvent)(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window);
 
 //! Entities with this type start an action when clicked on.
 //! The value of is_clicked depends if and how it is clicked on,

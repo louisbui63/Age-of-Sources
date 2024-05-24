@@ -28,5 +28,6 @@ void free_grid_functions() {
   hash_map_free(&GRID_FUNCTION_MAP /*, hash_map_entry_free_keys*/);
 }
 
-
-void empty_click_event(__attribute__((unused)) World *w, __attribute__((unused)) SDL_Renderer *renderer, __attribute__((unused)) SDL_Window *window) {}
+void empty_click_event(__attribute__((unused)) World *w,
+                       __attribute__((unused)) SDL_Renderer *renderer,
+                       __attribute__((unused)) SDL_Window *window) {}

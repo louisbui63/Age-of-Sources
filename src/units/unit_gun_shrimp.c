@@ -58,8 +58,11 @@
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/*This shrimp was born and raised for combat, through a rough training it became able to shoot bullets without the help of any tool*/
+/*This shrimp was born and raised for combat, through a rough training it became
+ * able to shoot bullets without the help of any tool*/
 
-ClickEvent gun_shrimp_grid(__attribute__((unused)) World *w, __attribute__((unused)) int slot, __attribute__((unused)) Entity *e) {
+ClickEvent gun_shrimp_grid(__attribute__((unused)) World *w,
+                           __attribute__((unused)) int slot,
+                           __attribute__((unused)) Entity *e) {
   return empty_click_event;
 }

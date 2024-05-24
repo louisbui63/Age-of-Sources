@@ -12,7 +12,13 @@
 // typedef enum {
 //   UNIT_TEST, // funny name :)
 //   WELL,
+//   FURNACE,
+//   CASERN,
+//   TOWER,
+//   KONBINI,
+//   HOUSE,
 //   BASE_SOLDIER,
+//   BEAVER,
 //   BASE_FISH,
 //   BASE_FLYING,
 //   UNIT_NUMBER
@@ -31,11 +37,12 @@
 
 double units_get_tile_speed(UnitTypes u, TileTypes t) {
   double unit_speeds[UNIT_NUMBER][TILE_NUMBER] = {
-  {1., 1., 1., 0., 0., 1.},
-  {1,1,1,0,0,1},
-  {1., 1., 1., 0., 0., 1.},
-  {0.75, 0.75, 0.75, 1.25, 0., 0.75},
-  {1., 1., 1., 1., 1., 1.},
+      {1., 1., 1., 0., 0., 1.}, {1, 1, 1, 0, 0, 1},
+      {0, 0, 0, 0, 0, 1},       {1, 1, 1, 0, 0, 1},
+      {1, 1, 1, 0, 0, 1},       {1, 1, 1, 0, 0, 1},
+      {1, 1, 1, 0, 0, 1},       {1., 1., 1., 0., 0., 1.},
+      {1., 1., 1., 0., 0., 1.}, {0.75, 0.75, 0.75, 1.25, 0., 0.75},
+      {1., 1., 1., 1., 1., 1.},
   };
   return unit_speeds[u][t];
 }
