@@ -60,5 +60,5 @@
 //! characters long.
 /*A fish that desperately tries to survive outside the water*/
 
-void fish_grid(__attribute__((unused)) World *w,
-               __attribute__((unused)) int slot) {}
+ClickEvent fish_grid(__attribute__((unused)) World *w,
+               __attribute__((unused)) int slot, __attribute__((unused)) Entity *e) {}

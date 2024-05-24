@@ -61,10 +61,11 @@
 //! characters long.
 /*A cute furball that can also build stuff*/
 
-void tanuki_grid(World *w, int slot) {
-  if (slot == 0) {
-    char *c = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
-    strcpy(c, "src/units/unit_well.c");
-    set_building_selection(w, c, WELL);
-  }
+ClickEvent tanuki_grid(World *w, int slot, Entity *e) {
+  // if (slot == 0) {
+  //   char *c = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
+  //   strcpy(c, "src/units/unit_well.c");
+  //   set_building_selection(w, c, WELL);
+  // }
+  return empty_click_event;
 }

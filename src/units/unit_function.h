@@ -3,39 +3,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../renderer/ui.h"
 #include "../data_structures/ecs.h"
 #include "../data_structures/hash_map.h"
 
 typedef void (*GridFunction)(World *, int);
 
-void tanuki_grid(World *w, int slot);
-void well_grid(World *w, int slot);
-void fish_grid(World *w, int slot);
+
+void empty_click_event(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+ClickEvent tanuki_grid(World *w, int slot, Entity *e);
+ClickEvent well_grid(World *w, int slot, Entity *e);
+ClickEvent fish_grid(World *w, int slot, Entity *e);
 
 extern HashMap GRID_FUNCTION_MAP;
 
-inline void set_grid_functions() {
-  GRID_FUNCTION_MAP = hash_map_create(hash_str, not_strcmp);
+void set_grid_functions();
 
-  char *k = malloc(sizeof(char) * (strlen("Tanuki") + 1));
-  strcpy(k, "Tanuki");
-  GridFunction *v = malloc(sizeof(GridFunction));
-  *v = tanuki_grid;
-  hash_map_insert(&GRID_FUNCTION_MAP, k, v);
-
-  k = malloc(sizeof(char) * (strlen("Well") + 1));
-  strcpy(k, "Well");
-  v = malloc(sizeof(GridFunction));
-  *v = tanuki_grid;
-  hash_map_insert(&GRID_FUNCTION_MAP, k, v);
-
-  k = malloc(sizeof(char) * (strlen("Fish") + 1));
-  strcpy(k, "Fish");
-  v = malloc(sizeof(GridFunction));
-  *v = fish_grid;
-  hash_map_insert(&GRID_FUNCTION_MAP, k, v);
-}
-
-inline void free_grid_functions() {
-  hash_map_free(&GRID_FUNCTION_MAP /*, hash_map_entry_free_keys*/);
-}
+void free_grid_functions();
