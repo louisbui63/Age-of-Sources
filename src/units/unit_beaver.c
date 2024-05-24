@@ -66,8 +66,9 @@
 Entity *BEAVER_ENTITY;
 
 #define beaver_slot_(slot, cl, wa, name, u)                                    \
-  void beaver_slot_##slot(World *w, SDL_Renderer *renderer,                    \
-                          SDL_Window *window) {                                \
+  void beaver_slot_                                                            \
+  ##slot(World *w, __attribute__((unused)) SDL_Renderer *renderer,             \
+         __attribute__((unused)) SDL_Window *window) {                         \
     Bitflag flag = COMPF_PLAYERMANAGER;                                        \
     VEC(EntityRef) ps = world_query(w, &flag);                                 \
     PlayerManager *pm0 =                                                       \
@@ -89,13 +90,13 @@ Entity *BEAVER_ENTITY;
     }                                                                          \
   }
 
-beaver_slot_(0, 300, 0, well, WELL);
-beaver_slot_(1, 200, 100, furnace, FURNACE);
-beaver_slot_(2, 600, 400, tanuki_casern, CASERN);
-beaver_slot_(3, 600, 400, tanuki_tower, TOWER); // not final values
-beaver_slot_(4, 600, 400, konbini_tanuki, KONBINI); // not final values
-beaver_slot_(5, 600, 400, tanuki_house, HOUSE); // not final values
-beaver_slot_(6, 600, 400, tanuki_fort, FORT); // not final values
+beaver_slot_(0, 300, 0, well, WELL)
+beaver_slot_(1, 200, 100, furnace, FURNACE)
+beaver_slot_(2, 600, 400, tanuki_casern, CASERN)
+beaver_slot_(3, 600, 400, tanuki_tower, TOWER)     // not final values
+beaver_slot_(4, 600, 400, konbini_tanuki, KONBINI) // not final values
+beaver_slot_(5, 600, 400, tanuki_house, HOUSE)     // not final values
+beaver_slot_(6, 600, 400, tanuki_fort, FORT)       // not final values
 
 // forum -> well -> furn -> cas -> tower -> kon -> house -> fort
 

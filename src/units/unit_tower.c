@@ -9,11 +9,11 @@
 
 //! The first text is the name of the unit. It must not be more than 255
 //! characters long.
-/*Forum*/
+/*Tower*/
 
 //! The second text is the hp of the unit, it must a be positive decimal number
 //! smaller or equal than 65535
-/*2000*/
+/*750*/
 
 //! The third text is the b_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -41,7 +41,7 @@
 
 //! The ninth text is the rg of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*180*/
 
 //! The tenth text is the sp of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -49,7 +49,7 @@
 
 //! The elventh text is the w of the unit's sprite, it must a be positive
 //! decimal number smaller or equal than 65535
-/*64*/
+/*32*/
 
 //! The twelfth text is the h of the unit's sprite, it must a be positive
 //! decimal number smaller or equal than 65535
@@ -57,66 +57,14 @@
 
 //! The thirteenth text is the unit's sprite path, it must be less than 255
 //! characters long.
-/*asset/sprites/forum.bmp*/
+/*asset/sprites/tanuki_tower.bmp*/
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/*The community center of the Tanuki civilization*/
+/**/
 
-Entity *FORUM_ENTITY;
-
-void forum_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-  Bitflag flag = COMPF_PLAYERMANAGER;
-  VEC(EntityRef) ps = world_query(w, &flag);
-  PlayerManager *pm0 =
-      entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
-  PlayerManager *pm1 =
-      entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
-  if (pm0->id == 1) {
-    PlayerManager *tmp = pm0;
-    pm0 = pm1;
-    pm1 = tmp;
-  }
-  // water&clay 5/s
-  if (pm0->water >= 5 * 10 && pm0->clay >= 5 * 10) {
-    pm0->water -= 5 * 10;
-    pm0->clay -= 5 * 10;
-    char *c = malloc(sizeof(char) * (strlen("src/units/unit_tanuki.c") + 1));
-    strcpy(c, "src/units/unit_tanuki.c");
-    Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
-    spawn_unit(w, BASE_SOLDIER, renderer, window, *p, 0);
-  }
-}
-
-void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-  Bitflag flag = COMPF_PLAYERMANAGER;
-  VEC(EntityRef) ps = world_query(w, &flag);
-  PlayerManager *pm0 =
-      entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
-  PlayerManager *pm1 =
-      entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
-  if (pm0->id == 1) {
-    PlayerManager *tmp = pm0;
-    pm0 = pm1;
-    pm1 = tmp;
-  }
-
-  if (pm0->water >= 5 * 10) {
-    pm0->water -= 5 * 10;
-    char *c = malloc(sizeof(char) * (strlen("src/units/unit_beaver.c") + 1));
-    strcpy(c, "src/units/unit_beaver.c");
-    Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
-    spawn_unit(w, BEAVER, renderer, window, *p, 0);
-  }
-}
-
-ClickEvent forum_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
-  FORUM_ENTITY = e;
-  switch (slot) {
-  case 0:
-    return forum_slot_0;
-  case 1:
-    return forum_slot_1;
-  }
+ClickEvent tower_grid(__attribute__((unused)) World *w,
+                     __attribute__((unused)) int slot,
+                     __attribute__((unused)) Entity *e) {
   return empty_click_event;
 }
