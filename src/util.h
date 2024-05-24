@@ -4,7 +4,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
-#include "data_structures/ecs.h"
 #include "errors.h"
 #include <stdint.h>
 #include <stdio.h>

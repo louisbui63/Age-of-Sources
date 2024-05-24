@@ -41,3 +41,5 @@ void draw_selection(World *w, SDL_Renderer *rdr, SDL_Window *window);
 void set_building_selection(World *w, char *building, UnitTypes but);
 
 void selector_free(void *s);
+
+void render_unit_grid(World *w, Entity *e);
