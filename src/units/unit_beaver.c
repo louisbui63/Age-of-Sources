@@ -13,7 +13,7 @@
 
 //! The second text is the hp of the unit, it must a be positive decimal number
 //! smaller or equal than 65535
-/*75*/
+/*50*/
 
 //! The third text is the b_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -45,23 +45,23 @@
 
 //! The tenth text is the sp of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*10*/
 
 //! The elventh text is the w of the unit's sprite, it must a be positive
 //! decimal number smaller or equal than 65535
-/*64*/
+/*32*/
 
 //! The twelfth text is the h of the unit's sprite, it must a be positive
 //! decimal number smaller or equal than 65535
-/*64*/
+/*32*/
 
 //! The thirteenth text is the unit's sprite path, it must be less than 255
 //! characters long.
-/*asset/sprites/forum.bmp*/
+/*asset/sprites/beaver.bmp*/
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/*The community center of the Tanuki civilization*/
+/*A hard worker with very little combat experience*/
 
 Entity *BEAVER_ENTITY;
 
@@ -77,7 +77,7 @@ void beaver_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window){
     pm0 = pm1;
     pm1 = tmp;
   }
-  // water&clay 5/s
+  
   if(pm0->water >= 5*10 && pm0->clay >= 5*10){
     pm0->water-=5*10;
     pm0->clay-=5*10;
