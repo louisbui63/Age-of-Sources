@@ -22,3 +22,5 @@ char is_ai_attacked(World *w);
 //! Cause the ai to act
 void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                     SDL_Window *window);
+
+void ai_defends_itself(World *w);

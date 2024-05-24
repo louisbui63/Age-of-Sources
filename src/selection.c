@@ -287,19 +287,19 @@ void draw_selection(World *w, SDL_Renderer *rdr, SDL_Window *window) {
         &(SDL_Rect){min(sl->start.x, sl->end.x), sl->start.y,
                     max(sl->start.x, sl->end.x) - min(sl->start.x, sl->end.x),
                     1});
-    SDL_RenderCopy(
-        rdr, t, 0,
-        &(SDL_Rect){min(sl->start.x, sl->end.x), sl->end.y,
-                    max(sl->start.x, sl->end.x) - min(sl->start.x, sl->end.x),
-                    1});
-    SDL_RenderCopy(
-        rdr, t, 0,
-        &(SDL_Rect){sl->start.x, min(sl->start.y, sl->end.y), 1,
-                    max(sl->start.y, sl->end.y) - min(sl->start.y, sl->end.y)});
-    SDL_RenderCopy(
-        rdr, t, 0,
-        &(SDL_Rect){sl->end.x, min(sl->start.y, sl->end.y), 1,
-                    max(sl->start.y, sl->end.y) - min(sl->start.y, sl->end.y)});
+    SDL_RenderCopy(rdr, t, 0,
+                   &(SDL_Rect){min(sl->start.x, sl->end.x), sl->end.y,
+                               max(sl->start.x, sl->end.x) -
+                                   min(sl->start.x, sl->end.x) + 1,
+                               1});
+    SDL_RenderCopy(rdr, t, 0,
+                   &(SDL_Rect){sl->start.x, min(sl->start.y, sl->end.y), 1,
+                               max(sl->start.y, sl->end.y) -
+                                   min(sl->start.y, sl->end.y) + 1});
+    SDL_RenderCopy(rdr, t, 0,
+                   &(SDL_Rect){sl->end.x, min(sl->start.y, sl->end.y), 1,
+                               max(sl->start.y, sl->end.y) -
+                                   min(sl->start.y, sl->end.y) + 1});
   }
 }
 
