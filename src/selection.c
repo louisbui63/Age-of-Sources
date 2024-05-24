@@ -89,10 +89,12 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             continue;
           Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
           Position *p = entity_get_component(w, e, COMP_POSITION);
-          if (SDL_PointInRect(&(SDL_Point){p->x, p->y}, &sel_rect) &&
-              SDL_PointInRect(
-                  &(SDL_Point){p->x + sp->rect->w, p->y + sp->rect->h},
-                  &sel_rect)) {
+          if (SDL_PointInRect(&(SDL_Point){p->x - (int)(sp->rect->w / 2),
+                                           p->y - (int)(sp->rect->h / 2)},
+                              &sel_rect) &&
+              SDL_PointInRect(&(SDL_Point){p->x + (int)(sp->rect->w / 2),
+                                           p->y + (int)(sp->rect->h / 2)},
+                              &sel_rect)) {
             vec_push(s->selected, es[i]);
           }
         }
@@ -180,9 +182,11 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
           continue;
         Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
         Position *p = entity_get_component(w, e, COMP_POSITION);
-        if (SDL_PointInRect(&(SDL_Point){mps.x, mps.y},
-                            &(SDL_Rect){sp->rect->x + p->x, sp->rect->y + p->y,
-                                        sp->rect->w, sp->rect->h}) &&
+        if (SDL_PointInRect(
+                &(SDL_Point){mps.x, mps.y},
+                &(SDL_Rect){sp->rect->x + p->x - (int)(sp->rect->w / 2),
+                            sp->rect->y + p->y - (int)(sp->rect->h / 2),
+                            sp->rect->w, sp->rect->h}) &&
             !((BuildingGhost *)entity_get_component(w, e, COMP_BUILDINGGHOST))
                  ->construction_done) {
           action_btarget = es[i];
@@ -200,10 +204,11 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             continue;
           Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
           Position *p = entity_get_component(w, e, COMP_POSITION);
-          if (SDL_PointInRect(&(SDL_Point){mps.x, mps.y},
-                              &(SDL_Rect){sp->rect->x + p->x,
-                                          sp->rect->y + p->y, sp->rect->w,
-                                          sp->rect->h})) {
+          if (SDL_PointInRect(
+                  &(SDL_Point){mps.x, mps.y},
+                  &(SDL_Rect){sp->rect->x + p->x - (int)(sp->rect->w / 2),
+                              sp->rect->y + p->y - (int)(sp->rect->h / 2),
+                              sp->rect->w, sp->rect->h})) {
             action_atarget = es[i];
             break;
           }

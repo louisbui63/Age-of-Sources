@@ -76,24 +76,24 @@ vec_free(obs);
 // but doesn't use a `SteerManager`
 mask = COMPF_POSITION | COMPF_STEERMANAGER | COMPF_ANIMATOR;
 er = world_query(w, &mask);
-_Pragma("omp parallel") {
-  _Pragma("omp for") {
-    for (uint i = 0; i < vec_len(er); i++) {
-      EntityRef ei = er[i];
-      Entity *e = get_entity(w, ei);
-      Animator *an = entity_get_component(w, e, COMP_ANIMATOR);
-      SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
-      if (stm->velocity.x == 0 && stm->velocity.y == 0) {
-        Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
-        if (ac && ac->act != Lazy) {
-          if (actionnate(w, ac, e))
-            advance_anim_state(an, Attacking, -1);
-        } else
-          advance_anim_state(an, Idle, -1);
-      } else
-        advance_anim_state(an, Moving, stm->velocity.x < 0);
-    }
-  }
-  _Pragma("omp barrier")
+// _Pragma("omp parallel") {
+//   _Pragma("omp for") {
+for (uint i = 0; i < vec_len(er); i++) {
+  EntityRef ei = er[i];
+  Entity *e = get_entity(w, ei);
+  Animator *an = entity_get_component(w, e, COMP_ANIMATOR);
+  SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
+  if (stm->velocity.x == 0 && stm->velocity.y == 0) {
+    Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
+    if (ac && ac->act != Lazy) {
+      if (actionnate(w, ac, e))
+        advance_anim_state(an, Attacking, -1);
+    } else
+      advance_anim_state(an, Idle, -1);
+  } else
+    advance_anim_state(an, Moving, stm->velocity.x < 0);
+  // }
+  // }
+  // _Pragma("omp barrier")
 }
 }

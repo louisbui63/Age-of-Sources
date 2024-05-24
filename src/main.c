@@ -4,8 +4,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "./renderer/button.h"
+#include "ai/ennemy_ai.h"
 #include "ai/movement.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
@@ -82,6 +84,10 @@ int main() {
   })
   SDL_FreeSurface(test_bmp);
 
+  // yes, one could probably exploit that, but at this point I think they
+  // deserve it
+  srand(time(NULL));
+
   set_grid_functions();
 
   World w = world_new();
@@ -108,6 +114,8 @@ int main() {
   // render_game_state(&w);
 
   spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100}, 0);
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){120, 100}, 0);
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 120}, 0);
   spawn_unit(&w, BASE_FISH, renderer, window, (Position){200, 200}, 1);
 
   {
@@ -124,7 +132,7 @@ int main() {
   for (uint i = 0; i < 2; i++) {
     Entity *e = spawn_entity(&w);
     PlayerManager *pm = malloc(sizeof(PlayerManager));
-    *pm = (PlayerManager){i, 0, 0, 0, 0};
+    *pm = (PlayerManager){i, 0, 0, 0, 0, 1.0, 1.0};
     ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
   }
 
@@ -140,6 +148,8 @@ int main() {
   // test_background); ecs_add_component(&w, test_e,
   // COMP_CLICKABLE, test_clickable);
 
+  AiState ais = Eco;
+
   // dt is the frametime from last frame
   Uint32 dt = TARGET_FRAMETIME;
   SDL_Event event;
@@ -153,7 +163,8 @@ int main() {
   ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
   Background *back = spawn_backbackground(renderer, window);
 
-  play_audio("asset/sfx/click.wav", 0);
+  int slow_tick = 0;
+
   for (; RUNNING != STOP;) {
     Uint32 start_time = SDL_GetTicks();
 
@@ -211,6 +222,21 @@ int main() {
     draw_selection(&w, renderer, window);
 
     SDL_RenderPresent(renderer);
+
+    if (RUNNING == IN_GAME) {
+      slow_tick = (slow_tick + 1) % 60;
+      // load balancing for the dummies
+      // idealy this would be done with some kind of thread-safe queue
+      if (slow_tick == 0) {
+        update_ressources(&w);
+      } else if (slow_tick == 15) {
+        take_ai_action(&w, &ais, renderer, window);
+      } else if (slow_tick == 30) {
+        reconsider_ai_state(&w, &ais);
+      } else if (slow_tick == 45) {
+        ai_defends_itself(&w);
+      }
+    }
 
     // delay before next frame
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);

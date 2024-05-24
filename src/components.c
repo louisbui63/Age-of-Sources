@@ -52,5 +52,7 @@ int init_world(World *w) {
   register_component_callback(w, BuildingGhost, building_ghost_component_free);
   register_component(w, Ownership);
   register_component(w, Actionnable);
+  register_component(w, WaterSource);
+  register_component(w, ClaySource);
   return SUCCESS;
 }

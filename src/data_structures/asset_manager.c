@@ -7,7 +7,6 @@
 
 #include "../errors.h"
 #include "../parser.h"
-#include "../renderer/camera.h"
 #include "../util.h"
 #include "hash_map.h"
 
@@ -256,6 +255,16 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
 
   case BASE_FISH:
     u = parse("src/units/unit_fish.c", renderer, window);
+    u->t = t;
+    break;
+
+  case FORUM:
+    u = parse("src/units/unit_forum.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UBEAVER:
+    u = parse("src/units/unit_tanuki.c", renderer, window);
     u->t = t;
     break;
 
