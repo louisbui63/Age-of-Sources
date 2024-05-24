@@ -91,6 +91,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
         vec_free(builders);
         return;
       }
+      flag = COMPF_PLAYERMANAGER;
       VEC(EntityRef) ps = world_query(w, &flag);
       PlayerManager *pm0 =
           entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
@@ -281,6 +282,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
         vec_free(targets);
         return;
       }
+      flag = COMPF_PLAYERMANAGER;
       VEC(EntityRef) ps = world_query(w, &flag);
       PlayerManager *pm0 =
           entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
