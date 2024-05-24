@@ -4,6 +4,7 @@
 #include <SDL2/SDL_video.h>
 
 #include "errors.h"
+#include "renderer/ui.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
@@ -107,3 +108,11 @@ typedef enum {
 typedef struct {
   SDL_Window *w;
 } Window;
+
+typedef struct {
+  SDL_Renderer *r;
+} Renderer;
+
+SDL_Window *get_renderer(World *w);
+
+SDL_Renderer *get_window(World *w);
