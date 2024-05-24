@@ -1,6 +1,6 @@
 CC = clang
 
-CFLAGS = -std=gnu2x -Wall -Wextra -pedantic -O2 -fopenmp=libomp  -Wno-gnu-empty-struct#-Isrc
+CFLAGS = -std=gnu2x -Wall -Wextra -pedantic -O2 -fopenmp=libomp  -Wno-gnu-empty-struct
 
 LIBS = $(shell pkg-config --cflags --libs sdl2 SDL2_mixer SDL2_ttf) -lm
 

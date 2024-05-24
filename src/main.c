@@ -13,6 +13,7 @@
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
+#include "game_manager.h"
 #include "input.h"
 #include "players.h"
 #include "renderer/camera.h"
@@ -124,11 +125,6 @@ int main() {
 
   // render_game_state(&w);
 
-  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100}, 0);
-  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){120, 100}, 0);
-  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 120}, 0);
-  spawn_unit(&w, BASE_FISH, renderer, window, (Position){200, 200}, 1);
-
   AiState ais = Eco;
 
   // dt is the frametime from last frame
@@ -138,17 +134,14 @@ int main() {
   // down keys and mouse buttons
   Inputs *input_down = inputs_new();
 
-  // generate the map from a bmp
-  Entity *map = spawn_entity(&w);
-  MapComponent *mc = malloc(sizeof(MapComponent));
-  *mc = (MapComponent){load_map_from_bmp("asset/map.bmp")};
-  ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
-
   spawn_main_menu(&w, renderer, window);
   Background *back = spawn_backbackground(renderer, window);
 
   // start the music
   Mix_PlayMusic(get_audio("asset/sfx/music.ogg", 1), -1);
+
+  Running previous_state = RUNNING;
+  char in_game = 0;
 
   int slow_tick = 0;
   for (; RUNNING != STOP;) {
@@ -203,7 +196,8 @@ int main() {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, back->sprite->texture, back->sprite->rect,
                    back->rect);
-    render(&w, renderer, camcam, window);
+    if (in_game)
+      render(&w, renderer, camcam, window);
     render_ui(&w, renderer, window);
     draw_selection(&w, renderer, window);
 
@@ -222,6 +216,18 @@ int main() {
       } else if (slow_tick == 45) {
         ai_defends_itself(&w);
       }
+    }
+
+    if (previous_state != RUNNING) {
+      if (previous_state == MAIN && RUNNING == IN_GAME) {
+        new_game(&w, renderer, window);
+        in_game = 1;
+      } else if (RUNNING == MAIN && previous_state == IN_GAMEMENU) {
+        revert_game(&w);
+        in_game = 0;
+      }
+
+      previous_state = RUNNING;
     }
 
     // delay before next frame
