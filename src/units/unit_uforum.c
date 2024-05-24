@@ -57,11 +57,11 @@
 
 //! The thirteenth text is the unit's sprite path, it must be less than 255
 //! characters long.
-/*asset/sprites/forum.bmp*/
+/*asset/sprites/unectas_forum.bmp*/
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/**/
+/*the headquarters for the mischievous operations of U.N.E.C.T.A.S.*/
 
 ClickEvent uforum_grid(__attribute__((unused)) World *w,
                        __attribute__((unused)) int slot,

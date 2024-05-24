@@ -263,6 +263,11 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
     u->t = t;
     break;
 
+  case UFORUM:
+    u = parse("src/units/unit_uforum.c", renderer, window);
+    u->t = t;
+    break;
+
   case UBEAVER:
     u = parse("src/units/unit_tanuki.c", renderer, window);
     u->t = t;
