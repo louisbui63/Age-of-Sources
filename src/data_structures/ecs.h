@@ -6,8 +6,9 @@
 #include "hash_map.h"
 #include <stdint.h>
 
-//! Note that this reference is only valid until the number of entities
-//! decreases
+//! A representation of an `Entity`. this note was left in its implementation :
+//! "Note that this reference is only valid until the number of entities
+//! decreases", but I'm pretty sure it's not true
 typedef uint64_t EntityRef;
 
 //! Used to store the component, its type and its id
@@ -61,10 +62,10 @@ typedef struct {
   uint last_component;
 
   //! Stores the available spaces in `components` that entity deletion created
-  VEC(uint) component_sparsity;
+  VEC(uint64_t) component_sparsity;
 
   //! Stores the available spaces in `entities` that entity deletion created
-  VEC(uint) entity_sparsity;
+  VEC(uint64_t) entity_sparsity;
 
 } World;
 
@@ -109,6 +110,9 @@ void ecs_add_component(World *w, Entity *e, int cid, void *c);
 
 //! Despawns an `Entity`
 void despawn_entity(World *w, Entity *e);
+
+//! Despawns every `Entity` with this `Bitflag`
+void despawn_from_component(World *w, Bitflag b);
 
 //! Returns an `Entity` pointer corresponding to the passed reference
 Entity *get_entity(World *w, EntityRef ref);

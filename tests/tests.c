@@ -4,9 +4,14 @@
 #include "hash_map.h"
 #include "input.h"
 #include "linked_list.h"
+#include "parser.h"
 #include "pathfinding.h"
 #include "pqueue.h"
 #include "vec.h"
+#include "vec2.h"
+
+int RUNNING = 1;
+char IS_FULLSCREEN = 0;
 
 #define TEST(fn, name)                                                         \
   {                                                                            \
@@ -23,11 +28,13 @@ int main() {
   // they don't fail, and there is nothing happening after them except other
   // tests.
   TEST(test_vec, "vec");
+  TEST(test_vec2, "vec2");
   TEST(test_linked_list, "linked_list");
   TEST(test_hash_map, "hash_map");
   TEST(test_input, "input");
   TEST(test_pqueue, "pqueue");
   TEST(test_pathfinding, "pathfinding");
   TEST(test_ecs, "ecs");
+  TEST(test_parser, "parser");
   return 0;
 }

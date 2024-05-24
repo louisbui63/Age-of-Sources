@@ -29,8 +29,9 @@ void map_component_free(void *a) {
   free(a);
 }
 
-char *get_tile_file_name(int8_t id) {
+char *get_tile_file_name(TileTypes tt) {
   // return should be freed !!
+  int8_t id = tiletype2pixel(tt);
   char *out = malloc(sizeof(int) * strlen("asset/sprites/tileXX.bmp0"));
   uint8_t u = *(uint8_t *)&id;
   sprintf(out, "asset/sprites/tile%.2X.bmp", u);
@@ -49,8 +50,43 @@ Map load_map_from_bmp(char *path) {
 
   for (int i = 0; i < surf->w; i++)
     for (int j = 0; j < surf->h; j++)
-      out[i][j] = ((int8_t *)surf->pixels)[j * surf->pitch + i * bs];
+      out[i][j] =
+          pixel2tiletype(((int8_t *)surf->pixels)[j * surf->pitch + i * bs]);
 
   SDL_FreeSurface(surf);
   return out;
+}
+
+TileTypes pixel2tiletype(int8_t id) {
+  uint8_t u = *(uint8_t *)&id;
+  if (u == 0x00)
+    return TILE_MOUNTAIN;
+  if (u == 0x3D)
+    return TILE_GIGEMENT;
+  if (u == 0xC3)
+    return TILE_WATER;
+  if (u == 0xD8)
+    return TILE_SWAMP;
+  if (u == 0xFF)
+    return TILE_PLAIN;
+  return -1;
+}
+
+int8_t tiletype2pixel_wrapped(TileTypes id) {
+  if (id == TILE_MOUNTAIN)
+    return 0x00;
+  if (id == TILE_GIGEMENT)
+    return 0x3D;
+  if (id == TILE_WATER)
+    return 0xC3;
+  if (id == TILE_SWAMP)
+    return 0xD8;
+  if (id == TILE_PLAIN)
+    return 0xFF;
+  return -1;
+}
+
+int8_t tiletype2pixel(TileTypes id) {
+  int8_t i = tiletype2pixel_wrapped(id);
+  return *(int8_t *)&i;
 }

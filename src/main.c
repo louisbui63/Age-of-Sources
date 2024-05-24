@@ -1,24 +1,40 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
+#include "./renderer/button.h"
+#include "ai/ennemy_ai.h"
+#include "ai/movement.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
 #include "input.h"
+#include "players.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
+#include "selection.h"
+#include "units/unit_function.h"
 #include "util.h"
+
+#include "audio/audio.h"
+
+Running RUNNING = MAIN;
+char IS_FULLSCREEN = false;
+HashMap GRID_FUNCTION_MAP;
 
 int main() {
   init_asset_manager();
 
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
   atexit(SDL_Quit);
-
+  HANDLE_ERROR(TTF_Init() < 0, SDL_GetError(), abort());
+  atexit(TTF_Quit);
   SDL_Window *window = SDL_CreateWindow(
       "test", 100, 100, WIN_W, WIN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
@@ -68,38 +84,75 @@ int main() {
   })
   SDL_FreeSurface(test_bmp);
 
+  // yes, one could probably exploit that, but at this point I think they
+  // deserve it
+  srand(time(NULL));
+
+  set_grid_functions();
+
   World w = world_new();
-  Camera cam = {.x = 32, .y = 32, .zoom = 1};
+  Camera *camcam = malloc(sizeof(Camera));
+  *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
 
   init_world(&w);
 
-  // Entity *test_e = spawn_entity(&w);
+  set_volume(64);
+
+  Entity *rende = spawn_entity(&w);
+  Renderer rendd = {.r = renderer};
+  ecs_add_component(&w, rende, COMP_RENDERER, &rendd);
+
+  Entity *wine = spawn_entity(&w);
+  Window wind = {.w = window};
+  KeyEvent *wink = malloc(sizeof(KeyEvent));
+  *wink = key_event_escape;
+  ecs_add_component(&w, wine, COMP_WINDOW, &wind);
+  ecs_add_component(&w, wine, COMP_KEY_EVENT, wink);
+
+  Entity *cam = spawn_entity(&w);
+  KeyEvent *cammove = malloc(sizeof(KeyEvent));
+  *cammove = map_movement;
+  ecs_add_component(&w, cam, COMP_CAMERA, camcam);
+  ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
+
+  // render_game_state(&w);
+
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100}, 0);
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){120, 100}, 0);
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 120}, 0);
+  spawn_unit(&w, BASE_FISH, renderer, window, (Position){200, 200}, 1);
+
+  {
+    Entity *e = spawn_entity(&w);
+    Selector *s = malloc(sizeof(Selector));
+    *s =
+        (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0, UNIT_TEST};
+    ecs_add_component(&w, e, COMP_SELECTOR, s);
+    KeyEvent *select_events = malloc(sizeof(KeyEvent));
+    *select_events = selection_event;
+    ecs_add_component(&w, e, COMP_KEY_EVENT, select_events);
+  }
+
+  for (uint i = 0; i < 2; i++) {
+    Entity *e = spawn_entity(&w);
+    PlayerManager *pm = malloc(sizeof(PlayerManager));
+    *pm = (PlayerManager){i, 0, 0, 0, 0, 1.0, 1.0};
+    ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
+  }
 
   Position *test_pos = malloc(sizeof(Position));
   *test_pos = (Position){.x = 155, .y = 250};
   // ecs_add_component(&w, test_e, COMP_POSITION, test_pos);
 
-  Sprite *test_sprite = malloc(sizeof(Sprite));
-  SDL_Rect *size = malloc(sizeof(SDL_Rect));
-  SDL_QueryTexture(test_tex, 0, 0, &size->w, &size->h);
-  size->x = 0;
-  size->y = 0;
-  // Background *test_background = malloc(sizeof(Background));
-  Clickable *test_clickable = malloc(sizeof(Clickable));
-  // Minimap *test_minimap = malloc(sizeof(Minimap));
-  KeyEvent *test_key_event = malloc(sizeof(KeyEvent));
-
-  *test_sprite = (Sprite){.texture = test_tex, .rect = size};
-  // *test_background = (Background){.sprite = test_sprite, .rect = size};
-  *test_clickable =
-      (Clickable){.sprite = test_sprite, .rect = size, .text = ""};
-  *test_key_event = clickable_event;
+  spawn_main_menu(&w, renderer, window);
+  // spawn_main_quit(&w, renderer, window);
 
   // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
   // ecs_add_component(&w, test_e, COMP_BACKGROUND,
   // test_background); ecs_add_component(&w, test_e,
   // COMP_CLICKABLE, test_clickable);
-  spawn_clickable(&w, test_clickable, test_key_event);
+
+  AiState ais = Eco;
 
   // dt is the frametime from last frame
   Uint32 dt = TARGET_FRAMETIME;
@@ -110,11 +163,15 @@ int main() {
 
   Entity *map = spawn_entity(&w);
   MapComponent *mc = malloc(sizeof(MapComponent));
-  *mc = (MapComponent){load_map_from_bmp("asset/test_map.bmp")};
+  *mc = (MapComponent){load_map_from_bmp("asset/map.bmp")};
   ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
+  Background *back = spawn_backbackground(renderer, window);
 
-  int running = 1;
-  for (; running;) {
+  int slow_tick = 0;
+
+  Mix_PlayMusic(get_audio("asset/sfx/music.ogg", 1), -1);
+
+  for (; RUNNING != STOP;) {
     Uint32 start_time = SDL_GetTicks();
 
     Inputs *input_pressed = inputs_new();
@@ -146,7 +203,7 @@ int main() {
                                       true);
         break;
       case SDL_QUIT:
-        running = 0;
+        RUNNING = 0;
         break;
       }
     }
@@ -155,27 +212,53 @@ int main() {
     inputs_run_callbacks(&w, renderer, input_down, KEY_DOWN);
     inputs_run_callbacks(&w, renderer, input_released, KEY_RELEASED);
 
+    if (RUNNING == IN_GAME)
+      move_units(&w);
+
     // free instant inputs
     inputs_free(input_pressed);
     inputs_free(input_released);
 
     // render
     SDL_RenderClear(renderer);
-    render(&w, renderer, &cam, window);
-    render_ui(&w, renderer);
+    SDL_RenderCopy(renderer, back->sprite->texture, back->sprite->rect,
+                   back->rect);
+    render(&w, renderer, camcam, window);
+    render_ui(&w, renderer, window);
+    draw_selection(&w, renderer, window);
 
     SDL_RenderPresent(renderer);
 
+    if (RUNNING == IN_GAME) {
+      slow_tick = (slow_tick + 1) % 60;
+      // load balancing for the dummies
+      // idealy this would be done with some kind of thread-safe queue
+      if (slow_tick == 0) {
+        update_ressources(&w);
+      } else if (slow_tick == 15) {
+        take_ai_action(&w, &ais, renderer, window);
+      } else if (slow_tick == 30) {
+        reconsider_ai_state(&w, &ais);
+      } else if (slow_tick == 45) {
+        ai_defends_itself(&w);
+      }
+    }
+
     // delay before next frame
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);
-    if (running && dt != TARGET_FRAMETIME)
+    if (RUNNING != STOP && dt != TARGET_FRAMETIME)
       SDL_Delay(TARGET_FRAMETIME - dt);
+    else if (RUNNING != STOP)
+      fprintf(stderr, "this is lag.\n");
   }
 
   inputs_free(input_down);
   world_free(&w);
-  free(size);
-  free(test_sprite);
+  background_component_free(back);
+
+  free_asset_store();
+  free_grid_functions();
+
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
 }

@@ -10,7 +10,7 @@ void *vec_new_inner(int size) {
   ((uint *)vec)[1] = VEC_INIT_CAPACITY;
   ((uint *)vec)[2] = 0;
 
-  return (uint8_t *)vec + 3 * sizeof(int);
+  return (uint8_t *)vec + 3 * sizeof(uint);
 }
 
 inline void vec_free(void *vec) { free((uint8_t *)vec - 3 * sizeof(uint)); }
@@ -38,6 +38,8 @@ void *vec_push_inner(void *vec, void *obj) {
 inline void vec_pop(void *vec) { ((uint *)vec)[-1]--; }
 inline uint vec_len(void *vec) { return ((uint *)vec)[-1]; }
 static inline uint vec_data_size(void *vec) { return ((uint *)vec)[-3]; }
+
+inline void vec_clear(VEC(void) vec) { ((uint *)vec)[-1] = 0; }
 
 char u64_gt(void *a, void *b) { return *(uint64_t *)a > *(uint64_t *)b; }
 
