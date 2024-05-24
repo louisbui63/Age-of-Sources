@@ -31,12 +31,14 @@ HashMap GRID_FUNCTION_MAP;
 int main() {
   init_asset_manager();
 
+  // Init SDL stuff
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
   atexit(SDL_Quit);
   HANDLE_ERROR(TTF_Init() < 0, SDL_GetError(), abort());
   atexit(TTF_Quit);
-  SDL_Window *window = SDL_CreateWindow(
-      "test", 100, 100, WIN_W, WIN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+  SDL_Window *window =
+      SDL_CreateWindow("Age of Sources", 100, 100, WIN_W, WIN_H,
+                       SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
   HANDLE_ERROR(!window, SDL_GetError(), abort());
   SDL_Renderer *renderer = SDL_CreateRenderer(
@@ -69,60 +71,44 @@ int main() {
 
   atexit(Mix_Quit);
 
-  SDL_Surface *test_bmp = SDL_LoadBMP("./asset/sprites/test.bmp");
-  HANDLE_ERROR(!test_bmp, SDL_GetError(), {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    abort();
-  })
-
-  SDL_Texture *test_tex = SDL_CreateTextureFromSurface(renderer, test_bmp);
-  HANDLE_ERROR(!test_tex, SDL_GetError(), {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    abort();
-  })
-  SDL_FreeSurface(test_bmp);
-
   // yes, one could probably exploit that, but at this point I think they
   // deserve it
   srand(time(NULL));
 
+  set_volume(64);
+
   set_grid_functions();
 
   World w = world_new();
-  Camera *camcam = malloc(sizeof(Camera));
-  *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
-
   init_world(&w);
 
-  set_volume(64);
-
-  Entity *rende = spawn_entity(&w);
-  Renderer rendd = {.r = renderer};
-  ecs_add_component(&w, rende, COMP_RENDERER, &rendd);
-
-  Entity *wine = spawn_entity(&w);
-  Window wind = {.w = window};
-  KeyEvent *wink = malloc(sizeof(KeyEvent));
-  *wink = key_event_escape;
-  ecs_add_component(&w, wine, COMP_WINDOW, &wind);
-  ecs_add_component(&w, wine, COMP_KEY_EVENT, wink);
-
-  Entity *cam = spawn_entity(&w);
-  KeyEvent *cammove = malloc(sizeof(KeyEvent));
-  *cammove = map_movement;
-  ecs_add_component(&w, cam, COMP_CAMERA, camcam);
-  ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
-
-  // render_game_state(&w);
-
-  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100}, 0);
-  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){120, 100}, 0);
-  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 120}, 0);
-  spawn_unit(&w, BASE_FISH, renderer, window, (Position){200, 200}, 1);
-
+  // create the camera
+  Camera *camcam = malloc(sizeof(Camera));
+  *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
   {
+    Entity *cam = spawn_entity(&w);
+    KeyEvent *cammove = malloc(sizeof(KeyEvent));
+    *cammove = map_movement;
+    ecs_add_component(&w, cam, COMP_CAMERA, camcam);
+    ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
+  }
+
+  { // make the renderer a part of the ecs
+    Entity *rende = spawn_entity(&w);
+    Renderer rendd = {.r = renderer};
+    ecs_add_component(&w, rende, COMP_RENDERER, &rendd);
+  }
+
+  { // make the window a part of the ecs
+    Entity *wine = spawn_entity(&w);
+    Window wind = {.w = window};
+    KeyEvent *wink = malloc(sizeof(KeyEvent));
+    *wink = key_event_escape;
+    ecs_add_component(&w, wine, COMP_WINDOW, &wind);
+    ecs_add_component(&w, wine, COMP_KEY_EVENT, wink);
+  }
+
+  { // create the selector
     Entity *e = spawn_entity(&w);
     Selector *s = malloc(sizeof(Selector));
     *s =
@@ -133,6 +119,7 @@ int main() {
     ecs_add_component(&w, e, COMP_KEY_EVENT, select_events);
   }
 
+  // create the players
   for (uint i = 0; i < 2; i++) {
     Entity *e = spawn_entity(&w);
     PlayerManager *pm = malloc(sizeof(PlayerManager));
@@ -140,17 +127,12 @@ int main() {
     ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
   }
 
-  Position *test_pos = malloc(sizeof(Position));
-  *test_pos = (Position){.x = 155, .y = 250};
-  // ecs_add_component(&w, test_e, COMP_POSITION, test_pos);
+  // render_game_state(&w);
 
-  spawn_main_menu(&w, renderer, window);
-  // spawn_main_quit(&w, renderer, window);
-
-  // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
-  // ecs_add_component(&w, test_e, COMP_BACKGROUND,
-  // test_background); ecs_add_component(&w, test_e,
-  // COMP_CLICKABLE, test_clickable);
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100}, 0);
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){120, 100}, 0);
+  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 120}, 0);
+  spawn_unit(&w, BASE_FISH, renderer, window, (Position){200, 200}, 1);
 
   AiState ais = Eco;
 
@@ -161,16 +143,20 @@ int main() {
   // down keys and mouse buttons
   Inputs *input_down = inputs_new();
 
-  Entity *map = spawn_entity(&w);
-  MapComponent *mc = malloc(sizeof(MapComponent));
-  *mc = (MapComponent){load_map_from_bmp("asset/map.bmp")};
-  ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
+  { // generate the map from a bmp
+    Entity *map = spawn_entity(&w);
+    MapComponent *mc = malloc(sizeof(MapComponent));
+    *mc = (MapComponent){load_map_from_bmp("asset/map.bmp")};
+    ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
+  }
+
+  spawn_main_menu(&w, renderer, window);
   Background *back = spawn_backbackground(renderer, window);
 
-  int slow_tick = 0;
-
+  // start the music
   Mix_PlayMusic(get_audio("asset/sfx/music.ogg", 1), -1);
 
+  int slow_tick = 0;
   for (; RUNNING != STOP;) {
     Uint32 start_time = SDL_GetTicks();
 
