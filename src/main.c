@@ -85,39 +85,34 @@ int main() {
   // create the camera
   Camera *camcam = malloc(sizeof(Camera));
   *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
-  {
-    Entity *cam = spawn_entity(&w);
-    KeyEvent *cammove = malloc(sizeof(KeyEvent));
-    *cammove = map_movement;
-    ecs_add_component(&w, cam, COMP_CAMERA, camcam);
-    ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
-  }
 
-  { // make the renderer a part of the ecs
-    Entity *rende = spawn_entity(&w);
-    Renderer rendd = {.r = renderer};
-    ecs_add_component(&w, rende, COMP_RENDERER, &rendd);
-  }
+  Entity *cam = spawn_entity(&w);
+  KeyEvent *cammove = malloc(sizeof(KeyEvent));
+  *cammove = map_movement;
+  ecs_add_component(&w, cam, COMP_CAMERA, camcam);
+  ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 
-  { // make the window a part of the ecs
-    Entity *wine = spawn_entity(&w);
-    Window wind = {.w = window};
-    KeyEvent *wink = malloc(sizeof(KeyEvent));
-    *wink = key_event_escape;
-    ecs_add_component(&w, wine, COMP_WINDOW, &wind);
-    ecs_add_component(&w, wine, COMP_KEY_EVENT, wink);
-  }
+  // make the renderer a part of the ecs
+  Entity *rende = spawn_entity(&w);
+  Renderer rendd = {.r = renderer};
+  ecs_add_component(&w, rende, COMP_RENDERER, &rendd);
 
-  { // create the selector
-    Entity *e = spawn_entity(&w);
-    Selector *s = malloc(sizeof(Selector));
-    *s =
-        (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0, UNIT_TEST};
-    ecs_add_component(&w, e, COMP_SELECTOR, s);
-    KeyEvent *select_events = malloc(sizeof(KeyEvent));
-    *select_events = selection_event;
-    ecs_add_component(&w, e, COMP_KEY_EVENT, select_events);
-  }
+  // make the window a part of the ecs
+  Entity *wine = spawn_entity(&w);
+  Window wind = {.w = window};
+  KeyEvent *wink = malloc(sizeof(KeyEvent));
+  *wink = key_event_escape;
+  ecs_add_component(&w, wine, COMP_WINDOW, &wind);
+  ecs_add_component(&w, wine, COMP_KEY_EVENT, wink);
+
+  // create the selector
+  Entity *e = spawn_entity(&w);
+  Selector *s = malloc(sizeof(Selector));
+  *s = (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0, UNIT_TEST};
+  ecs_add_component(&w, e, COMP_SELECTOR, s);
+  KeyEvent *select_events = malloc(sizeof(KeyEvent));
+  *select_events = selection_event;
+  ecs_add_component(&w, e, COMP_KEY_EVENT, select_events);
 
   // create the players
   for (uint i = 0; i < 2; i++) {
@@ -143,12 +138,11 @@ int main() {
   // down keys and mouse buttons
   Inputs *input_down = inputs_new();
 
-  { // generate the map from a bmp
-    Entity *map = spawn_entity(&w);
-    MapComponent *mc = malloc(sizeof(MapComponent));
-    *mc = (MapComponent){load_map_from_bmp("asset/map.bmp")};
-    ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
-  }
+  // generate the map from a bmp
+  Entity *map = spawn_entity(&w);
+  MapComponent *mc = malloc(sizeof(MapComponent));
+  *mc = (MapComponent){load_map_from_bmp("asset/map.bmp")};
+  ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
 
   spawn_main_menu(&w, renderer, window);
   Background *back = spawn_backbackground(renderer, window);
