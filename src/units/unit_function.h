@@ -11,31 +11,11 @@ typedef void (*GridFunction)(World *, int);
 void tanuki_grid(World *w, int slot);
 void well_grid(World *w, int slot);
 void fish_grid(World *w, int slot);
+void ubeaver_grid(World *w, int slot);
 
 extern HashMap GRID_FUNCTION_MAP;
 
-inline void set_grid_functions() {
-  GRID_FUNCTION_MAP = hash_map_create(hash_str, not_strcmp);
-
-  char *k = malloc(sizeof(char) * (strlen("Tanuki") + 1));
-  strcpy(k, "Tanuki");
-  GridFunction *v = malloc(sizeof(GridFunction));
-  *v = tanuki_grid;
-  hash_map_insert(&GRID_FUNCTION_MAP, k, v);
-
-  k = malloc(sizeof(char) * (strlen("Well") + 1));
-  strcpy(k, "Well");
-  v = malloc(sizeof(GridFunction));
-  *v = tanuki_grid;
-  hash_map_insert(&GRID_FUNCTION_MAP, k, v);
-
-  k = malloc(sizeof(char) * (strlen("Fish") + 1));
-  strcpy(k, "Fish");
-  v = malloc(sizeof(GridFunction));
-  *v = fish_grid;
-  hash_map_insert(&GRID_FUNCTION_MAP, k, v);
-}
-
+void set_grid_functions();
 inline void free_grid_functions() {
   hash_map_free(&GRID_FUNCTION_MAP /*, hash_map_entry_free_keys*/);
 }

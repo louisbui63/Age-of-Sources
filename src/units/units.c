@@ -79,8 +79,9 @@ Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
   switch (t) {
 
   default:
-    *stm = (SteerManager){
-        10, 10, 10, 10, 10, 0, (Vec2){0, 0}, (Vec2){100, 100}, (Vec2){0, 0}, 0};
+    *stm = (SteerManager){10,           10, 10,           10,
+                          10,           0,  (Vec2){0, 0}, (Vec2){pp->x, pp->y},
+                          (Vec2){0, 0}, 0};
     break;
   }
 

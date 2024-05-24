@@ -4,8 +4,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "./renderer/button.h"
+#include "ai/ennemy_ai.h"
 #include "ai/movement.h"
 #include "components.h"
 #include "data_structures/asset_manager.h"
@@ -82,6 +84,10 @@ int main() {
   })
   SDL_FreeSurface(test_bmp);
 
+  // yes, one could probably exploit that, but at this point I think they
+  // deserve it
+  srand(time(NULL));
+
   set_grid_functions();
 
   World w = world_new();
@@ -140,6 +146,8 @@ int main() {
   // test_background); ecs_add_component(&w, test_e,
   // COMP_CLICKABLE, test_clickable);
 
+  AiState ais = Eco;
+
   // dt is the frametime from last frame
   Uint32 dt = TARGET_FRAMETIME;
   SDL_Event event;
@@ -153,7 +161,8 @@ int main() {
   ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
   Background *back = spawn_backbackground(renderer, window);
 
-  play_audio("asset/sfx/click.wav", 0);
+  int slow_tick = 0;
+
   for (; RUNNING != STOP;) {
     Uint32 start_time = SDL_GetTicks();
 
@@ -211,6 +220,18 @@ int main() {
     draw_selection(&w, renderer, window);
 
     SDL_RenderPresent(renderer);
+
+    if (RUNNING == IN_GAME) {
+      slow_tick = (slow_tick + 1) % 60;
+      // load balancing for the dummies
+      if (slow_tick == 0) {
+        update_ressources(&w);
+      } else if (slow_tick == 15) {
+        take_ai_action(&w, &ais, renderer, window);
+      } else if (slow_tick == 30) {
+        reconsider_ai_state(&w, &ais);
+      }
+    }
 
     // delay before next frame
     dt = min(TARGET_FRAMETIME, SDL_GetTicks() - start_time);

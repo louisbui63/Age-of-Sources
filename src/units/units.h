@@ -12,6 +12,12 @@
 typedef enum {
   UNIT_TEST, // funny name :)
   WELL,
+  FORUM,
+  UWELL,
+  UFURNACE,
+  UFORUM,
+  BEAVER,
+  UBEAVER,
   BASE_SOLDIER,
   BASE_FISH,
   UNIT_NUMBER
