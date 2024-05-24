@@ -112,15 +112,15 @@ void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
       spawn_unit(w, BEAVER, renderer, window, *p, 0);
     }
   }
+}
 
-  ClickEvent forum_grid(__attribute__((unused)) World * w, int slot,
-                        Entity *e) {
-    FORUM_ENTITY = e;
-    switch (slot) {
-    case 0:
-      return forum_slot_0;
-    case 1:
-      return forum_slot_1;
-    }
-    return empty_click_event;
+ClickEvent forum_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
+  FORUM_ENTITY = e;
+  switch (slot) {
+  case 0:
+    return forum_slot_0;
+  case 1:
+    return forum_slot_1;
   }
+  return empty_click_event;
+}

@@ -14,6 +14,10 @@
 extern Running RUNNING;
 
 void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
+
+  if ((RUNNING == IN_GAME) + 1) {
+    printf("2\n");
+  }
   uint64_t mask = COMPF_BACKGROUND;
   VEC(EntityRef) er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
@@ -64,6 +68,10 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     }
   }
 
+  if ((RUNNING == IN_GAME) + 1) {
+    printf("3\n");
+  }
+
   mask = COMPF_MINIMAP;
   er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
@@ -82,7 +90,9 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     if (mouse_in_rect(rdr, h->rect))
       render_hoverable(h->rect, h->text);
   }
-
+  if ((RUNNING == IN_GAME) + 1) {
+    printf("1\n");
+  }
   mask = COMPF_ACTUALISEDTEXT;
   er = world_query(w, &mask);
   for (uint i = 0; i < vec_len(er); i++) {
@@ -224,31 +234,33 @@ ActualisedText *render_game_state(World *w) {
 
 char *running_to_str(__attribute__((unused)) World *w,
                      __attribute__((unused)) Entity *e) {
+  char *t = malloc(strlen("Stop          ") + 1);
   switch (RUNNING) {
   case STOP:
-    return "Stop          ";
+    strcpy(t, "Stop          ");
     break;
 
   case MAIN:
-    return "Main          ";
+    strcpy(t, "Main          ");
     break;
 
   case OPTIONMAIN:
-    return "OptionMain    ";
+    strcpy(t, "OptionMain    ");
     break;
 
   case IN_GAME:
-    return "In_Game       ";
+    strcpy(t, "In_Game       ");
     break;
 
   case IN_GAMEMENU:
-    return "In_GameMenu   ";
+    strcpy(t, "In_GameMenu   ");
     break;
 
   case IN_GAMEOPTION:
-    return "In_GameOption ";
+    strcpy(t, "In_GameOption ");
     break;
   }
+  return t;
 }
 
 SDL_Renderer *get_renderer(World *w) {

@@ -312,8 +312,9 @@ void selector_free(void *s) {
 }
 
 void actualise_grid_coordinates(int *x, int *y, int i) {
-  *x = (i % 3) * 32;
-  *y = (i / 3) * 32;
+  int n = 5; // This is the length of a line in the ui
+  *x = (i % n) * 32;
+  *y = (i / n) * 32;
 }
 
 void render_unit_grid(World *w, Entity *e) {
@@ -456,9 +457,25 @@ void render_unit_grid(World *w, Entity *e) {
     //   wi); key_event = malloc(sizeof(KeyEvent)); *key_event =
     //   clickable_event; spawn_clickable(w, c, key_event); i++; break;
 
+    //   // Fort
+    //   actualise_grid_coordinates(&x, &y, i);
+    //   c = malloc(sizeof(Clickable));
+    //   c->rect = malloc(sizeof(SDL_Rect));
+    //   *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 64, .w = 64};
+    //   c->is_clicked = 0;
+    //   c->click_event = beaver_grid(w, i, e);
+    //   c->text = malloc(sizeof(Text));
+    //   c->text->str = malloc(1);
+    //   *(c->text->str) = '\0';
+    //   c->sprite = malloc(sizeof(Sprite));
+    //   c->sprite->rect = malloc(sizeof(SDL_Rect));
+    //   *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    //   c->sprite->texture = get_texture("asset/sprites/tanuki_fort.bmp", r,
+    //   wi); key_event = malloc(sizeof(KeyEvent)); *key_event =
+    //   clickable_event; spawn_clickable(w, c, key_event); i++; break;
   case WELL:
 
-    // BEAVER
+    // // Beaver
     // actualise_grid_coordinates(&x, &y, i);
     // c = malloc(sizeof(Clickable));
     // c->rect = malloc(sizeof(SDL_Rect));

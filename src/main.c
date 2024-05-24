@@ -14,7 +14,6 @@
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
 #include "input.h"
-#include "player.h"
 #include "players.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
@@ -112,7 +111,7 @@ int main() {
 
   Entity *cam = spawn_entity(&w);
   KeyEvent *cammove = malloc(sizeof(KeyEvent));
-  *cammove = map_movemunit_beaverent;
+  *cammove = map_movement;
   ecs_add_component(&w, cam, COMP_CAMERA, camcam);
   ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 

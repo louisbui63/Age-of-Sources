@@ -98,6 +98,11 @@ Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
   Animator *a = malloc(sizeof(Animator));
   *a = animator_new(u);
   ecs_add_component(w, e, COMP_ANIMATOR, a);
+  SteerObstacle *st = malloc(sizeof(SteerObstacle));
+  // *st =
+  //     (SteerObstacle){.bounding_circle = 10, .position = (Vec2){pp->x,
+  //     pp->y}};
+  ecs_add_component(w, e, COMP_STEEROBSTACLE, st);
 
   SteerManager *stm = malloc(sizeof(SteerManager));
   switch (t) {
