@@ -15,6 +15,7 @@ typedef enum {
   FORUM,
   UWELL,
   UFURNACE,
+  FURNACE,
   UFORUM,
   UCASERN,
   BEAVER,
