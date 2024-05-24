@@ -375,7 +375,7 @@ Background *spawn_game_background(World *w, SDL_Renderer *renderer,
   back->sprite->texture =
       get_texture("asset/sprites/ingamebackground.bmp", renderer, window);
   Entity *e = spawn_entity(w);
-  ecs_add_component(w, e, COMP_ACTUALISEDTEXT, back);
+  ecs_add_component(w, e, COMP_BACKGROUND, back);
   return back;
 }
 
