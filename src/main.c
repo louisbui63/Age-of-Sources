@@ -136,7 +136,7 @@ int main() {
   for (uint i = 0; i < 2; i++) {
     Entity *e = spawn_entity(&w);
     PlayerManager *pm = malloc(sizeof(PlayerManager));
-    *pm = (PlayerManager){i, 0, 0, 0, 0, 1.0, 1.0};
+    *pm = (PlayerManager){i, 0, 0, 0, 0, 1.0, 1.0, 1.0, 1.0};
     ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
   }
 
