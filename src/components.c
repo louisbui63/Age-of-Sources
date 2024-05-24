@@ -26,6 +26,9 @@ int init_world(World *w) {
   register_system_requirement(w, COMPF_POSITION | COMPF_SPRITE |
                                      COMPF_SELECTABLE | COMPF_OWNERSHIP |
                                      COMPF_BUILDINGGHOST);
+  register_system_requirement(w, COMPF_SELECTABLE | COMPF_POSITION |
+                                     COMPF_SPRITE | COMPF_OWNERSHIP |
+                                     COMPF_UNIT);
   register_component(w, Position);
   register_component_callback(w, Sprite, sprite_component_free);
   register_component(w, KeyEvent);

@@ -69,7 +69,7 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
   mask = COMPF_POSITION | COMPF_SPRITE;
   er = world_query(w, &mask);
   _Pragma("omp parallel") {
-    _Pragma("omp for") {
+    _Pragma("omp for ordered schedule(static, 1)") {
       for (uint i = 0; i < vec_len(er); i++) {
         EntityRef ei = er[i];
         Entity *e = get_entity(w, ei);
@@ -82,10 +82,10 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
         Position wtr = world2screenspace(
             &(Position){.x = p->x + tr.x, .y = p->y + tr.y}, cam);
         SDL_Rect r = {
-            .x = wtl.x, .y = wtl.y, .w = wtr.x - wtl.x, .h = wtr.y - wtl.y};
+            .x = wtl.x - s->rect->w/2, .y = wtl.y - s->rect->h/2, .w = wtr.x - wtl.x, .h = wtr.y - wtl.y};
         // occludes offscreen sprites
         if (wtl.x < WIN_W && wtl.y < WIN_H && wtr.x > 0 && wtr.y > 0) {
-          _Pragma("omp critical") {
+          _Pragma("omp ordered") {
             for (uint j = 0; j < vec_len(selecteds); j++) {
               if (selecteds[j] == ei) {
                 SDL_RenderCopy(rdr,

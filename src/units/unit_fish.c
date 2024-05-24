@@ -1,4 +1,3 @@
-#include "../selection.h"
 #include "unit_function.h"
 
 //! This file is a template for the unit files, every data about the units must
@@ -7,15 +6,15 @@
 
 //! The first text is the name of the unit. It must not be more than 255
 //! characters long.
-/*Well*/
+/*Fish*/
 
 //! The second text is the hp of the unit, it must a be positive decimal number
 //! smaller or equal than 65535
-/*400*/
+/*200*/
 
 //! The third text is the b_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*20*/
 
 //! The fourth text is the p_dam of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -27,16 +26,15 @@
 
 //! The sixth text is the b_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*100*/
+/*20*/
 
 //! The seventh text is the p_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*100*/
+/*10*/
 
 //! The eigth text is the s_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*150*/
-// A well is an inhert thing
+/*5*/
 
 //! The ninth text is the rg of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -44,7 +42,7 @@
 
 //! The tenth text is the sp of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*0*/
+/*10*/
 
 //! The elventh text is the w of the unit's sprite, it must a be positive
 //! decimal number smaller or equal than 65535
@@ -56,18 +54,11 @@
 
 //! The thirteenth text is the unit's sprite path, it must be less than 255
 //! characters long.
-/*asset/sprites/well.bmp*/
+/*asset/sprites/le_fish.bmp*/
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/*A place to get drinkable water from*/
+/*A fish that desperately tries to survive outside the water*/
 
-ClickEvent well_grid(__attribute__((unused)) World *w,
-               __attribute__((unused)) int slot, Entity* e) {
-  // if (slot == 0) {
-  //   char *c = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
-  //   strcpy(c, "src/units/unit_well.c");
-  //   set_building_selection(w, c);
-  // }
-  return empty_click_event;
-}
+ClickEvent fish_grid(__attribute__((unused)) World *w,
+               __attribute__((unused)) int slot, __attribute__((unused)) Entity *e) {}

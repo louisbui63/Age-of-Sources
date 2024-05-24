@@ -6,7 +6,7 @@
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "input.h"
-#include "parser.h"
+#include "units/units.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
@@ -104,11 +104,27 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
       reset_selection_type(s);
     else if (inputs_is_mouse_button_in(i, 1) && get_mouse_position(r).y < 270 &&
              st == KEY_RELEASED) {
+
       SDL_Point pt = get_mouse_position(r);
+      Position pworld = (Position){pt.x, pt.y};
+      Bitflag bf_cam = COMPF_CAMERA;
+      VEC(EntityRef) camv = world_query(w, &bf_cam);
+      Entity *ecam = get_entity(w, camv[0]);
+      Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
+      pworld = screen2worldspace(&pworld, cam);
+      Vec2 vworld = (Vec2){pworld.x,pworld.y};
+      TilePosition tp_mouse = pos2tile(&vworld);
+
+
+      Bitflag bf = COMPF_MAPCOMPONENT;
+      VEC(EntityRef) mapv = world_query(w, &bf);
+      Entity *emap = get_entity(w, mapv[0]);
+      MapComponent *mapc = entity_get_component(w, emap, COMP_MAPCOMPONENT);
+
       Bitflag flag = COMPF_WINDOW;
       SDL_Window *window = entity_get_component(
           w, get_entity(w, world_query(w, &flag)[0]), COMP_WINDOW);
-      {
+      if(units_get_tile_speed(s->building_utype,mapc->map[tp_mouse.x][tp_mouse.y])){
         Entity *e = spawn_entity(w);
         // ownership can only be 0 if building is placed by the player
         Ownership *o = calloc(1, sizeof(Ownership));
@@ -126,13 +142,13 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
 
         ecs_add_component(w, e, COMP_SPRITE, sp);
         Position *p = calloc(1, sizeof(Position));
-        *p = (Position){pt.x, pt.y};
+        *p = pworld;
         ecs_add_component(w, e, COMP_POSITION, p);
-        Selectable *s = calloc(1, sizeof(Selectable));
-        s->is_ghost = 1;
-        ecs_add_component(w, e, COMP_SELECTABLE, s);
+        Selectable *sbis = calloc(1, sizeof(Selectable));
+        sbis->is_ghost = 1;
+        ecs_add_component(w, e, COMP_SELECTABLE, sbis);
+        reset_selection_type(s);
       }
-      reset_selection_type(s);
     }
   }
   if (inputs_is_mouse_button_in(i, SDL_BUTTON_RIGHT) && RUNNING == IN_GAME) {
@@ -151,7 +167,8 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
       Position mpp = (Position){.x = mp.x, .y = mp.y};
       Position mps = screen2worldspace(&mpp, cam);
 
-      EntityRef action_target = UINT64_MAX;
+      EntityRef action_btarget = UINT64_MAX;
+      EntityRef action_atarget = UINT64_MAX;
 
       // HERE TOO:
       Bitflag flag = COMPF_SELECTABLE | COMPF_POSITION | COMPF_SPRITE |
@@ -166,9 +183,31 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         Position *p = entity_get_component(w, e, COMP_POSITION);
         if (SDL_PointInRect(&(SDL_Point){mps.x, mps.y},
                             &(SDL_Rect){sp->rect->x + p->x, sp->rect->y + p->y,
-                                        sp->rect->w, sp->rect->h})) {
-          action_target = es[i];
+                                        sp->rect->w, sp->rect->h}) &&
+            !((BuildingGhost *)entity_get_component(w, e, COMP_BUILDINGGHOST))
+                 ->construction_done) {
+          action_btarget = es[i];
           break;
+        }
+      }
+      if (action_btarget == UINT64_MAX) {
+        Bitflag flag = COMPF_SELECTABLE | COMPF_POSITION | COMPF_SPRITE |
+                       COMPF_OWNERSHIP | COMPF_UNIT;
+        VEC(EntityRef) es = world_query(w, &flag);
+        for (uint i = 0; i < vec_len(es); i++) {
+          Entity *e = get_entity(w, es[i]);
+          Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
+          if (o->owner == 0)
+            continue;
+          Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
+          Position *p = entity_get_component(w, e, COMP_POSITION);
+          if (SDL_PointInRect(&(SDL_Point){mps.x, mps.y},
+                              &(SDL_Rect){sp->rect->x + p->x,
+                                          sp->rect->y + p->y, sp->rect->w,
+                                          sp->rect->h})) {
+            action_atarget = es[i];
+            break;
+          }
         }
       }
 
@@ -180,9 +219,12 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
 
           // HERE
           Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
-          if (ac && action_target != UINT64_MAX) {
+          if (ac && action_btarget != UINT64_MAX) {
             ac->act = Build;
-            ac->target = action_target;
+            ac->target = action_btarget;
+          } else if (ac && action_atarget != UINT64_MAX) {
+            ac->act = Attack;
+            ac->target = action_atarget;
           } else if (ac) {
             ac->act = Lazy;
             ac->target = UINT64_MAX;

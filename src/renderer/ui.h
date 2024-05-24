@@ -18,6 +18,8 @@ typedef struct {
   SDL_Rect *rect;
 } Background;
 
+typedef void (*ClickEvent)(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
 //! Entities with this type start an action when clicked on.
 //! The value of is_clicked depends if and how it is clicked on,
 //! when is_clicked is equal to one it means the left click is pressed on over
@@ -30,7 +32,8 @@ typedef struct {
   SDL_Rect *rect;
   Text *text;
   Uint8 is_clicked;
-  void (*click_event)(World *w, SDL_Renderer *renderer, SDL_Window *window);
+  ClickEvent click_event;
+  // void (*click_event)(World *w, SDL_Renderer *renderer, SDL_Window *window);
 } Clickable;
 
 //! Type that corresponds to the minimap

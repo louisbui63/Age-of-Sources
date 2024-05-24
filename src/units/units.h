@@ -14,6 +14,8 @@ typedef enum {
   WELL,
   BASE_SOLDIER,
   BEAVER,
+  BASE_FISH,
+  BASE_FLYING,
   FORUM,
   UNIT_NUMBER
 } UnitTypes;
@@ -34,7 +36,7 @@ typedef enum {
 //! characters long not including '\0', it must not contain '*'.
 typedef struct {
   char *name;
-  uint16_t hp;          // Health Point
+  double hp;            // Health Point
   uint16_t max_hp;      // Maximum Health Point
   uint16_t b_dam;       // Blunt damage
   uint16_t p_dam;       // Piercing damage
