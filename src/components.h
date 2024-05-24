@@ -47,6 +47,10 @@
 #define COMP_OWNERSHIP 20
 #define COMPF_ACTIONNABLE (1 << 21)
 #define COMP_ACTIONNABLE 21
+#define COMPF_WATERSOURCE (1 << 22)
+#define COMP_WATERSOURCE 22
+#define COMPF_CLAYSOURCE (1 << 23)
+#define COMP_CLAYSOURCE 23
 
 //! Initializes the components required by the game. Must be called exactly once
 //! before using the world.
