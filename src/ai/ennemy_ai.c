@@ -136,7 +136,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           SteerManager *stm = entity_get_component(
               w, get_entity(w, world_query(w, &bf)[0]), COMP_STEERMANAGER);
 
-          Path pa = pathfind_astar(mapc->map, UNIT_TEST, &tpstart, &tpend);
+          Path pa = pathfind_astar(mapc->map, BEAVER, &tpstart, &tpend);
           if (pa) {
             if (vec_len(pa) > 1) {
               free(pa[0]);
