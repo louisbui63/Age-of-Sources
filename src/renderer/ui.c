@@ -15,7 +15,7 @@ extern Running RUNNING;
 
 void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
 
-  if ((RUNNING == IN_GAME) + 1) {
+  if (RUNNING == IN_GAME) {
     printf("2\n");
   }
   uint64_t mask = COMPF_BACKGROUND;
@@ -68,7 +68,7 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     }
   }
 
-  if ((RUNNING == IN_GAME) + 1) {
+  if (RUNNING == IN_GAME) {
     printf("3\n");
   }
 
@@ -90,7 +90,7 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
     if (mouse_in_rect(rdr, h->rect))
       render_hoverable(h->rect, h->text);
   }
-  if ((RUNNING == IN_GAME) + 1) {
+  if (RUNNING == IN_GAME) {
     printf("1\n");
   }
   mask = COMPF_ACTUALISEDTEXT;

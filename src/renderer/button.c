@@ -358,12 +358,10 @@ void event_gameoption_back(World *w, SDL_Renderer *renderer,
   event_game_menu(w, renderer, window);
 }
 
-void spawn_game_ui(__attribute__((unused)) World *w,
-                   __attribute__((unused)) SDL_Renderer *renderer,
-                   __attribute__((unused)) SDL_Window *window) {
+void spawn_game_ui(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   printf("1\n");
   spawn_game_background(w, renderer, window);
-  spawn_game_ressources(w, renderer, window);
+  // spawn_game_ressources(w, renderer, window);
 }
 
 Background *spawn_game_background(World *w, SDL_Renderer *renderer,
@@ -371,9 +369,9 @@ Background *spawn_game_background(World *w, SDL_Renderer *renderer,
   Background *back = malloc(sizeof(Background));
   back->sprite = malloc(sizeof(Sprite));
   back->rect = malloc(sizeof(SDL_Rect));
-  *(back->rect) = (SDL_Rect){.h = 90, .w = 640, .y = 0, .x = 270};
+  *(back->rect) = (SDL_Rect){.x = 270, .y = 0, .h = 90, .w = 640};
   back->sprite->rect = malloc(sizeof(SDL_Rect));
-  *(back->sprite->rect) = (SDL_Rect){.h = 90, .w = 640, .y = 0, .x = 270};
+  *(back->sprite->rect) = (SDL_Rect){.x = 270, .y = 0, .h = 90, .w = 640};
   back->sprite->texture =
       get_texture("asset/sprites/ingamebackground.bmp", renderer, window);
   Entity *e = spawn_entity(w);
