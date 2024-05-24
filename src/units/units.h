@@ -14,6 +14,7 @@ typedef enum {
   WELL,
   BASE_SOLDIER,
   BASE_FISH,
+  BASE_FLYING,
   UNIT_NUMBER
 } UnitTypes;
 

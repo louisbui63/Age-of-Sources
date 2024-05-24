@@ -9,9 +9,34 @@
 #include "../selection.h"
 #include "units.h"
 
+// typedef enum {
+//   UNIT_TEST, // funny name :)
+//   WELL,
+//   BASE_SOLDIER,
+//   BASE_FISH,
+//   BASE_FLYING,
+//   UNIT_NUMBER
+// } UnitTypes;
+
+// typedef enum {
+//   TILE_PLAIN,
+//   TILE_FOREST,
+//   TILE_SWAMP,
+//   TILE_WATER,
+//   TILE_MOUNTAIN,
+//   TILE_GIGEMENT,
+
+//   TILE_NUMBER
+// } TileTypes;
+
 double units_get_tile_speed(UnitTypes u, TileTypes t) {
-  // double unit_test_speeds[TILE_NUMBER] = {1., 1., 1., 0., 0., 1.};
-  double unit_speeds[UNIT_NUMBER][TILE_NUMBER] = {{1., 1., 1., 0., 0., 1.}};
+  double unit_speeds[UNIT_NUMBER][TILE_NUMBER] = {
+  {1., 1., 1., 0., 0., 1.},
+  {1,1,1,0,0,1},
+  {1., 1., 1., 0., 0., 1.},
+  {0.75, 0.75, 0.75, 1.25, 0., 0.75},
+  {1., 1., 1., 1., 1., 1.},
+  };
   return unit_speeds[u][t];
 }
 

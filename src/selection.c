@@ -6,6 +6,7 @@
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "input.h"
+#include "units/units.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include <SDL2/SDL_rect.h>
@@ -102,11 +103,27 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
       reset_selection_type(s);
     else if (inputs_is_mouse_button_in(i, 1) && get_mouse_position(r).y < 270 &&
              st == KEY_RELEASED) {
+
       SDL_Point pt = get_mouse_position(r);
+      Position pworld = (Position){pt.x, pt.y};
+      Bitflag bf_cam = COMPF_CAMERA;
+      VEC(EntityRef) camv = world_query(w, &bf_cam);
+      Entity *ecam = get_entity(w, camv[0]);
+      Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
+      pworld = screen2worldspace(&pworld, cam);
+      Vec2 vworld = (Vec2){pworld.x,pworld.y};
+      TilePosition tp_mouse = pos2tile(&vworld);
+
+
+      Bitflag bf = COMPF_MAPCOMPONENT;
+      VEC(EntityRef) mapv = world_query(w, &bf);
+      Entity *emap = get_entity(w, mapv[0]);
+      MapComponent *mapc = entity_get_component(w, emap, COMP_MAPCOMPONENT);
+
       Bitflag flag = COMPF_WINDOW;
       SDL_Window *window = entity_get_component(
           w, get_entity(w, world_query(w, &flag)[0]), COMP_WINDOW);
-      {
+      if(units_get_tile_speed(s->building_utype,mapc->map[tp_mouse.x][tp_mouse.y])){
         Entity *e = spawn_entity(w);
         // ownership can only be 0 if building is placed by the player
         Ownership *o = calloc(1, sizeof(Ownership));
@@ -124,19 +141,13 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
 
         ecs_add_component(w, e, COMP_SPRITE, sp);
         Position *p = calloc(1, sizeof(Position));
-        *p = (Position){pt.x, pt.y};
-        Bitflag bf = COMPF_CAMERA;
-        VEC(EntityRef) camv = world_query(w, &bf);
-        Entity *ecam = get_entity(w, camv[0]);
-        Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
-        Position pworld = screen2worldspace(p, cam);
         *p = pworld;
         ecs_add_component(w, e, COMP_POSITION, p);
-        Selectable *s = calloc(1, sizeof(Selectable));
-        s->is_ghost = 1;
-        ecs_add_component(w, e, COMP_SELECTABLE, s);
+        Selectable *sbis = calloc(1, sizeof(Selectable));
+        sbis->is_ghost = 1;
+        ecs_add_component(w, e, COMP_SELECTABLE, sbis);
+        reset_selection_type(s);
       }
-      reset_selection_type(s);
     }
   }
   if (inputs_is_mouse_button_in(i, SDL_BUTTON_RIGHT) && RUNNING == IN_GAME) {
