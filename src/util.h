@@ -1,10 +1,11 @@
 //! @file util.h
 #pragma once
 
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
+#include "data_structures/ecs.h"
 #include "errors.h"
-#include "renderer/ui.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
@@ -112,7 +113,3 @@ typedef struct {
 typedef struct {
   SDL_Renderer *r;
 } Renderer;
-
-SDL_Window *get_renderer(World *w);
-
-SDL_Renderer *get_window(World *w);

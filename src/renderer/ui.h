@@ -18,7 +18,8 @@ typedef struct {
   SDL_Rect *rect;
 } Background;
 
-typedef void (*ClickEvent)(World *w, SDL_Renderer *renderer, SDL_Window *window);
+typedef void (*ClickEvent)(World *w, SDL_Renderer *renderer,
+                           SDL_Window *window);
 
 //! Entities with this type start an action when clicked on.
 //! The value of is_clicked depends if and how it is clicked on,
@@ -111,3 +112,7 @@ ActualisedText *render_game_state(World *w);
 //! The string is padded with spaces at the end so that when the text is
 //! rendered they all begin at the same place
 char *running_to_str(World *w, Entity *e);
+
+SDL_Renderer *get_renderer(World *w);
+
+SDL_Window *get_window(World *w);

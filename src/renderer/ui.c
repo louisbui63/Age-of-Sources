@@ -250,3 +250,19 @@ char *running_to_str(__attribute__((unused)) World *w,
     break;
   }
 }
+
+SDL_Renderer *get_renderer(World *w) {
+  uint64_t mask = COMPF_RENDERER;
+  VEC(EntityRef) er = world_query(w, &mask);
+  Entity *e = get_entity(w, er[0]);
+  Renderer *r = entity_get_component(w, e, COMP_RENDERER);
+  return r->r;
+}
+
+SDL_Window *get_window(World *w) {
+  uint64_t mask = COMPF_WINDOW;
+  VEC(EntityRef) er = world_query(w, &mask);
+  Entity *e = get_entity(w, er[0]);
+  Window *wi = entity_get_component(w, e, COMP_WINDOW);
+  return wi->w;
+}

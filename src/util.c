@@ -44,19 +44,3 @@ inline Vec2 v2truncate(Vec2 a, float b) {
 }
 inline Vec2 v2div(Vec2 a, float b) { return (Vec2){a.x / b, a.y / b}; }
 inline float v2dot(Vec2 a, Vec2 b) { return a.x * b.x + a.y * b.y; }
-
-SDL_Renderer *get_renderer(World *w) {
-  uint64_t mask = COMPF_RENDERER;
-  VEC(EntityRef) er = world_query(w, &mask);
-  Entity *e = get_entity(w, er[0]);
-  Renderer *r = entity_get_component(w, e, COMP_RENDERER);
-  return r->r;
-}
-
-SDL_Window *get_window(World *w) {
-  uint64_t mask = COMPF_WINDOW;
-  VEC(EntityRef) er = world_query(w, &mask);
-  Entity *e = get_entity(w, er[0]);
-  Window *wi = entity_get_component(w, e, COMP_WINDOW);
-  return wi->w;
-}
