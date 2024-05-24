@@ -1,4 +1,3 @@
-#include "../selection.h"
 #include "unit_function.h"
 
 //! This file is a template for the unit files, every data about the units must
@@ -7,7 +6,7 @@
 
 //! The first text is the name of the unit. It must not be more than 255
 //! characters long.
-/*Well*/
+/*Furnace*/
 
 //! The second text is the hp of the unit, it must a be positive decimal number
 //! smaller or equal than 65535
@@ -36,7 +35,6 @@
 //! The eigth text is the s_def of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
 /*150*/
-// A well is an inhert thing
 
 //! The ninth text is the rg of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -56,14 +54,14 @@
 
 //! The thirteenth text is the unit's sprite path, it must be less than 255
 //! characters long.
-/*asset/sprites/well.bmp*/
+/*asset/sprites/furnace.bmp*/
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/*A place to get drinkable water from*/
+/*Collects and smelts the clay around it into a useable ressource*/
 
-ClickEvent well_grid(__attribute__((unused)) World *w,
-                     __attribute__((unused)) int slot,
-                     __attribute__((unused)) Entity *e) {
+ClickEvent furnace_grid(__attribute__((unused)) World *w,
+                        __attribute__((unused)) int slot,
+                        __attribute__((unused)) Entity *e) {
   return empty_click_event;
 }
