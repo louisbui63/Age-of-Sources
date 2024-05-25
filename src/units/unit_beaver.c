@@ -91,7 +91,7 @@ Entity *BEAVER_ENTITY;
   }
 
 beaver_slot_(0, 300, 0, well, WELL)
-beaver_slot_(1, 200, 100, furnace, FURNACE)
+beaver_slot_(1, 0, 300, furnace, FURNACE)
 beaver_slot_(2, 600, 400, tanuki_casern, CASERN)
 beaver_slot_(3, 600, 400, tanuki_tower, TOWER)     // not final values
 beaver_slot_(4, 600, 400, konbini_tanuki, KONBINI) // not final values
