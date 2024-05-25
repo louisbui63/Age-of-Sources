@@ -11,7 +11,6 @@ void building_ghost_component_free(void *a) {
 }
 
 void finish_construction(World *w, Entity *e) {
-  printf("done\n");
   BuildingGhost *bg = entity_get_component(w, e, COMP_BUILDINGGHOST);
   Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
   bg->construction_done = 1;

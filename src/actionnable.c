@@ -16,18 +16,15 @@ char actionnate(World *w, Actionnable *ac, Entity *se) {
   case Build: {
     Entity *e = get_entity(w, ac->target);
     if (!e) {
-      printf("hm\n");
       ac->act = Lazy;
       return 0;
     }
     BuildingGhost *bg = entity_get_component(w, e, COMP_BUILDINGGHOST);
     if (!bg) {
-      printf("hm2\n");
       ac->act = Lazy;
       return 0;
     }
     if (bg->construction_done) {
-      printf("hm3\n");
       ac->act = Lazy;
       return 0;
     }

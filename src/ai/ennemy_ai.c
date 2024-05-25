@@ -166,7 +166,6 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                                                   COMP_ACTIONNABLE);
 
           {
-            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -189,7 +188,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
-            act->target = eref;
+            act->target = e->id;
           }
         }
         for (uint i = 1; i < vec_len(builders) && pm1->clay > 300; i += 2) {
@@ -200,7 +199,6 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                                                   COMP_ACTIONNABLE);
 
           {
-            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -224,7 +222,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
-            act->target = eref;
+            act->target = e->id;
           }
         }
       }
@@ -315,7 +313,6 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                                                   COMP_ACTIONNABLE);
 
           {
-            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -339,7 +336,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
-            act->target = eref;
+            act->target = e->id;
           }
         }
       } else {
@@ -460,7 +457,6 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                                                   COMP_ACTIONNABLE);
 
           {
-            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -484,7 +480,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
-            act->target = eref;
+            act->target = e->id;
           }
         }
       } else {
