@@ -22,6 +22,12 @@ void set_grid_functions() {
   v = malloc(sizeof(GridFunction));
   *v = fish_grid;
   hash_map_insert(&GRID_FUNCTION_MAP, k, v);
+
+  k = malloc(sizeof(char) * (strlen("DEBUG") + 1));
+  strcpy(k, "DEBUG");
+  v = malloc(sizeof(GridFunction));
+  *v = debug_grid;
+  hash_map_insert(&GRID_FUNCTION_MAP, k, v);
 }
 
 void free_grid_functions() {

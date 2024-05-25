@@ -16,6 +16,7 @@ ClickEvent well_grid(World *w, int slot, Entity *e);
 ClickEvent fish_grid(World *w, int slot, Entity *e);
 ClickEvent frog_grid(World *w, int slot, Entity *e);
 ClickEvent forum_grid(World *w, int slot, Entity *e);
+ClickEvent debug_grid(World *w, int slot, Entity *e);
 
 extern HashMap GRID_FUNCTION_MAP;
 

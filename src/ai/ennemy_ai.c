@@ -45,13 +45,19 @@ void reconsider_ai_state(World *w, AiState *ais) {
   case Eco:
     if (is_ai_attacked(w))
       *ais = Defense;
-    if (pm1->dclay + pm1->dwater * 1.2 > pm0->dclay + pm0->dwater)
+    if ((pm1->dclay * pm1->clay_multiplier +
+         pm1->dwater * pm1->water_multiplier) *
+            1.2 >
+        pm0->dclay * pm0->clay_multiplier + pm0->dwater * pm0->water_multiplier)
       *ais = Offense;
     break;
   case Offense:
     if (is_ai_attacked(w))
       *ais = Defense;
-    if (pm1->dclay + pm1->dwater < 1.2 * (pm0->dclay + pm0->dwater))
+    if (pm1->dclay * pm1->clay_multiplier +
+            pm1->dwater * pm1->water_multiplier <
+        1.2 * (pm0->dclay * pm0->clay_multiplier +
+               pm0->dwater * pm0->water_multiplier))
       *ais = Offense;
     break;
   case Defense:
