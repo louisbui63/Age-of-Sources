@@ -130,6 +130,21 @@ void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
   }
 }
 
+void clickable_event_mute(World *w, SDL_Renderer *rdr, Entity *entity,
+                          Inputs *in, KeyState keystate) {
+  Clickable *c = entity_get_component(w, entity, COMP_CLICKABLE);
+  if (!(mouse_in_rect(rdr, c->rect))) {
+    c->is_clicked = 0;
+    return;
+  } else if (!inputs_is_mouse_button_in(in, SDL_BUTTON_LEFT))
+    return;
+  else if (keystate == KEY_PRESSED) {
+    c->is_clicked = 1;
+  } else if ((keystate == KEY_RELEASED) * (c->is_clicked == 1)) {
+    c->is_clicked = 2;
+  }
+}
+
 void render_hoverable(SDL_Rect *rect, char *text) {
   rect = rect + 0;
   text = text + 0;

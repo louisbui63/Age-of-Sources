@@ -69,11 +69,16 @@ Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event);
 //! it will be set to 1 and if it is set to 1 and the click is released then it
 //! will be set to 2. The idea is that if set to 1
 //! there will be a visual change by darkening the sprite
-//! and if it set to 2 it will start the action linked to the sprite.
-//! It must be noted that if you click on the sprite, mouve your mouse out and
-//! then release the click it will do nothing as a way to correct missclicks.
+//! and if it set to 2 `render_ui` will start the action linked to the sprite.
+//! When setting it to 2, it plays a sound. It must be noted that if you click
+//! on the sprite, mouve your mouse out and then release the click it will do
+//! nothing as a way to correct missclicks.
 void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
                      KeyState keystate);
+
+//! This functon is the same as `clickable_event` but it does not make sound.
+void clickable_event_mute(World *w, SDL_Renderer *rdr, Entity *entity,
+                          Inputs *in, KeyState keystate);
 
 //! This function is used to render the entities associated with a hoverable
 //! component

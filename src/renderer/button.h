@@ -13,6 +13,14 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
                                       SDL_Window *window),
                         char *t, int xp, int yp);
 
+//! This function is the same as `spawn_button` but uses `clickable_event_mute`
+//! instead of `clickable_event` so that it does not make sound.
+Clickable *spawn_button_mute(World *w, SDL_Renderer *renderer,
+                             SDL_Window *window,
+                             void (*event)(World *w, SDL_Renderer *renderer,
+                                           SDL_Window *window),
+                             char *t, int xp, int yp);
+
 //! Creates the main menu.
 void spawn_main_menu(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
