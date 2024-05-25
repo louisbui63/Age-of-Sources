@@ -102,7 +102,9 @@ typedef enum {
   OPTIONMAIN,
   IN_GAME,
   IN_GAMEMENU,
-  IN_GAMEOPTION
+  IN_GAMEOPTION,
+  VICTORY,
+  DEFEAT
 } Running;
 
 typedef struct {

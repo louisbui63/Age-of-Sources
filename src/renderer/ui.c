@@ -250,6 +250,14 @@ char *running_to_str(__attribute__((unused)) World *w,
   case IN_GAMEOPTION:
     strcpy(t, "In_GameOption ");
     break;
+
+  case VICTORY:
+    strcpy(t, "Victory       ");
+    break;
+
+  case DEFEAT:
+    strcpy(t, "Defeat        ");
+    break;
   }
   return t;
 }

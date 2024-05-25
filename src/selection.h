@@ -42,4 +42,5 @@ void set_building_selection(World *w, char *building, UnitTypes but);
 
 void selector_free(void *s);
 
-void render_unit_grid(World *w, Entity *e);
+//! Renders the grid of options available when a unit is selected
+void render_unit_grid(World *w, EntityRef e);
