@@ -66,7 +66,7 @@
 Entity *FORUM_ENTITY;
 
 slot_spawn_unit(forum_slot_0, tanuki, 50, 50, FORUM_ENTITY, BASE_SOLDIER)
-slot_spawn_unit(forum_slot_1, beaver, 50, 0, FORUM_ENTITY, BEAVER)
+slot_spawn_unit(forum_slot_1, beaver, 0, 0, FORUM_ENTITY, BEAVER)
 
 ClickEvent forum_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
   FORUM_ENTITY = e;
