@@ -18,11 +18,9 @@ char is_ai_attacked(World *w) {
     if (ac->act == Attack && ow->owner == 0) {
       if (entity_get_component(w, get_entity(w, ac->target),
                                COMP_BUILDINGGHOST))
-        printf("attacked\n");
-      return 1;
+        return 1;
     }
   }
-  printf("not attacked\n");
   return 0;
 }
 
@@ -428,6 +426,8 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
         vec_free(targets);
         return;
       }
+
+      flag = COMPF_PLAYERMANAGER;
       VEC(EntityRef) ps = world_query(w, &flag);
       PlayerManager *pm0 =
           entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
@@ -497,7 +497,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
       }
 
       for (uint i = 0; i < vec_len(fighters); i++) {
-        Actionnable *act = entity_get_component(w, get_entity(w, builders[i]),
+        Actionnable *act = entity_get_component(w, get_entity(w, fighters[i]),
                                                 COMP_ACTIONNABLE);
         if (act->act == Lazy) {
           if (!vec_len(targets)) {

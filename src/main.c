@@ -10,12 +10,14 @@
 #include "ai/ennemy_ai.h"
 #include "ai/movement.h"
 #include "components.h"
+#include "construction.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
 #include "game_manager.h"
 #include "input.h"
 #include "players.h"
+#include "renderer/button.h"
 #include "renderer/camera.h"
 #include "renderer/sprite.h"
 #include "renderer/ui.h"
@@ -213,6 +215,28 @@ int main() {
         take_ai_action(&w, &ais, renderer, window);
       } else if (slow_tick == 30) {
         reconsider_ai_state(&w, &ais);
+
+        int tforum = 0;
+        int uforum = 0;
+
+        Bitflag flag = COMPF_UNIT;
+        VEC(EntityRef) es = world_query(&w, &flag);
+        for (uint i = 0; i < vec_len(es); i++) {
+          Entity *e = get_entity(&w, es[i]);
+          Unit *u = entity_get_component(&w, e, COMP_UNIT);
+          BuildingGhost *bg = entity_get_component(&w, e, COMP_BUILDINGGHOST);
+          if (bg && !bg->construction_done)
+            continue;
+          if (u->t == FORUM)
+            tforum++;
+          if (u->t == UFORUM)
+            uforum++;
+        }
+
+        if (!uforum)
+          spawn_victory(&w, renderer, window);
+        else if (!tforum)
+          spawn_defeat(&w, renderer, window);
       } else if (slow_tick == 45) {
         ai_defends_itself(&w);
       }
@@ -222,7 +246,9 @@ int main() {
       if (previous_state == MAIN && RUNNING == IN_GAME) {
         new_game(&w, renderer, window, camcam);
         in_game = 1;
-      } else if (RUNNING == MAIN && previous_state == IN_GAMEMENU) {
+      } else if (RUNNING == MAIN &&
+                 (previous_state == IN_GAMEMENU || previous_state == VICTORY ||
+                  previous_state == DEFEAT)) {
         revert_game(&w);
         in_game = 0;
       }
