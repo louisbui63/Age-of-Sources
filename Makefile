@@ -33,7 +33,7 @@ doc:
 latex:
 	make -C ./doc latex
 
-htmldoc : doc
+htmldoc :
 	firefox https://uwu-segfault.eu/2p2doc/
 
 clean:

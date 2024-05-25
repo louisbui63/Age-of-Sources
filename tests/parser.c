@@ -6,7 +6,7 @@
 #include "../src/util.h"
 
 int test_parser() {
-  Unit *unit = parse("./tests/testunit.h", NULL, NULL);
+  UnitT *unit = parse("./tests/testunit.h", NULL, NULL);
 
   ASSERT(unit->b_dam == 100);
   ASSERT(unit->b_def == 20);
