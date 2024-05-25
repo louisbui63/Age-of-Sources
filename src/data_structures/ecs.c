@@ -241,3 +241,10 @@ void despawn_from_component(World *w, Bitflag b) {
     despawn_entity(w, e);
   }
 }
+
+EntityRef get_next_entity_ref(World *w) {
+  if (vec_len(w->entity_sparsity)) {
+    return w->entity_sparsity[vec_len(w->entity_sparsity) - 1];
+  }
+  return vec_len(w->entities) - 1;
+}
