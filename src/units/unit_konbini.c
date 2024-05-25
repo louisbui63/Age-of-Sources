@@ -46,11 +46,11 @@
 
 //! The elventh text is the w of the unit's sprite, it must a be positive
 //! decimal number smaller or equal than 65535
-/*32*/
+/*64*/
 
 //! The twelfth text is the h of the unit's sprite, it must a be positive
 //! decimal number smaller or equal than 65535
-/*32*/
+/*64*/
 
 //! The thirteenth text is the unit's sprite path, it must be less than 255
 //! characters long.

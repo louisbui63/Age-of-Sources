@@ -186,6 +186,7 @@ Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window) {
       get_texture("./asset/backbackground.bmp", rdr, window);
   return back;
 }
+
 void null_click_event(__attribute__((unused)) World *w,
                       __attribute__((unused)) SDL_Renderer *renderer,
                       __attribute__((unused)) SDL_Window *window) {}
@@ -249,6 +250,14 @@ char *running_to_str(__attribute__((unused)) World *w,
 
   case IN_GAMEOPTION:
     strcpy(t, "In_GameOption ");
+    break;
+
+  case VICTORY:
+    strcpy(t, "Victory       ");
+    break;
+
+  case DEFEAT:
+    strcpy(t, "Defeat        ");
     break;
   }
   return t;

@@ -18,9 +18,11 @@ char is_ai_attacked(World *w) {
     if (ac->act == Attack && ow->owner == 0) {
       if (entity_get_component(w, get_entity(w, ac->target),
                                COMP_BUILDINGGHOST))
-        return 1;
+        printf("attacked\n");
+      return 1;
     }
   }
+  printf("not attacked\n");
   return 0;
 }
 
@@ -46,7 +48,7 @@ void reconsider_ai_state(World *w, AiState *ais) {
     if (is_ai_attacked(w))
       *ais = Defense;
     if ((pm1->dclay * pm1->clay_multiplier +
-         pm1->dwater * pm1->water_multiplier) *
+         pm1->dwater * pm1->water_multiplier) /
             1.2 >
         pm0->dclay * pm0->clay_multiplier + pm0->dwater * pm0->water_multiplier)
       *ais = Offense;
@@ -56,8 +58,9 @@ void reconsider_ai_state(World *w, AiState *ais) {
       *ais = Defense;
     if (pm1->dclay * pm1->clay_multiplier +
             pm1->dwater * pm1->water_multiplier <
-        1.2 * (pm0->dclay * pm0->clay_multiplier +
-               pm0->dwater * pm0->water_multiplier))
+        (pm0->dclay * pm0->clay_multiplier +
+         pm0->dwater * pm0->water_multiplier) /
+            1.2)
       *ais = Offense;
     break;
   case Defense:
@@ -76,7 +79,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
     // possible
     {
       Entity *forum = 0;
-      VEC(Entity *) builders = vec_new(Entity *);
+      VEC(EntityRef) builders = vec_new(EntityRef);
       Bitflag flag = COMPF_UNIT;
       VEC(EntityRef) es = world_query(w, &flag);
       for (uint i = 0; i < vec_len(es); i++) {
@@ -89,7 +92,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           else if (u->t == UBEAVER) {
             Actionnable *act = entity_get_component(w, e, COMP_ACTIONNABLE);
             if (act->act == Lazy)
-              vec_push(builders, e);
+              vec_push(builders, es[i]);
           }
         }
       }
@@ -113,8 +116,8 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
         while (pm1->water > 100 && i++ < 2) {
           pm1->water -= 100;
           spawn_unit(w, UBEAVER, renderer, window,
-                     (Position){p->x + (float)(rand() % 200 - 100) / 10,
-                                p->y + (float)(rand() % 200 - 100) / 10},
+                     (Position){p->x + (float)(rand() % 2000 - 1000) / 10,
+                                p->y + (float)(rand() % 2000 - 1000) / 10},
                      1);
         }
       } else {
@@ -124,7 +127,8 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
              i += 2) {
           pm1->clay -= 200;
           pm1->water -= 100;
-          Position *p = entity_get_component(w, builders[i], COMP_POSITION);
+          Position *p = entity_get_component(w, get_entity(w, builders[i]),
+                                             COMP_POSITION);
           // Hardcoding is good, actually
           Position target = {1536 + (rand() % (16 * 8)) - 16 * 4,
                              832 + (rand() % (16 * 8)) - 16 * 4};
@@ -141,7 +145,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           TilePosition tpend = pos2tile(&mp_vec2);
 
           SteerManager *stm = entity_get_component(
-              w, get_entity(w, world_query(w, &bf)[0]), COMP_STEERMANAGER);
+              w, get_entity(w, builders[i]), COMP_STEERMANAGER);
 
           Path pa = pathfind_astar(mapc->map, BEAVER, &tpstart, &tpend);
           if (pa) {
@@ -159,10 +163,11 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           }
 
           bf = COMPF_ACTIONNABLE;
-          Actionnable *act =
-              entity_get_component(w, builders[i], COMP_ACTIONNABLE);
+          Actionnable *act = entity_get_component(w, get_entity(w, builders[i]),
+                                                  COMP_ACTIONNABLE);
 
           {
+            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -180,26 +185,20 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             ecs_add_component(w, e, COMP_SPRITE, sp);
             Position *p = calloc(1, sizeof(Position));
             *p = (Position){target.x, target.y};
-            Bitflag bf = COMPF_CAMERA;
-            VEC(EntityRef) camv = world_query(w, &bf);
-            Entity *ecam = get_entity(w, camv[0]);
-            Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
-            Position pworld = screen2worldspace(p, cam);
-            *p = pworld;
             ecs_add_component(w, e, COMP_POSITION, p);
             ClaySource *cs = malloc(sizeof(ClaySource));
             ecs_add_component(w, e, COMP_CLAYSOURCE, cs);
 
             act->act = Build;
-            // yes, this is the ref of the entity we just created
-            act->target = vec_len(w->entities) - 1;
+            act->target = eref;
           }
         }
         for (uint i = 1; i < vec_len(builders) && pm1->clay > 300; i += 2) {
           pm1->clay -= 300;
-          Position *ps = entity_get_component(w, builders[i], COMP_POSITION);
-          Actionnable *act =
-              entity_get_component(w, builders[i], COMP_ACTIONNABLE);
+          Position *ps = entity_get_component(w, get_entity(w, builders[i]),
+                                              COMP_POSITION);
+          Actionnable *act = entity_get_component(w, get_entity(w, builders[i]),
+                                                  COMP_ACTIONNABLE);
 
           {
             Entity *e = spawn_entity(w);
@@ -220,12 +219,6 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             Position *p = calloc(1, sizeof(Position));
             *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
                             ps->y + (float)(rand() % 200 - 100) / 10};
-            Bitflag bf = COMPF_CAMERA;
-            VEC(EntityRef) camv = world_query(w, &bf);
-            Entity *ecam = get_entity(w, camv[0]);
-            Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
-            Position pworld = screen2worldspace(p, cam);
-            *p = pworld;
             ecs_add_component(w, e, COMP_POSITION, p);
             ClaySource *cs = malloc(sizeof(WaterSource));
             ecs_add_component(w, e, COMP_WATERSOURCE, cs);
@@ -254,10 +247,11 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
     {
 
       Entity *forum = 0;
-      VEC(Entity *) builders = vec_new(Entity *);
-      VEC(Entity *) barracks = vec_new(Entity *);
-      VEC(Entity *) fighters = vec_new(Entity *);
+      VEC(EntityRef) builders = vec_new(EntityRef);
+      VEC(EntityRef) barracks = vec_new(EntityRef);
+      VEC(EntityRef) fighters = vec_new(EntityRef);
       VEC(EntityRef) targets = vec_new(EntityRef);
+      int builder_count = 0;
 
       Bitflag flag = COMPF_UNIT;
       VEC(EntityRef) es = world_query(w, &flag);
@@ -269,13 +263,14 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           if (u->t == UFORUM)
             forum = e;
           else if (u->t == UBEAVER) {
+            builder_count++;
             Actionnable *act = entity_get_component(w, e, COMP_ACTIONNABLE);
             if (act->act == Lazy)
-              vec_push(builders, e);
+              vec_push(builders, es[i]);
           } else if (u->t == UCASERN) {
-            vec_push(barracks, e);
+            vec_push(barracks, es[i]);
           } else if (u->b_dam != 0 || u->p_dam != 0 || u->s_dam != 0) {
-            vec_push(fighters, e);
+            vec_push(fighters, es[i]);
           }
         } else {
           vec_push(targets, es[i]);
@@ -298,14 +293,14 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
         pm1 = pm0;
       }
 
-      if (vec_len(builders) < 2) {
+      if (builder_count < 2) {
         Position *p = entity_get_component(w, forum, COMP_POSITION);
         int i = 0;
         while (pm1->water > 100 && i++ < 2) {
           pm1->water -= 100;
           spawn_unit(w, UBEAVER, renderer, window,
-                     (Position){p->x + (float)(rand() % 200 - 100) / 10,
-                                p->y + (float)(rand() % 200 - 100) / 10},
+                     (Position){p->x + (float)(rand() % 2000 - 1000) / 10,
+                                p->y + (float)(rand() % 2000 - 1000) / 10},
                      1);
         }
       } else if (vec_len(barracks) < 2) {
@@ -315,11 +310,13 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           pm1->clay -= 600;
           pm1->water -= 400;
 
-          Position *ps = entity_get_component(w, builders[i], COMP_POSITION);
-          Actionnable *act =
-              entity_get_component(w, builders[i], COMP_ACTIONNABLE);
+          Position *ps = entity_get_component(w, get_entity(w, builders[i]),
+                                              COMP_POSITION);
+          Actionnable *act = entity_get_component(w, get_entity(w, builders[i]),
+                                                  COMP_ACTIONNABLE);
 
           {
+            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -338,17 +335,10 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             Position *p = calloc(1, sizeof(Position));
             *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
                             ps->y + (float)(rand() % 200 - 100) / 10};
-            Bitflag bf = COMPF_CAMERA;
-            VEC(EntityRef) camv = world_query(w, &bf);
-            Entity *ecam = get_entity(w, camv[0]);
-            Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
-            Position pworld = screen2worldspace(p, cam);
-            *p = pworld;
             ecs_add_component(w, e, COMP_POSITION, p);
 
             act->act = Build;
-            // yes, this is the ref of the entity we just created
-            act->target = vec_len(w->entities) - 1;
+            act->target = eref;
           }
         }
       } else {
@@ -356,17 +346,18 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
              i < vec_len(barracks) && pm1->water > 80 && pm1->clay > 40; i++) {
           pm1->clay -= 600;
           pm1->water -= 400;
-          Position *ps = entity_get_component(w, barracks[i], COMP_POSITION);
+          Position *ps = entity_get_component(w, get_entity(w, barracks[i]),
+                                              COMP_POSITION);
           spawn_unit(w, BASE_FISH, renderer, window,
-                     (Position){ps->x + (float)(rand() % 200 - 100) / 10,
-                                ps->y + (float)(rand() % 200 - 100) / 10},
+                     (Position){ps->x + (float)(rand() % 2000 - 1000) / 10,
+                                ps->y + (float)(rand() % 2000 - 1000) / 10},
                      1);
         }
       }
 
       for (uint i = 0; i < vec_len(fighters); i++) {
-        Actionnable *act =
-            entity_get_component(w, builders[i], COMP_ACTIONNABLE);
+        Actionnable *act = entity_get_component(w, get_entity(w, fighters[i]),
+                                                COMP_ACTIONNABLE);
         if (act->act == Lazy) {
           if (!vec_len(targets)) {
             fprintf(stderr, "somehow the player has nothing anymore\n");
@@ -399,10 +390,11 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
     {
 
       Entity *forum = 0;
-      VEC(Entity *) builders = vec_new(Entity *);
-      VEC(Entity *) barracks = vec_new(Entity *);
-      VEC(Entity *) fighters = vec_new(Entity *);
+      VEC(EntityRef) builders = vec_new(EntityRef);
+      VEC(EntityRef) barracks = vec_new(EntityRef);
+      VEC(EntityRef) fighters = vec_new(EntityRef);
       VEC(EntityRef) targets = vec_new(EntityRef);
+      int builder_count = 0;
 
       Bitflag flag = COMPF_UNIT;
       VEC(EntityRef) es = world_query(w, &flag);
@@ -414,13 +406,14 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           if (u->t == UFORUM)
             forum = e;
           else if (u->t == UBEAVER) {
+            builder_count++;
             Actionnable *act = entity_get_component(w, e, COMP_ACTIONNABLE);
             if (act->act == Lazy)
-              vec_push(builders, e);
+              vec_push(builders, es[i]);
           } else if (u->t == UCASERN) {
-            vec_push(barracks, e);
+            vec_push(barracks, es[i]);
           } else if (u->b_dam != 0 || u->p_dam != 0 || u->s_dam != 0) {
-            vec_push(fighters, e);
+            vec_push(fighters, es[i]);
           }
         } else {
           Actionnable *a = entity_get_component(w, e, COMP_ACTIONNABLE);
@@ -444,7 +437,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
         pm1 = pm0;
       }
 
-      if (vec_len(builders) < 2) {
+      if (builder_count < 2) {
         Position *p = entity_get_component(w, forum, COMP_POSITION);
         int i = 0;
         while (pm1->water > 100 && i++ < 2) {
@@ -458,11 +451,13 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           pm1->clay -= 600;
           pm1->water -= 400;
 
-          Position *ps = entity_get_component(w, builders[i], COMP_POSITION);
-          Actionnable *act =
-              entity_get_component(w, builders[i], COMP_ACTIONNABLE);
+          Position *ps = entity_get_component(w, get_entity(w, builders[i]),
+                                              COMP_POSITION);
+          Actionnable *act = entity_get_component(w, get_entity(w, builders[i]),
+                                                  COMP_ACTIONNABLE);
 
           {
+            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -481,17 +476,10 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             Position *p = calloc(1, sizeof(Position));
             *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
                             ps->y + (float)(rand() % 200 - 100) / 10};
-            Bitflag bf = COMPF_CAMERA;
-            VEC(EntityRef) camv = world_query(w, &bf);
-            Entity *ecam = get_entity(w, camv[0]);
-            Camera *cam = entity_get_component(w, ecam, COMP_CAMERA);
-            Position pworld = screen2worldspace(p, cam);
-            *p = pworld;
             ecs_add_component(w, e, COMP_POSITION, p);
 
             act->act = Build;
-            // yes, this is the ref of the entity we just created
-            act->target = vec_len(w->entities) - 1;
+            act->target = eref;
           }
         }
       } else {
@@ -499,17 +487,18 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
              i < vec_len(barracks) && pm1->water > 80 && pm1->clay > 40; i++) {
           pm1->clay -= 600;
           pm1->water -= 400;
-          Position *ps = entity_get_component(w, barracks[i], COMP_POSITION);
+          Position *ps = entity_get_component(w, get_entity(w, barracks[i]),
+                                              COMP_POSITION);
           spawn_unit(w, BASE_FISH, renderer, window,
-                     (Position){ps->x + (float)(rand() % 200 - 100) / 10,
-                                ps->y + (float)(rand() % 200 - 100) / 10},
+                     (Position){ps->x + (float)(rand() % 2000 - 1000) / 10,
+                                ps->y + (float)(rand() % 2000 - 1000) / 10},
                      1);
         }
       }
 
       for (uint i = 0; i < vec_len(fighters); i++) {
-        Actionnable *act =
-            entity_get_component(w, builders[i], COMP_ACTIONNABLE);
+        Actionnable *act = entity_get_component(w, get_entity(w, builders[i]),
+                                                COMP_ACTIONNABLE);
         if (act->act == Lazy) {
           if (!vec_len(targets)) {
             fprintf(stderr, "somehow the player has nothing anymore\n");
@@ -536,10 +525,15 @@ void ai_defends_itself(World *w) {
   for (uint i = 0; i < vec_len(es); i++) {
     Actionnable *act =
         entity_get_component(w, get_entity(w, es[i]), COMP_ACTIONNABLE);
-    if (act->act == Attack) {
+    SteerManager *stm =
+        entity_get_component(w, get_entity(w, es[i]), COMP_STEERMANAGER);
+    Ownership *o =
+        entity_get_component(w, get_entity(w, es[i]), COMP_OWNERSHIP);
+    if (o->owner == 0 && act->act == Attack &&
+        (!stm->current_path || !vec_len(stm->current_path))) {
       Entity *e = get_entity(w, act->target);
       Actionnable *act2 = entity_get_component(w, e, COMP_ACTIONNABLE);
-      if (act2->act != Attack) {
+      if (act2 && act2->act != Attack) {
         act2->act = Attack;
         act2->target = es[i];
       }

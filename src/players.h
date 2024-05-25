@@ -23,4 +23,5 @@ typedef struct {
 typedef struct {
 } ClaySource;
 
+//! Self explanatory
 void update_ressources(World *w);

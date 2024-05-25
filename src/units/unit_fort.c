@@ -63,14 +63,14 @@
 //! characters long.
 /**/
 
-Entity *FORT_ENTITY;
+EntityRef FORT_ENTITY;
 
-slot_spawn_unit(fort_slot_0, t34, 50, 50, FORT_ENTITY, T34)
-slot_spawn_unit(fort_slot_1, maid, 50, 50, FORT_ENTITY, MAID)
-slot_spawn_unit(fort_slot_2, pingu, 50, 50, FORT_ENTITY, PINGU)
+slot_spawn_unit(fort_slot_0, t34, 50, 50, get_entity(w, FORT_ENTITY), T34)
+slot_spawn_unit(fort_slot_1, maid, 50, 50, get_entity(w, FORT_ENTITY), MAID)
+slot_spawn_unit(fort_slot_2, pingu, 50, 50, get_entity(w, FORT_ENTITY), PINGU)
 
 ClickEvent fort_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
-  FORT_ENTITY = e;
+  FORT_ENTITY = e->id;
   switch (slot) {
   case 0:
     return fort_slot_0;

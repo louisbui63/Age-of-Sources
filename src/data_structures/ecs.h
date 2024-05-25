@@ -135,6 +135,10 @@ VEC(EntityRef) * world_query_mut(World *w, Bitflag *b);
 //! returned
 void *entity_get_component(World *w, Entity *e, int type);
 
+//! Returns the `EntityRef` of an entity that would be created just after the
+//! call to this function
+EntityRef get_next_entity_ref(World *w);
+
 //! Expands to a parallel query on the elements of `erefs`. `erefs` is expected
 //! to be the return value of `world_query`, and must be a glvalue. Commands are
 //! executed with the understanding that they can access the element they work
