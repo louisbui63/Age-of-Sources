@@ -137,6 +137,13 @@ ActualisedText *spawn_victory_text(World *w, SDL_Renderer *renderer,
 
 char *str_victory_text(World *w, Entity *e);
 
+void spawn_defeat(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+ActualisedText *spawn_defeat_text(World *w,
+
+                                  SDL_Renderer *renderer, SDL_Window *window);
+char *str_defeat_text(World *w, Entity *e);
+
 //
 //
 //
