@@ -27,7 +27,7 @@ void *get_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
 //! unadvisable as slow. Crashes on invalid file path or texture creation.
 void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
 
-//! Frees the texture of the file `t` in the `ASSET_STORE`.
+//! Remove a texture from the `ASSET_STORE` and free it.
 int drop_texture(char *t);
 
 //! Returns a pointer to the audio from file `t`. Will had it to the
@@ -48,8 +48,7 @@ void *load_font(char *t, Uint8 size);
 //! `ASSET_STORE` if it is not in it yet.
 void *get_font(char *t, Uint8 size);
 
-//! Frees the font with a size of `size` and the font `font` `t` in the
-//! `ASSET_STORE`.
+//! Remove a font from the `ASSET_STORE` and free it.
 int drop_font(char *font, Uint8 size);
 
 //! Loads the unit of the UnitTypes `t` in the `ASSET_STORE` by parsing the file
@@ -62,7 +61,7 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window);
 //! `ASSET_STORE` if it is not in it yet.
 void *get_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window);
 
-//! Frees the unit of the file `t` in the `ASSET_STORE`.
+//! Remove a unit from the `ASSET_STORE` and free it.
 int drop_unit(UnitTypes *t);
 
 //! Self explanatory.
