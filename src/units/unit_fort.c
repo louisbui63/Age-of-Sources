@@ -76,6 +76,8 @@ ClickEvent fort_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
     return fort_slot_0;
   case 1:
     return fort_slot_1;
+  case 2:
+    return fort_slot_2;
   }
   return empty_click_event;
 }
