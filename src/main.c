@@ -117,15 +117,15 @@ int main() {
   *select_events = selection_event;
   ecs_add_component(&w, e, COMP_KEY_EVENT, select_events);
 
+  // render_game_state(&w);
+  //
   // create the players
   for (uint i = 0; i < 2; i++) {
     Entity *e = spawn_entity(&w);
     PlayerManager *pm = malloc(sizeof(PlayerManager));
-    *pm = (PlayerManager){i, 0, 0, 0, 0, 1.0, 1.0, 1.0, 1.0};
+    *pm = (PlayerManager){i, 500, 0, 500, 0, 1.0, 1.0, 1.0, 1.0};
     ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
   }
-
-  // render_game_state(&w);
 
   AiState ais = Eco;
 

@@ -2,7 +2,7 @@
 
 Age of Sources is a real time strategy game spiritually in line with games like Dune 2, Command and Conquer: Red Alert, and Warhammer 40k: Dawn of War II. It depicts a war between the tanuki civilization and U.N.E.C.T.A.S., a dangerous foreign entity which is after their resources.
 
-To fight Unectas (the leader of U.N.E.C.T.A.S.), the player will have to build a town and a varied army of cute tanukis their allies.
+To fight Unectas (the leader of U.N.E.C.T.A.S.), the player will have to build a town and a varied army of cute tanukis helped by their allies (including notably mounted penguins).
 
 ## How to play
 
