@@ -27,6 +27,8 @@ typedef struct {
   VEC(EntityRef) selected;
   char *building;
   UnitTypes building_utype;
+  int water_cost;
+  int clay_cost;
 } Selector;
 
 //! A `KeyEvent` that manages selections
@@ -38,7 +40,8 @@ void draw_selection(World *w, SDL_Renderer *rdr, SDL_Window *window);
 
 //! Switches the selector to `Building` type for a specified `building` and its
 //! UnitTypes `but`
-void set_building_selection(World *w, char *building, UnitTypes but);
+void set_building_selection(World *w, char *building, UnitTypes but, int water,
+                            int clay);
 
 void selector_free(void *s);
 

@@ -86,7 +86,7 @@ Entity *BEAVER_ENTITY;
       char *un =                                                               \
           malloc(sizeof(char) * (strlen("src/units/unit_" #name ".c") + 1));   \
       strcpy(un, "src/units/unit_" #name ".c");                                \
-      set_building_selection(w, un, u);                                        \
+      set_building_selection(w, un, u, wa, cl);                                \
     }                                                                          \
   }
 

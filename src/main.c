@@ -111,7 +111,8 @@ int main() {
   // create the selector
   Entity *e = spawn_entity(&w);
   Selector *s = malloc(sizeof(Selector));
-  *s = (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0, UNIT_TEST};
+  *s = (Selector){Normal, {0, 0},    {0, 0}, 0, vec_new(EntityRef),
+                  0,      UNIT_TEST, 0,      0};
   ecs_add_component(&w, e, COMP_SELECTOR, s);
   KeyEvent *select_events = malloc(sizeof(KeyEvent));
   *select_events = selection_event;

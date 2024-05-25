@@ -15,14 +15,31 @@
 
 extern Running RUNNING;
 
-void reset_selection_type(Selector *s) {
-  if (s->type == Building)
+void reset_selection_type(World *w, Selector *s) {
+  if (s->type == Building) {
     free(s->building);
+
+    Bitflag flag = COMPF_PLAYERMANAGER;
+    VEC(EntityRef) ps = world_query(w, &flag);
+    PlayerManager *pm0 =
+        entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
+    PlayerManager *pm1 =
+        entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
+    if (pm0->id == 1) {
+      PlayerManager *tmp = pm0;
+      pm0 = pm1;
+      pm1 = tmp;
+    }
+
+    pm0->water += s->water_cost;
+    pm0->clay += s->clay_cost;
+  }
   s->type = Normal;
   SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
 }
 
-void set_building_selection(World *w, char *building, UnitTypes but) {
+void set_building_selection(World *w, char *building, UnitTypes but, int water,
+                            int clay) {
   Bitflag flag = COMPF_SELECTOR;
   VEC(EntityRef) es = world_query(w, &flag);
   // I'm not responsible if you somehow end up with two selectors and so it
@@ -30,13 +47,31 @@ void set_building_selection(World *w, char *building, UnitTypes but) {
   Entity *e = get_entity(w, es[0]);
   Selector *sl = entity_get_component(w, e, COMP_SELECTOR);
 
-  if (sl->type == Building)
+  if (sl->type == Building) {
     free(sl->building);
+
+    Bitflag flag = COMPF_PLAYERMANAGER;
+    VEC(EntityRef) ps = world_query(w, &flag);
+    PlayerManager *pm0 =
+        entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
+    PlayerManager *pm1 =
+        entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
+    if (pm0->id == 1) {
+      PlayerManager *tmp = pm0;
+      pm0 = pm1;
+      pm1 = tmp;
+    }
+
+    pm0->water += sl->water_cost;
+    pm0->clay += sl->clay_cost;
+  }
 
   sl->is_selecting = 0;
   sl->type = Building;
   sl->building = building;
   sl->building_utype = but;
+  sl->water_cost = water;
+  sl->clay_cost = clay;
   SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR));
 }
 
@@ -44,16 +79,10 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
                      KeyState st) {
   Selector *s = entity_get_component(w, e, COMP_SELECTOR);
 
-  if (inputs_is_key_in(i, SDLK_b)) {
-    char *un = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
-    strcpy(un, "src/units/unit_well.c");
-    set_building_selection(w, un, WELL);
-  }
-
   if (inputs_is_key_in(i, SDLK_m)) {
     char *un = malloc(sizeof(char) * (strlen("src/units/unit_debug.c") + 1));
     strcpy(un, "src/units/unit_debug.c");
-    set_building_selection(w, un, DEBUG);
+    set_building_selection(w, un, DEBUG, 0, 0);
   }
 
   if (inputs_is_key_in(i, SDLK_TAB) && st == KEY_PRESSED &&
@@ -133,7 +162,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
     }
   } else if (s->type == Building && RUNNING == IN_GAME) {
     if (inputs_is_key_in(i, SDLK_ESCAPE) && st == KEY_PRESSED)
-      reset_selection_type(s);
+      reset_selection_type(w, s);
     else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) &&
              get_mouse_position(r).y < 270 && st == KEY_RELEASED) {
 
@@ -183,7 +212,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         if (s->building_utype == DEBUG)
           finish_construction(w, e);
 
-        reset_selection_type(s);
+        reset_selection_type(w, s);
       }
     }
   }
