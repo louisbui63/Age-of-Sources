@@ -44,4 +44,4 @@ void selector_free(void *s);
 
 //! This function is used to get the add right Clickables to the world to show
 //! the option of an unit when you select it to show when you select it.
-void render_unit_grid(World *w, Entity *e);
+void render_unit_grid(World *w, EntityRef e);
