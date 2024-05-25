@@ -5,6 +5,7 @@
 #include "../data_structures/asset_manager.h"
 #include "../pathfinding.h"
 #include "../players.h"
+#include "../selection.h"
 #include "../units/units.h"
 #include "steering_behaviors.h"
 
@@ -184,8 +185,8 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             Position *p = calloc(1, sizeof(Position));
             *p = (Position){target.x, target.y};
             ecs_add_component(w, e, COMP_POSITION, p);
-            ClaySource *cs = malloc(sizeof(ClaySource));
-            ecs_add_component(w, e, COMP_CLAYSOURCE, cs);
+            Selectable *sl = malloc(sizeof(Selectable));
+            ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
             act->target = eref;
@@ -199,6 +200,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                                                   COMP_ACTIONNABLE);
 
           {
+            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -218,12 +220,11 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
                             ps->y + (float)(rand() % 200 - 100) / 10};
             ecs_add_component(w, e, COMP_POSITION, p);
-            ClaySource *cs = malloc(sizeof(WaterSource));
-            ecs_add_component(w, e, COMP_WATERSOURCE, cs);
+            Selectable *sl = malloc(sizeof(Selectable));
+            ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
-            // yes, this is the ref of the entity we just created
-            act->target = vec_len(w->entities) - 1;
+            act->target = eref;
           }
         }
       }
@@ -334,6 +335,8 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
                             ps->y + (float)(rand() % 200 - 100) / 10};
             ecs_add_component(w, e, COMP_POSITION, p);
+            Selectable *sl = malloc(sizeof(Selectable));
+            ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
             act->target = eref;
@@ -477,6 +480,8 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
                             ps->y + (float)(rand() % 200 - 100) / 10};
             ecs_add_component(w, e, COMP_POSITION, p);
+            Selectable *sl = malloc(sizeof(Selectable));
+            ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
             act->target = eref;

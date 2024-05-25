@@ -205,6 +205,7 @@ void despawn_entity(World *w, Entity *e) {
       uint64_t *uwu = *(uint64_t **)(((HashMapEntry *)cur->data)->value);
       for (uint i = 0; i < vec_len(uwu); i++) {
         if (uwu[i] == e->id) {
+          printf("couic\n");
           vec_swap(uwu, i, vec_len(uwu) - 1);
           vec_pop(uwu);
         }

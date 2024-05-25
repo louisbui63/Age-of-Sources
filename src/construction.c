@@ -11,6 +11,7 @@ void building_ghost_component_free(void *a) {
 }
 
 void finish_construction(World *w, Entity *e) {
+  printf("done\n");
   BuildingGhost *bg = entity_get_component(w, e, COMP_BUILDINGGHOST);
   Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
   bg->construction_done = 1;
@@ -33,6 +34,7 @@ void finish_construction(World *w, Entity *e) {
 
   ecs_add_component(w, e, COMP_UNIT, u);
   if (bg->unit_type == WELL || bg->unit_type == UWELL) {
+    printf("water\n");
     WaterSource *ws = malloc(sizeof(WaterSource));
     ecs_add_component(w, e, COMP_WATERSOURCE, ws);
   } else if (bg->unit_type == FURNACE || bg->unit_type == UFURNACE) {
