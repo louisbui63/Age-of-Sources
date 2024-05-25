@@ -56,6 +56,21 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
     set_building_selection(w, un, DEBUG);
   }
 
+  if (inputs_is_key_in(i, SDLK_TAB) && st == KEY_PRESSED &&
+      vec_len(s->selected) > 1) {
+    uint i = 0;
+    for (; i < vec_len(s->selected) &&
+           !entity_get_component(w, get_entity(w, s->selected[i]),
+                                 COMP_STEERMANAGER);
+         i++)
+      ;
+    if (i >= vec_len(s->selected))
+      i = 0;
+    EntityRef er = s->selected[i];
+    vec_clear(s->selected);
+    vec_push(s->selected, er);
+  }
+
   if (s->type == Normal && RUNNING == IN_GAME) {
     if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT)) {
       if (st == KEY_PRESSED) {
