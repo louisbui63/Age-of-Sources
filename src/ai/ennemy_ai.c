@@ -18,9 +18,11 @@ char is_ai_attacked(World *w) {
     if (ac->act == Attack && ow->owner == 0) {
       if (entity_get_component(w, get_entity(w, ac->target),
                                COMP_BUILDINGGHOST))
-        return 1;
+        printf("attacked\n");
+      return 1;
     }
   }
+  printf("not attacked\n");
   return 0;
 }
 

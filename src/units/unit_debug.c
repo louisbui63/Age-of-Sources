@@ -64,7 +64,7 @@
 /*DEBUG*/
 
 char TARGET = 0;
-Entity *DEBUG_ENTITY;
+EntityRef DEBUG_ENTITY;
 
 void unit_debug_slot_0(__attribute__((unused)) World *w,
                        __attribute__((unused)) SDL_Renderer *renderer,
@@ -190,7 +190,8 @@ void unit_debug_slot_4(World *w, __attribute__((unused)) SDL_Renderer *renderer,
 void unit_debug_slot_5(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   char *c = malloc(sizeof(char) * (strlen("src/units/unit_maid.c") + 1));
   strcpy(c, "src/units/unit_maid.c");
-  Position *p = entity_get_component(w, DEBUG_ENTITY, COMP_POSITION);
+  Position *p =
+      entity_get_component(w, get_entity(w, DEBUG_ENTITY), COMP_POSITION);
   spawn_unit(w, MAID, renderer, window,
              (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
              0);
@@ -199,16 +200,16 @@ void unit_debug_slot_5(World *w, SDL_Renderer *renderer, SDL_Window *window) {
 void unit_debug_slot_6(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   char *c = malloc(sizeof(char) * (strlen("src/units/unit_hippo.c") + 1));
   strcpy(c, "src/units/unit_hippo.c");
-  Position *p = entity_get_component(w, DEBUG_ENTITY, COMP_POSITION);
+  Position *p =
+      entity_get_component(w, get_entity(w, DEBUG_ENTITY), COMP_POSITION);
   spawn_unit(w, HIPPO, renderer, window,
              (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
              1);
 }
 
 ClickEvent debug_grid(__attribute__((unused)) World *w,
-                      __attribute__((unused)) int slot,
-                      __attribute__((unused)) Entity *e) {
-  DEBUG_ENTITY = e;
+                      __attribute__((unused)) int slot, Entity *e) {
+  DEBUG_ENTITY = e->id;
   switch (slot) {
   case 0:
     return unit_debug_slot_0;
