@@ -103,15 +103,12 @@ void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
 
   if (pm0->water >= 5 * 10) {
     pm0->water -= 5 * 10;
-    if (pm0->water >= 5 * 10) {
-      pm0->water -= 5 * 10;
-      char *c = malloc(sizeof(char) * (strlen("src/units/unit_beaver.c") + 1));
-      strcpy(c, "src/units/unit_beaver.c");
-      Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
-      spawn_unit(
-          w, BEAVER, renderer, window,
-          (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100}, 0);
-    }
+    char *c = malloc(sizeof(char) * (strlen("src/units/unit_beaver.c") + 1));
+    strcpy(c, "src/units/unit_beaver.c");
+    Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
+    spawn_unit(w, BEAVER, renderer, window,
+               (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
+               0);
   }
 }
 
