@@ -1,4 +1,5 @@
 //! @file ennemy_ai.h
+#pragma once
 #include "../data_structures/ecs.h"
 #include <SDL2/SDL_render.h>
 
