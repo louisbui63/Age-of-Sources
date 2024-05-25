@@ -40,6 +40,7 @@ typedef enum {
   SAMURAI,
   SECU,
   T34,
+  DEBUG,
   UNIT_NUMBER
 } UnitTypes;
 

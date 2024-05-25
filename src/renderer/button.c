@@ -497,7 +497,7 @@ char *get_clay(World *w, __attribute__((unused)) Entity *e) {
   int i = 4;
   wi = wi / 10;
   while ((i >= 0) && (wi)) {
-    tmp[i++] = '0' + wi % 10;
+    tmp[i--] = '0' + wi % 10;
     wi = wi / 10;
   }
   return tmp;

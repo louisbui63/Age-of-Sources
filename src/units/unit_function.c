@@ -1,4 +1,17 @@
 #include "unit_function.h"
+#include "../components.h"
+
+PlayerManager *get_player_0(World *w) {
+  Bitflag flag = COMPF_PLAYERMANAGER;
+  VEC(EntityRef) ps = world_query(w, &flag);
+  PlayerManager *pm0 =
+      entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
+  PlayerManager *pm1 =
+      entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
+  if (pm0->id == 1)
+    pm0 = pm1;
+  return pm0;
+}
 
 extern HashMap GRID_FUNCTION_MAP;
 
@@ -21,6 +34,12 @@ void set_grid_functions() {
   strcpy(k, "Fish");
   v = malloc(sizeof(GridFunction));
   *v = fish_grid;
+  hash_map_insert(&GRID_FUNCTION_MAP, k, v);
+
+  k = malloc(sizeof(char) * (strlen("DEBUG") + 1));
+  strcpy(k, "DEBUG");
+  v = malloc(sizeof(GridFunction));
+  *v = debug_grid;
   hash_map_insert(&GRID_FUNCTION_MAP, k, v);
 }
 

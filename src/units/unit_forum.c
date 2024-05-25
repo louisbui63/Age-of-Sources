@@ -65,53 +65,8 @@
 
 Entity *FORUM_ENTITY;
 
-void forum_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-  Bitflag flag = COMPF_PLAYERMANAGER;
-  VEC(EntityRef) ps = world_query(w, &flag);
-  PlayerManager *pm0 =
-      entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
-  PlayerManager *pm1 =
-      entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
-  if (pm0->id == 1) {
-    PlayerManager *tmp = pm0;
-    pm0 = pm1;
-    pm1 = tmp;
-  }
-  // water&clay 5/s
-  if (pm0->water >= 5 * 10 && pm0->clay >= 5 * 10) {
-    pm0->water -= 5 * 10;
-    pm0->clay -= 5 * 10;
-    char *c = malloc(sizeof(char) * (strlen("src/units/unit_tanuki.c") + 1));
-    strcpy(c, "src/units/unit_tanuki.c");
-    Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
-    spawn_unit(w, BASE_SOLDIER, renderer, window, *p, 0);
-  }
-}
-
-void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
-  Bitflag flag = COMPF_PLAYERMANAGER;
-  VEC(EntityRef) ps = world_query(w, &flag);
-  PlayerManager *pm0 =
-      entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
-  PlayerManager *pm1 =
-      entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
-  if (pm0->id == 1) {
-    PlayerManager *tmp = pm0;
-    pm0 = pm1;
-    pm1 = tmp;
-  }
-
-  if (pm0->water >= 5 * 10) {
-    pm0->water -= 5 * 10;
-    if (pm0->water >= 5 * 10) {
-      pm0->water -= 5 * 10;
-      char *c = malloc(sizeof(char) * (strlen("src/units/unit_beaver.c") + 1));
-      strcpy(c, "src/units/unit_beaver.c");
-      Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
-      spawn_unit(w, BEAVER, renderer, window, *p, 0);
-    }
-  }
-}
+slot_spawn_unit(forum_slot_0, tanuki, 50, 50, FORUM_ENTITY, BASE_SOLDIER)
+slot_spawn_unit(forum_slot_1, beaver, 50, 0, FORUM_ENTITY, BEAVER)
 
 ClickEvent forum_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
   FORUM_ENTITY = e;

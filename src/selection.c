@@ -50,6 +50,27 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
     set_building_selection(w, un, WELL);
   }
 
+  if (inputs_is_key_in(i, SDLK_m)) {
+    char *un = malloc(sizeof(char) * (strlen("src/units/unit_debug.c") + 1));
+    strcpy(un, "src/units/unit_debug.c");
+    set_building_selection(w, un, DEBUG);
+  }
+
+  if (inputs_is_key_in(i, SDLK_TAB) && st == KEY_PRESSED &&
+      vec_len(s->selected) > 1) {
+    uint i = 0;
+    for (; i < vec_len(s->selected) &&
+           !entity_get_component(w, get_entity(w, s->selected[i]),
+                                 COMP_STEERMANAGER);
+         i++)
+      ;
+    if (i >= vec_len(s->selected))
+      i = 0;
+    EntityRef er = s->selected[i];
+    vec_clear(s->selected);
+    vec_push(s->selected, er);
+  }
+
   if (s->type == Normal && RUNNING == IN_GAME) {
     if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT)) {
       if (st == KEY_PRESSED) {
@@ -95,12 +116,14 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             continue;
           Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
           Position *p = entity_get_component(w, e, COMP_POSITION);
-          if (SDL_PointInRect(&(SDL_Point){p->x - (int)(sp->rect->w / 2),
-                                           p->y - (int)(sp->rect->h / 2)},
-                              &sel_rect) &&
-              SDL_PointInRect(&(SDL_Point){p->x + (int)(sp->rect->w / 2),
-                                           p->y + (int)(sp->rect->h / 2)},
-                              &sel_rect)) {
+          if (SDL_PointInRect(
+                  &(SDL_Point){p->x - (int)(sp->rect->w / (2 * cam->zoom)),
+                               p->y - (int)(sp->rect->h / (2 * cam->zoom))},
+                  &sel_rect) &&
+              SDL_PointInRect(
+                  &(SDL_Point){p->x + (int)(sp->rect->w / (2 * cam->zoom)),
+                               p->y + (int)(sp->rect->h / (2 * cam->zoom))},
+                  &sel_rect)) {
             vec_push(s->selected, es[i]);
           }
         }
@@ -111,8 +134,8 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
   } else if (s->type == Building && RUNNING == IN_GAME) {
     if (inputs_is_key_in(i, SDLK_ESCAPE) && st == KEY_PRESSED)
       reset_selection_type(s);
-    else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) && get_mouse_position(r).y < 270 &&
-             st == KEY_RELEASED) {
+    else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) &&
+             get_mouse_position(r).y < 270 && st == KEY_RELEASED) {
 
       SDL_Point pt = get_mouse_position(r);
       Position pworld = (Position){pt.x, pt.y};
@@ -156,6 +179,10 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         Selectable *sbis = calloc(1, sizeof(Selectable));
         sbis->is_ghost = 1;
         ecs_add_component(w, e, COMP_SELECTABLE, sbis);
+
+        if (s->building_utype == DEBUG)
+          finish_construction(w, e);
+
         reset_selection_type(s);
       }
     }
@@ -179,7 +206,6 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
       EntityRef action_btarget = UINT64_MAX;
       EntityRef action_atarget = UINT64_MAX;
 
-      // HERE TOO:
       Bitflag flag = COMPF_SELECTABLE | COMPF_POSITION | COMPF_SPRITE |
                      COMPF_OWNERSHIP | COMPF_BUILDINGGHOST;
       VEC(EntityRef) es = world_query(w, &flag);
@@ -192,9 +218,10 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         Position *p = entity_get_component(w, e, COMP_POSITION);
         if (SDL_PointInRect(
                 &(SDL_Point){mps.x, mps.y},
-                &(SDL_Rect){sp->rect->x + p->x - (int)(sp->rect->w / 2),
-                            sp->rect->y + p->y - (int)(sp->rect->h / 2),
-                            sp->rect->w, sp->rect->h}) &&
+                &(SDL_Rect){
+                    sp->rect->x + p->x - (int)(sp->rect->w / (2 * cam->zoom)),
+                    sp->rect->y + p->y - (int)(sp->rect->h / (2 * cam->zoom)),
+                    sp->rect->w, sp->rect->h}) &&
             !((BuildingGhost *)entity_get_component(w, e, COMP_BUILDINGGHOST))
                  ->construction_done) {
           action_btarget = es[i];
@@ -214,9 +241,10 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
           Position *p = entity_get_component(w, e, COMP_POSITION);
           if (SDL_PointInRect(
                   &(SDL_Point){mps.x, mps.y},
-                  &(SDL_Rect){sp->rect->x + p->x - (int)(sp->rect->w / 2),
-                              sp->rect->y + p->y - (int)(sp->rect->h / 2),
-                              sp->rect->w, sp->rect->h})) {
+                  &(SDL_Rect){
+                      sp->rect->x + p->x - (int)(sp->rect->w / (2 * cam->zoom)),
+                      sp->rect->y + p->y - (int)(sp->rect->h / (2 * cam->zoom)),
+                      sp->rect->w, sp->rect->h})) {
             action_atarget = es[i];
             break;
           }
@@ -229,7 +257,6 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         Position *p = entity_get_component(w, e, COMP_POSITION);
         if (stm != 0) {
 
-          // HERE
           Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
           if (ac && action_btarget != UINT64_MAX) {
             ac->act = Build;
@@ -254,7 +281,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             path_free(stm->current_path);
           stm->current_path = 0;
 
-          Unit *u = entity_get_component(w,e,COMP_UNIT);
+          Unit *u = entity_get_component(w, e, COMP_UNIT);
           Path p = pathfind_astar(mapc->map, u->t, &tpstart, &tpend);
           if (p) {
             if (vec_len(p) > 1) {
@@ -478,26 +505,7 @@ void render_unit_grid(World *w, Entity *e) {
     //   c->sprite->texture = get_texture("asset/sprites/tanuki_fort.bmp", r,
     //   wi); key_event = malloc(sizeof(KeyEvent)); *key_event =
     //   clickable_event; spawn_clickable(w, c, key_event); i++; break;
-  case WELL:
-
-    // // Beaver
-    // actualise_grid_coordinates(&x, &y, i);
-    // c = malloc(sizeof(Clickable));
-    // c->rect = malloc(sizeof(SDL_Rect));
-    // *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
-    // c->is_clicked = 0;
-    // c->click_event = forum_grid(w, i, e);
-    // c->text = malloc(sizeof(Text));
-    // c->text->str = malloc(1);
-    // *(c->text->str) = '\0';
-    // c->sprite = malloc(sizeof(Sprite));
-    // c->sprite->rect = malloc(sizeof(SDL_Rect));
-    // *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
-    // c->sprite->texture = get_texture("asset/sprites/tanuki_beaver.bmp", r,
-    // wi); key_event = malloc(sizeof(KeyEvent)); *key_event = clickable_event;
-    // spawn_clickable(w, c, key_event);
-    // i++;
-
+  case FORUM:
     // Tanuki
     actualise_grid_coordinates(&x, &y, i);
     c = malloc(sizeof(Clickable));
@@ -518,6 +526,123 @@ void render_unit_grid(World *w, Entity *e) {
     spawn_clickable(w, c, key_event);
     i++;
 
+    // Beaver
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = forum_grid(w, i, e);
+    c->text = malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->text->color = malloc(1);
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/tanuki_beaver.bmp", r, wi);
+    key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+    break;
+
+  case DEBUG:
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = debug_grid(w, i, e);
+    c->text = malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->text->color = malloc(1);
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/debug/swp.bmp", r, wi);
+    key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = debug_grid(w, i, e);
+    c->text = malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->text->color = malloc(1);
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/debug/const.bmp", r, wi);
+    key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = debug_grid(w, i, e);
+    c->text = malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->text->color = malloc(1);
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/debug/dam.bmp", r, wi);
+    key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = debug_grid(w, i, e);
+    c->text = malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->text->color = malloc(1);
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/debug/clay.bmp", r, wi);
+    key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = debug_grid(w, i, e);
+    c->text = malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->text->color = malloc(1);
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/debug/water.bmp", r, wi);
+    key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+    break;
   default:
     break;
   }

@@ -42,8 +42,8 @@ void update_ressources(World *w) {
       pm0->dclay += 10;
   }
 
-  pm1->water += pm1->dwater;
-  pm1->clay += pm1->dclay;
-  pm0->water += pm0->dwater;
-  pm0->clay += pm0->dclay;
+  pm1->water += pm1->dwater * pm1->water_multiplier;
+  pm1->clay += pm1->dclay * pm1->clay_multiplier;
+  pm0->water += pm0->dwater * pm0->water_multiplier;
+  pm0->clay += pm0->dclay * pm0->clay_multiplier;
 }

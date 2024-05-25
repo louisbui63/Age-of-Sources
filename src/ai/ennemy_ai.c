@@ -45,13 +45,19 @@ void reconsider_ai_state(World *w, AiState *ais) {
   case Eco:
     if (is_ai_attacked(w))
       *ais = Defense;
-    if (pm1->dclay + pm1->dwater * 1.2 > pm0->dclay + pm0->dwater)
+    if ((pm1->dclay * pm1->clay_multiplier +
+         pm1->dwater * pm1->water_multiplier) *
+            1.2 >
+        pm0->dclay * pm0->clay_multiplier + pm0->dwater * pm0->water_multiplier)
       *ais = Offense;
     break;
   case Offense:
     if (is_ai_attacked(w))
       *ais = Defense;
-    if (pm1->dclay + pm1->dwater < 1.2 * (pm0->dclay + pm0->dwater))
+    if (pm1->dclay * pm1->clay_multiplier +
+            pm1->dwater * pm1->water_multiplier <
+        1.2 * (pm0->dclay * pm0->clay_multiplier +
+               pm0->dwater * pm0->water_multiplier))
       *ais = Offense;
     break;
   case Defense:
@@ -91,6 +97,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
         vec_free(builders);
         return;
       }
+      flag = COMPF_PLAYERMANAGER;
       VEC(EntityRef) ps = world_query(w, &flag);
       PlayerManager *pm0 =
           entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
@@ -281,6 +288,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
         vec_free(targets);
         return;
       }
+      flag = COMPF_PLAYERMANAGER;
       VEC(EntityRef) ps = world_query(w, &flag);
       PlayerManager *pm0 =
           entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
