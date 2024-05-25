@@ -2,6 +2,7 @@
 #pragma once
 #include "../data_structures/ecs.h"
 #include "../input.h"
+#include "../units/units.h"
 #include "sprite.h"
 
 //! Type that corresponds to the text that should be rendered on entities such
@@ -42,13 +43,6 @@ typedef struct {
   SDL_Rect *rect;
 } Minimap;
 
-//! Type with this component show text when hovered
-typedef struct {
-  SDL_Rect *rect;
-  ActualisedText *text;
-  UnitTypes t;
-} Hoverable;
-
 //! Type used to render text that is not constant sur as hp, sound volume or
 //! ressources.
 typedef struct {
@@ -56,6 +50,13 @@ typedef struct {
   SDL_Rect *rect;
   SDL_Color *color;
 } ActualisedText;
+
+//! Type with this component show text when hovered
+typedef struct {
+  SDL_Rect *rect;
+  ActualisedText *text;
+  UnitTypes t;
+} Hoverable;
 
 //! Renders any entity that has user interface related component
 void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi);
