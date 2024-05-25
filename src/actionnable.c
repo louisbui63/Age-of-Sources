@@ -64,7 +64,7 @@ char actionnate(World *w, Actionnable *ac, Entity *se) {
       return 0;
     }
 
-    if (v2len(v2sub((Vec2){p1->x, p1->y}, (Vec2){p2->x, p2->y})) > u1->rg) {
+    if (v2len(v2sub((Vec2){p1->x, p1->y}, (Vec2){p2->x, p2->y})) <= u1->rg) {
 
       Bitflag flag = COMPF_PLAYERMANAGER;
       VEC(EntityRef) ps = world_query(w, &flag);
@@ -101,6 +101,8 @@ char actionnate(World *w, Actionnable *ac, Entity *se) {
       MapComponent *mapc = entity_get_component(w, emap, COMP_MAPCOMPONENT);
 
       SteerManager *stm = entity_get_component(w, se, COMP_STEERMANAGER);
+      if (stm->current_path && vec_len(stm->current_path))
+        return 0;
 
       Vec2 p_vec2 = (Vec2){.x = p1->x, .y = p1->y};
       TilePosition tpstart = pos2tile(&p_vec2);
@@ -113,7 +115,7 @@ char actionnate(World *w, Actionnable *ac, Entity *se) {
         path_free(stm->current_path);
       stm->current_path = 0;
 
-      Path p = pathfind_astar(mapc->map, UNIT_TEST, &tpstart, &tpend);
+      Path p = pathfind_astar(mapc->map, u1->t, &tpstart, &tpend);
       if (p) {
         if (vec_len(p) > 1) {
           free(p[0]);

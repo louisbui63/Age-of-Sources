@@ -128,7 +128,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
           }
         }
         if (vec_len(s->selected))
-          render_unit_grid(w, get_entity(w, s->selected[0]));
+          render_unit_grid(w, s->selected[0]);
       }
     }
   } else if (s->type == Building && RUNNING == IN_GAME) {
@@ -349,8 +349,9 @@ void actualise_grid_coordinates(int *x, int *y, int i) {
   *y = 270 + 15 + (i / n) * 32;
 }
 
-void render_unit_grid(World *w, Entity *e) {
-  UnitTypes t = ((Unit *)entity_get_component(w, e, COMP_UNIT))->t;
+void render_unit_grid(World *w, EntityRef e) {
+  UnitTypes t =
+      ((Unit *)entity_get_component(w, get_entity(w, e), COMP_UNIT))->t;
   despawn_from_component(w, COMPF_CLICKABLE);
   int i = 0;
   int x = 135;
@@ -388,7 +389,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = beaver_grid(w, i, e);
+    c->click_event = beaver_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -408,7 +409,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = beaver_grid(w, i, e);
+    c->click_event = beaver_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -428,7 +429,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = beaver_grid(w, i, e);
+    c->click_event = beaver_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -448,7 +449,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = beaver_grid(w, i, e);
+    c->click_event = beaver_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -468,7 +469,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = beaver_grid(w, i, e);
+    c->click_event = beaver_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -488,7 +489,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = beaver_grid(w, i, e);
+    c->click_event = beaver_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -509,7 +510,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 64, .w = 64};
     c->is_clicked = 0;
-    c->click_event = beaver_grid(w, i, e);
+    c->click_event = beaver_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -530,7 +531,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = forum_grid(w, i, e);
+    c->click_event = forum_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -550,7 +551,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = forum_grid(w, i, e);
+    c->click_event = forum_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -571,7 +572,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = debug_grid(w, i, e);
+    c->click_event = debug_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -590,7 +591,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = debug_grid(w, i, e);
+    c->click_event = debug_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -609,7 +610,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = debug_grid(w, i, e);
+    c->click_event = debug_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -628,7 +629,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = debug_grid(w, i, e);
+    c->click_event = debug_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -647,7 +648,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = debug_grid(w, i, e);
+    c->click_event = debug_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -656,6 +657,44 @@ void render_unit_grid(World *w, Entity *e) {
     c->sprite->rect = malloc(sizeof(SDL_Rect));
     *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
     c->sprite->texture = get_texture("asset/debug/water.bmp", r, wi);
+    key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = debug_grid(w, i, get_entity(w, e));
+    c->text = malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->text->color = malloc(1);
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/tanuki_maid.bmp", r, wi);
+    key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    spawn_clickable(w, c, key_event);
+    i++;
+
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = debug_grid(w, i, get_entity(w, e));
+    c->text = malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->text->color = malloc(1);
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/not_a_rhino.bmp", r, wi);
     key_event = malloc(sizeof(KeyEvent));
     *key_event = clickable_event;
     spawn_clickable(w, c, key_event);
@@ -670,7 +709,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = casern_grid(w, i, e);
+    c->click_event = casern_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -690,7 +729,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = casern_grid(w, i, e);
+    c->click_event = casern_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -710,7 +749,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = casern_grid(w, i, e);
+    c->click_event = casern_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -733,7 +772,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = fort_grid(w, i, e);
+    c->click_event = fort_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -753,7 +792,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = fort_grid(w, i, e);
+    c->click_event = fort_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
@@ -773,7 +812,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->rect = malloc(sizeof(SDL_Rect));
     *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
-    c->click_event = fort_grid(w, i, e);
+    c->click_event = fort_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';

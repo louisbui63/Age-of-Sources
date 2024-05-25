@@ -42,6 +42,6 @@ void set_building_selection(World *w, char *building, UnitTypes but);
 
 void selector_free(void *s);
 
-//! This function is used to get the right clickable to show when you select an
-//! unit.
+//! This function is used to get the add right Clickables to the world to show
+//! the option of an unit when you select it to show when you select it.
 void render_unit_grid(World *w, Entity *e);
