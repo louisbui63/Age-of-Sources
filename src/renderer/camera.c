@@ -84,8 +84,8 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
         Position wtl = world2screenspace(p, cam);
         Position wtr = world2screenspace(
             &(Position){.x = p->x + tr.x, .y = p->y + tr.y}, cam);
-        SDL_Rect r = {.x = wtl.x - (int)(s->rect->w / 2),
-                      .y = wtl.y - (int)(s->rect->h / 2),
+        SDL_Rect r = {.x = wtl.x - (int)(s->rect->w / (2 * cam->zoom)),
+                      .y = wtl.y - (int)(s->rect->h / (2 * cam->zoom)),
                       .w = wtr.x - wtl.x,
                       .h = wtr.y - wtl.y};
         // occludes offscreen sprites
@@ -150,9 +150,17 @@ void map_movement(World *w, SDL_Renderer *, Entity *e, Inputs *i, KeyState st) {
   }
   if (st == KEY_PRESSED && inputs_is_key_in(i, SDLK_COMMA)) {
     Camera *c = entity_get_component(w, e, COMP_CAMERA);
-    if (c->zoom == 1)
+    if (c->zoom == 1) {
       c->zoom = 2;
-    else
+      c->x = c->x < 0 ? 0
+                      : (c->x > TILE_SIZE * 400 - WIN_W * c->zoom
+                             ? TILE_SIZE * 400 - WIN_W * c->zoom
+                             : c->x);
+      c->y = c->y < 0 ? 0
+                      : (c->y > TILE_SIZE * 400 - (WIN_H - 90) * c->zoom
+                             ? TILE_SIZE * 400 - (WIN_H - 90) * c->zoom
+                             : c->y);
+    } else
       c->zoom = 1;
   }
 }
