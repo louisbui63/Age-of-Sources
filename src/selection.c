@@ -344,7 +344,7 @@ void selector_free(void *s) {
 }
 
 void actualise_grid_coordinates(int *x, int *y, int i) {
-  int n = 5; // This is the length of a line in the ui
+  int n = 6; // This is the length of a line in the ui - 1
   *x = 135 + (i % n) * 32;
   *y = 270 + 15 + (i / n) * 32;
 }

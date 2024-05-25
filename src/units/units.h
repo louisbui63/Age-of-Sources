@@ -97,6 +97,7 @@ typedef struct {
 //! `tile`
 double units_get_tile_speed(UnitTypes u, TileTypes t);
 
+//! Self explanatory.
 void unit_component_free(void *uni);
 
 //! A component indicating to which player a unit is belonging
@@ -104,7 +105,9 @@ typedef struct {
   char owner;
 } Ownership;
 
+//! Self explanatory.
 void unitt_free(UnitT *u);
 
+//! Creates an Unit of the UnitTypes `t` at the position `p` owned by `owner`.
 Entity *spawn_unit(World *w, UnitTypes t, SDL_Renderer *renderer,
                    SDL_Window *window, Position p, char owner);

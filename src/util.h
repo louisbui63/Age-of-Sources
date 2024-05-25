@@ -66,7 +66,10 @@ void sleep_nano(uint64_t n);
 
 typedef unsigned int uint;
 
+//! Self explanatory.
 #define max(a, b) ((a > b) ? (a) : (b))
+
+//! Self explanatory.
 #define min(a, b) ((a < b) ? (a) : (b))
 
 //! a 2d vector for use in units movement
@@ -96,6 +99,7 @@ Vec2 v2truncate(Vec2 a, float b);
 //! performs a dot product between two `Vec2`
 float v2dot(Vec2 a, Vec2 b);
 
+//! This enum is used to know the state of the game.
 typedef enum {
   STOP,
   MAIN,
@@ -107,10 +111,14 @@ typedef enum {
   DEFEAT
 } Running;
 
+//! This is type that was created to be able to get the window from the world
+//! using the ecs.
 typedef struct {
   SDL_Window *w;
 } Window;
 
+//! This is type that was created to be able to get the renderer from the world
+//! using the ecs.
 typedef struct {
   SDL_Renderer *r;
 } Renderer;

@@ -13,6 +13,7 @@ typedef struct {
   UnitTypes unit_type;
 } BuildingGhost;
 
+//! Self explanatory.
 void building_ghost_component_free(void *);
 
 //! Transforms a building's ghost into a proper building (typically, would be

@@ -79,24 +79,30 @@ void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
 //! component
 void render_hoverable(SDL_Rect *rect, char *text);
 
+//! Self explanatory.
 void hoverable_component_free(void *tmp);
 
+//! Self explanatory.
 void minimap_component_free(void *temp);
 
+//! Self explanatory.
 void background_component_free(void *temp);
 
+//! Self explanatory.
 void clickable_component_free(void *temp);
 
+//! Self explanatory.
 void text_component_free(void *temp);
 
+//! Self explanatory.
 void actualised_text_component_free(void *temp);
 
 //! Creates a black background that will be rendered before everything else.
 Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
 
-void null_click_event(__attribute__((unused)) World *w,
-                      __attribute__((unused)) SDL_Renderer *renderer,
-                      __attribute__((unused)) SDL_Window *window);
+//! A click_event that must be used when a clickable shouldn't do anything. This
+//! function ought to be useless outside of debug.
+void null_click_event(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
 //! Change `inner` so that it becomes the biggest rectangle of same ratio that
 //! can fit into `outer` padded by `padding` pixels.
@@ -113,6 +119,8 @@ ActualisedText *render_game_state(World *w);
 //! rendered they all begin at the same place
 char *running_to_str(World *w, Entity *e);
 
+//! Self explanatory.
 SDL_Renderer *get_renderer(World *w);
 
+//! Self explanatory.
 SDL_Window *get_window(World *w);
