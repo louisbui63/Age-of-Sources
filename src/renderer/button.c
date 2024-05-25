@@ -123,6 +123,27 @@ void event_sound_test(__attribute__((unused)) World *w,
                       __attribute__((unused)) SDL_Renderer *renderer,
                       __attribute__((unused)) SDL_Window *window);
 
+void spawn_victory(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+Clickable *spawn_end_exit(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+void event_end_exit(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+Background *spawn_end_background(World *w, SDL_Renderer *renderer,
+                                 SDL_Window *window);
+
+ActualisedText *spawn_victory_text(World *w, SDL_Renderer *renderer,
+                                   SDL_Window *window);
+
+char *str_victory_text(World *w, Entity *e);
+
+void spawn_defeat(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+ActualisedText *spawn_defeat_text(World *w,
+
+                                  SDL_Renderer *renderer, SDL_Window *window);
+char *str_defeat_text(World *w, Entity *e);
+
 //
 //
 //
@@ -511,6 +532,14 @@ void key_event_escape(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
       event_gameoption_back(w, rdr, wind->w);
       break;
 
+    case VICTORY:
+      event_end_exit(w, rdr, wind->w);
+      break;
+
+    case DEFEAT:
+      event_end_exit(w, rdr, wind->w);
+      break;
+
     default:
       break;
     }
@@ -655,4 +684,100 @@ void render_vec(World *w, VEC(Clickable *) vec) {
     spawn_clickable(w, vec[i], key_event);
   }
   vec_free(vec);
+}
+
+void spawn_victory(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  RUNNING = VICTORY;
+  despawn_from_component(w, COMPF_BACKGROUND);
+  despawn_from_component(w, COMPF_CLICKABLE);
+  despawn_from_component(w, COMPF_HOVERABLE);
+  despawn_from_component(w, COMPF_ACTUALISEDTEXT);
+  spawn_end_exit(w, renderer, window);
+  spawn_end_background(w, renderer, window);
+  spawn_victory_text(w, renderer, window);
+}
+
+Clickable *spawn_end_exit(World *w, SDL_Renderer *renderer,
+                          SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_end_exit, "Exit",
+                      (WIN_W - 100) / 2, (WIN_W - 100) / 2);
+}
+
+void event_end_exit(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  despawn_from_component(w, COMPF_ACTUALISEDTEXT);
+  despawn_from_component(w, COMPF_BACKGROUND);
+  despawn_from_component(w, COMPF_CLICKABLE);
+  spawn_main_menu(w, renderer, window);
+}
+
+Background *spawn_end_background(World *w, SDL_Renderer *renderer,
+                                 SDL_Window *window) {
+  return spawn_option_background(w, renderer, window);
+}
+
+ActualisedText *spawn_victory_text(__attribute__((unused)) World *w,
+                                   __attribute__((unused))
+                                   SDL_Renderer *renderer,
+                                   __attribute__((unused)) SDL_Window *window) {
+  Entity *e = spawn_entity(w);
+  ActualisedText *t = malloc(sizeof(ActualisedText));
+  t->color = malloc(sizeof(SDL_Color));
+  *(t->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+  t->rect = malloc(sizeof(SDL_Rect));
+  *(t->rect) =
+      (SDL_Rect){.x = soundxpos + 100, .y = soundypos + 5, .h = 20, .w = 100};
+  t->get_text = str_victory_text;
+  ecs_add_component(w, e, COMP_ACTUALISEDTEXT, t);
+  return t;
+}
+
+char *str_victory_text(__attribute__((unused)) World *w,
+                       __attribute__((unused)) Entity *e) {
+  int n = 90;
+  if (!(rand() % n)) {
+    play_audio("./asset/sfx/yahoo.wav", 0);
+  }
+
+  char *v = "Victory";
+  char *t = malloc(strlen(v) + 1);
+  strcpy(t, v);
+  return t;
+}
+
+void spawn_defeat(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  RUNNING = DEFEAT;
+  despawn_from_component(w, COMPF_BACKGROUND);
+  despawn_from_component(w, COMPF_CLICKABLE);
+  despawn_from_component(w, COMPF_HOVERABLE);
+  despawn_from_component(w, COMPF_ACTUALISEDTEXT);
+  spawn_end_exit(w, renderer, window);
+  spawn_end_background(w, renderer, window);
+  spawn_defeat_text(w, renderer, window);
+}
+
+ActualisedText *spawn_defeat_text(__attribute__((unused)) World *w,
+                                  __attribute__((unused))
+                                  SDL_Renderer *renderer,
+                                  __attribute__((unused)) SDL_Window *window) {
+  Entity *e = spawn_entity(w);
+  ActualisedText *t = malloc(sizeof(ActualisedText));
+  t->color = malloc(sizeof(SDL_Color));
+  *(t->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+  t->rect = malloc(sizeof(SDL_Rect));
+  int padding = 20;
+  *(t->rect) = (SDL_Rect){.x = (WIN_W - 500) / 2 + padding,
+                          .y = (WIN_H - 200) / 2 - WIN_H / 8 + padding,
+                          .h = 200 - 2 * padding,
+                          .w = 500 - 2 * padding};
+  t->get_text = str_victory_text;
+  ecs_add_component(w, e, COMP_ACTUALISEDTEXT, t);
+  return t;
+}
+
+char *str_defeat_text(__attribute__((unused)) World *w,
+                      __attribute__((unused)) Entity *e) {
+  char *v = "Defeat";
+  char *t = malloc(strlen(v) + 1);
+  strcpy(t, v);
+  return t;
 }

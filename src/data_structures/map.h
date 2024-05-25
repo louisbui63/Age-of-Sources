@@ -51,6 +51,8 @@ Map load_map_from_bmp(char *path);
 //! be freed.
 char *get_tile_file_name(TileTypes tt);
 
+//! Takes a pixel `id` and return the TileTypes that matches it.
 TileTypes pixel2tiletype(int8_t id);
 
+//! Takes a TileTypes `id` and return a pixel that matches it.
 int8_t tiletype2pixel(TileTypes id);

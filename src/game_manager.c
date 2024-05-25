@@ -1,6 +1,7 @@
 #include "game_manager.h"
 #include "actionnable.h"
 #include "components.h"
+#include "construction.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/map.h"
 #include "selection.h"
@@ -56,6 +57,11 @@ void new_game(World *w, SDL_Renderer *renderer, SDL_Window *window,
     ecs_add_component(w, e, COMP_UNIT, u);
     Selectable *se = calloc(1, sizeof(Selectable));
     ecs_add_component(w, e, COMP_SELECTABLE, se);
+    BuildingGhost *bg = malloc(sizeof(BuildingGhost));
+    *bg = (BuildingGhost){
+        ut, 1000, 500, 1, FORUM,
+    };
+    ecs_add_component(w, e, COMP_BUILDINGGHOST, bg);
   }
   { // spawn unectas forum
     Entity *e = spawn_entity(w);
@@ -95,6 +101,11 @@ void new_game(World *w, SDL_Renderer *renderer, SDL_Window *window,
     ecs_add_component(w, e, COMP_UNIT, u);
     Selectable *se = calloc(1, sizeof(Selectable));
     ecs_add_component(w, e, COMP_SELECTABLE, se);
+    BuildingGhost *bg = malloc(sizeof(BuildingGhost));
+    *bg = (BuildingGhost){
+        ut, 1000, 500, 1, UFORUM,
+    };
+    ecs_add_component(w, e, COMP_BUILDINGGHOST, bg);
   }
 }
 void revert_game(World *w) {

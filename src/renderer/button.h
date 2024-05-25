@@ -23,3 +23,9 @@ void key_event_escape(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
 //! Function that returns the sound level as a string with like `sound/128`, for
 //! a volume of 37, it returns `37/128`.
 char *str_sound_level(World *w, Entity *e);
+
+//! Displays the victory screen
+void spawn_victory(World *w, SDL_Renderer *renderer, SDL_Window *window);
+
+//! Displays the defeat screen
+void spawn_defeat(World *w, SDL_Renderer *renderer, SDL_Window *window);

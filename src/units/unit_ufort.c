@@ -41,7 +41,7 @@
 
 //! The ninth text is the rg of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*180*/
+/*1444*/
 
 //! The tenth text is the sp of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -57,7 +57,7 @@
 
 //! The thirteenth text is the unit's sprite path, it must be less than 255
 //! characters long.
-/*asset/sprites/tanuki_fort.bmp*/
+/*asset/sprites/unectas_fort.bmp*/
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.

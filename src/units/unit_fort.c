@@ -41,7 +41,7 @@
 
 //! The ninth text is the rg of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
-/*180*/
+/*1444*/
 
 //! The tenth text is the sp of the unit, it must a be positive decimal
 //! number smaller or equal than 65535
@@ -63,14 +63,14 @@
 //! characters long.
 /**/
 
-Entity *FORT_ENTITY;
+EntityRef FORT_ENTITY;
 
-slot_spawn_unit(fort_slot_0, t34, 50, 50, FORT_ENTITY, T34)
-slot_spawn_unit(fort_slot_1, maid, 50, 50, FORT_ENTITY, MAID)
-slot_spawn_unit(fort_slot_2, pingu, 50, 50, FORT_ENTITY, PINGU)
+slot_spawn_unit(fort_slot_0, t34, 50, 50, get_entity(w, FORT_ENTITY), T34)
+slot_spawn_unit(fort_slot_1, maid, 50, 50, get_entity(w, FORT_ENTITY), MAID)
+slot_spawn_unit(fort_slot_2, pingu, 50, 50, get_entity(w, FORT_ENTITY), PINGU)
 
 ClickEvent fort_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
-  FORT_ENTITY = e;
+  FORT_ENTITY = e->id;
   switch (slot) {
   case 0:
     return fort_slot_0;
