@@ -215,8 +215,8 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
 
             ecs_add_component(w, e, COMP_SPRITE, sp);
             Position *p = calloc(1, sizeof(Position));
-            *p = (Position){ps->x + (float)(rand() % 2000 - 1000) / 10,
-                            ps->y + (float)(rand() % 2000 - 1000) / 10};
+            *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
+                            ps->y + (float)(rand() % 200 - 100) / 10};
             ecs_add_component(w, e, COMP_POSITION, p);
             ClaySource *cs = malloc(sizeof(WaterSource));
             ecs_add_component(w, e, COMP_WATERSOURCE, cs);
@@ -350,8 +350,8 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           Position *ps = entity_get_component(w, get_entity(w, barracks[i]),
                                               COMP_POSITION);
           spawn_unit(w, BASE_FISH, renderer, window,
-                     (Position){ps->x + (float)(rand() % 200 - 100) / 10,
-                                ps->y + (float)(rand() % 200 - 100) / 10},
+                     (Position){ps->x + (float)(rand() % 2000 - 1000) / 10,
+                                ps->y + (float)(rand() % 2000 - 1000) / 10},
                      1);
         }
       }
@@ -491,8 +491,8 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           Position *ps = entity_get_component(w, get_entity(w, barracks[i]),
                                               COMP_POSITION);
           spawn_unit(w, BASE_FISH, renderer, window,
-                     (Position){ps->x + (float)(rand() % 200 - 100) / 10,
-                                ps->y + (float)(rand() % 200 - 100) / 10},
+                     (Position){ps->x + (float)(rand() % 2000 - 1000) / 10,
+                                ps->y + (float)(rand() % 2000 - 1000) / 10},
                      1);
         }
       }
