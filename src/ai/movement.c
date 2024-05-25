@@ -45,8 +45,8 @@ void move_units(World *w) {
             break;
         }
       }
-      Unit* u = entity_get_component(w,e,COMP_UNIT);
-      behavior_complete(w,u,stm);
+      Unit *u = entity_get_component(w, e, COMP_UNIT);
+      behavior_complete(w, u, stm);
     } else
       stm->velocity = (Vec2){0, 0};
 
