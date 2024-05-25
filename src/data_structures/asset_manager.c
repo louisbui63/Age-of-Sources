@@ -248,43 +248,38 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
     u->t = t;
     break;
 
-  case BASE_SOLDIER:
-    u = parse("src/units/unit_tanuki.c", renderer, window);
+  case FURNACE:
+    u = parse("src/units/unit_furnace.c", renderer, window);
     u->t = t;
     break;
 
-  case BASE_FISH:
-    u = parse("src/units/unit_fish.c", renderer, window);
+  case CASERN:
+    u = parse("src/units/unit_casern.c", renderer, window);
+    u->t = t;
+    break;
+
+  case TOWER:
+    u = parse("src/units/unit_tower.c", renderer, window);
+    u->t = t;
+    break;
+
+  case KONBINI:
+    u = parse("src/units/unit_konbini.c", renderer, window);
+    u->t = t;
+    break;
+
+  case HOUSE:
+    u = parse("src/units/unit_house.c", renderer, window);
+    u->t = t;
+    break;
+
+  case FORT:
+    u = parse("src/units/unit_fort.c", renderer, window);
     u->t = t;
     break;
 
   case FORUM:
     u = parse("src/units/unit_forum.c", renderer, window);
-    u->t = t;
-    break;
-
-  case UFORUM:
-    u = parse("src/units/unit_uforum.c", renderer, window);
-    u->t = t;
-    break;
-
-  case UBEAVER:
-    u = parse("src/units/unit_ubeaver.c", renderer, window);
-    u->t = t;
-    break;
-
-  case DEBUG:
-    u = parse("src/units/unit_debug.c", renderer, window);
-    u->t = t;
-    break;
-
-  case BEAVER:
-    u = parse("src/units/unit_beaver.c", renderer, window);
-    u->t = t;
-    break;
-
-  case UCASERN:
-    u = parse("src/units/unit_ucasern.c", renderer, window);
     u->t = t;
     break;
 
@@ -295,6 +290,106 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
 
   case UFURNACE:
     u = parse("src/units/unit_ufurnace.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UCASERN:
+    u = parse("src/units/unit_ucasern.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UTOWER:
+    u = parse("src/units/unit_utower.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UKONBINI:
+    u = parse("src/units/unit_ukonbini.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UHOUSE:
+    u = parse("src/units/unit_uhouse.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UFORT:
+    u = parse("src/units/unit_ufort.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UFORUM:
+    u = parse("src/units/unit_uforum.c", renderer, window);
+    u->t = t;
+    break;
+
+  case BEAVER:
+    u = parse("src/units/unit_beaver.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UBEAVER:
+    u = parse("src/units/unit_ubeaver.c", renderer, window);
+    u->t = t;
+    break;
+
+  case BASE_SOLDIER:
+    u = parse("src/units/unit_tanuki.c", renderer, window);
+    u->t = t;
+    break;
+
+  case BASE_FISH:
+    u = parse("src/units/unit_fish.c", renderer, window);
+    u->t = t;
+    break;
+
+  case MAID:
+    u = parse("src/units/unit_maid.c", renderer, window);
+    u->t = t;
+    break;
+
+  case FROG:
+    u = parse("src/units/unit_frog.c", renderer, window);
+    u->t = t;
+    break;
+
+  case SHRIMP:
+    u = parse("src/units/unit_shrimp.c", renderer, window);
+    u->t = t;
+    break;
+
+  case HIPPO:
+    u = parse("src/units/unit_hippo.c", renderer, window);
+    u->t = t;
+    break;
+
+  case NARVAL:
+    u = parse("src/units/unit_narval.c", renderer, window);
+    u->t = t;
+    break;
+
+  case PINGU:
+    u = parse("src/units/unit_pingu.c", renderer, window);
+    u->t = t;
+    break;
+
+  case SAMURAI:
+    u = parse("src/units/unit_samurai.c", renderer, window);
+    u->t = t;
+    break;
+
+  case SECU:
+    u = parse("src/units/unit_secu.c", renderer, window);
+    u->t = t;
+    break;
+
+  case T34:
+    u = parse("src/units/unit_t34.c", renderer, window);
+    u->t = t;
+    break;
+
+  case DEBUG:
+    u = parse("src/units/unit_debug.c", renderer, window);
     u->t = t;
     break;
 

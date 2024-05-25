@@ -54,7 +54,7 @@ BehaviorStatus behavior_obstacle_avoidance(SteerManager *s,
                                            VEC(SteerObstacle *) obstacles);
 //! Completes a behavioral cycle for `s`, *id est* updates its velocity and
 //! position
-BehaviorStatus behavior_complete(World *w, Unit* u,SteerManager *s);
+BehaviorStatus behavior_complete(World *w, Unit *u, SteerManager *s);
 
 //! Instructs `s` to follow its internal path
 BehaviorStatus behavior_follow_path(SteerManager *s);

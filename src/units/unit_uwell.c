@@ -56,7 +56,7 @@
 
 //! The thirteenth text is the unit's sprite path, it must be less than 255
 //! characters long.
-/*asset/sprites/well.bmp*/
+/*asset/sprites/unectas_well.bmp*/
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.

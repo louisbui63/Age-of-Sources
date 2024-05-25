@@ -60,8 +60,20 @@
 //! characters long.
 /**/
 
+Entity *CASERN_ENTITY;
+
+slot_spawn_unit(casern_slot_0, samurai, 50, 50, CASERN_ENTITY, SAMURAI)
+slot_spawn_unit(casern_slot_1, secu, 50, 50, CASERN_ENTITY, SECU)
+
 ClickEvent casern_grid(__attribute__((unused)) World *w,
                        __attribute__((unused)) int slot,
                        __attribute__((unused)) Entity *e) {
+  CASERN_ENTITY = e;
+  switch (slot) {
+  case 0:
+    return casern_slot_0;
+  case 1:
+    return casern_slot_1;
+  }
   return empty_click_event;
 }
