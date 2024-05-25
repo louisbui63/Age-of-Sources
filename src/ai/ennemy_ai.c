@@ -46,7 +46,7 @@ void reconsider_ai_state(World *w, AiState *ais) {
     if (is_ai_attacked(w))
       *ais = Defense;
     if ((pm1->dclay * pm1->clay_multiplier +
-         pm1->dwater * pm1->water_multiplier) *
+         pm1->dwater * pm1->water_multiplier) /
             1.2 >
         pm0->dclay * pm0->clay_multiplier + pm0->dwater * pm0->water_multiplier)
       *ais = Offense;
@@ -56,8 +56,9 @@ void reconsider_ai_state(World *w, AiState *ais) {
       *ais = Defense;
     if (pm1->dclay * pm1->clay_multiplier +
             pm1->dwater * pm1->water_multiplier <
-        1.2 * (pm0->dclay * pm0->clay_multiplier +
-               pm0->dwater * pm0->water_multiplier))
+        (pm0->dclay * pm0->clay_multiplier +
+         pm0->dwater * pm0->water_multiplier) /
+            1.2)
       *ais = Offense;
     break;
   case Defense:
@@ -65,7 +66,6 @@ void reconsider_ai_state(World *w, AiState *ais) {
       *ais = Eco;
     break;
   }
-  printf("current ai state: %d\n", *ais);
 }
 
 void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
@@ -143,7 +143,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           TilePosition tpend = pos2tile(&mp_vec2);
 
           SteerManager *stm = entity_get_component(
-              w, get_entity(w, world_query(w, &bf)[0]), COMP_STEERMANAGER);
+              w, get_entity(w, builders[i]), COMP_STEERMANAGER);
 
           Path pa = pathfind_astar(mapc->map, BEAVER, &tpstart, &tpend);
           if (pa) {
@@ -290,9 +290,6 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
       if (pm0->id == 1) {
         pm1 = pm0;
       }
-
-      printf("%d;%d;%d;%d\n", vec_len(builders), vec_len(barracks),
-             vec_len(fighters), vec_len(targets));
 
       if (builder_count < 2) {
         Position *p = entity_get_component(w, forum, COMP_POSITION);
@@ -526,7 +523,12 @@ void ai_defends_itself(World *w) {
   for (uint i = 0; i < vec_len(es); i++) {
     Actionnable *act =
         entity_get_component(w, get_entity(w, es[i]), COMP_ACTIONNABLE);
-    if (act->act == Attack) {
+    SteerManager *stm =
+        entity_get_component(w, get_entity(w, es[i]), COMP_STEERMANAGER);
+    Ownership *o =
+        entity_get_component(w, get_entity(w, es[i]), COMP_OWNERSHIP);
+    if (o->owner == 0 && act->act == Attack &&
+        (!stm->current_path || !vec_len(stm->current_path))) {
       Entity *e = get_entity(w, act->target);
       Actionnable *act2 = entity_get_component(w, e, COMP_ACTIONNABLE);
       if (act2 && act2->act != Attack) {

@@ -288,6 +288,16 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
     u->t = t;
     break;
 
+  case UWELL:
+    u = parse("src/units/unit_uwell.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UFURNACE:
+    u = parse("src/units/unit_ufurnace.c", renderer, window);
+    u->t = t;
+    break;
+
   default:
     u = parse("src/units/unit_tanuki.c", renderer, window);
     u->t = t;

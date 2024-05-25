@@ -64,6 +64,7 @@
 /*DEBUG*/
 
 char TARGET = 0;
+Entity *DEBUG_ENTITY;
 
 void unit_debug_slot_0(__attribute__((unused)) World *w,
                        __attribute__((unused)) SDL_Renderer *renderer,
@@ -92,7 +93,7 @@ void unit_debug_slot_1(World *w, __attribute__((unused)) SDL_Renderer *renderer,
     targ = pm1;
 
   if (targ->construct_multiplier == 1.0)
-    targ->construct_multiplier = 1e10;
+    targ->construct_multiplier = 100;
   else
     targ->construct_multiplier = 1.0;
 
@@ -186,10 +187,28 @@ void unit_debug_slot_4(World *w, __attribute__((unused)) SDL_Renderer *renderer,
           TARGET, targ->water_multiplier);
 }
 
+void unit_debug_slot_5(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  char *c = malloc(sizeof(char) * (strlen("src/units/unit_maid.c") + 1));
+  strcpy(c, "src/units/unit_maid.c");
+  Position *p = entity_get_component(w, DEBUG_ENTITY, COMP_POSITION);
+  spawn_unit(w, MAID, renderer, window,
+             (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
+             0);
+}
+
+void unit_debug_slot_6(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  char *c = malloc(sizeof(char) * (strlen("src/units/unit_hippo.c") + 1));
+  strcpy(c, "src/units/unit_hippo.c");
+  Position *p = entity_get_component(w, DEBUG_ENTITY, COMP_POSITION);
+  spawn_unit(w, HIPPO, renderer, window,
+             (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
+             1);
+}
+
 ClickEvent debug_grid(__attribute__((unused)) World *w,
                       __attribute__((unused)) int slot,
                       __attribute__((unused)) Entity *e) {
-
+  DEBUG_ENTITY = e;
   switch (slot) {
   case 0:
     return unit_debug_slot_0;
@@ -201,6 +220,10 @@ ClickEvent debug_grid(__attribute__((unused)) World *w,
     return unit_debug_slot_3;
   case 4:
     return unit_debug_slot_4;
+  case 5:
+    return unit_debug_slot_5;
+  case 6:
+    return unit_debug_slot_6;
   }
   return empty_click_event;
 }
