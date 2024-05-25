@@ -125,13 +125,12 @@ void event_sound_test(__attribute__((unused)) World *w,
 
 void spawn_victory(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
-Clickable *spawn_victory_exit(World *w, SDL_Renderer *renderer,
-                              SDL_Window *window);
+Clickable *spawn_end_exit(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
-void event_victory_exit(World *w, SDL_Renderer *renderer, SDL_Window *window);
+void event_end_exit(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
-Background *spawn_victory_background(World *w, SDL_Renderer *renderer,
-                                     SDL_Window *window);
+Background *spawn_end_background(World *w, SDL_Renderer *renderer,
+                                 SDL_Window *window);
 
 ActualisedText *spawn_victory_text(World *w, SDL_Renderer *renderer,
                                    SDL_Window *window);
@@ -526,6 +525,14 @@ void key_event_escape(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
       event_gameoption_back(w, rdr, wind->w);
       break;
 
+    case VICTORY:
+      event_end_exit(w, rdr, wind->w);
+      break;
+
+    case DEFEAT:
+      event_end_exit(w, rdr, wind->w);
+      break;
+
     default:
       break;
     }
@@ -678,26 +685,26 @@ void spawn_victory(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   despawn_from_component(w, COMPF_CLICKABLE);
   despawn_from_component(w, COMPF_HOVERABLE);
   despawn_from_component(w, COMPF_ACTUALISEDTEXT);
-  spawn_victory_exit(w, renderer, window);
-  spawn_victory_background(w, renderer, window);
+  spawn_end_exit(w, renderer, window);
+  spawn_end_background(w, renderer, window);
   spawn_victory_text(w, renderer, window);
 }
 
-Clickable *spawn_victory_exit(World *w, SDL_Renderer *renderer,
-                              SDL_Window *window) {
-  return spawn_button(w, renderer, window, event_victory_exit, "Exit",
+Clickable *spawn_end_exit(World *w, SDL_Renderer *renderer,
+                          SDL_Window *window) {
+  return spawn_button(w, renderer, window, event_end_exit, "Exit",
                       (WIN_W - 100) / 2, (WIN_W - 100) / 2);
 }
 
-void event_victory_exit(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+void event_end_exit(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   despawn_from_component(w, COMPF_ACTUALISEDTEXT);
   despawn_from_component(w, COMPF_BACKGROUND);
   despawn_from_component(w, COMPF_CLICKABLE);
   spawn_main_menu(w, renderer, window);
 }
 
-Background *spawn_victory_background(World *w, SDL_Renderer *renderer,
-                                     SDL_Window *window) {
+Background *spawn_end_background(World *w, SDL_Renderer *renderer,
+                                 SDL_Window *window) {
   return spawn_option_background(w, renderer, window);
 }
 
