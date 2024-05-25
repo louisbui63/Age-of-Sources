@@ -4,6 +4,7 @@
 #include "construction.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/map.h"
+#include "players.h"
 #include "selection.h"
 #include "units/units.h"
 
@@ -113,4 +114,12 @@ void revert_game(World *w) {
   despawn_from_component(w, COMPF_UNIT);
   despawn_from_component(w, COMPF_BUILDINGGHOST);
   despawn_from_component(w, COMPF_MAPCOMPONENT);
+  despawn_from_component(w, COMPF_PLAYERMANAGER);
+  // create the players
+  for (uint i = 0; i < 2; i++) {
+    Entity *e = spawn_entity(w);
+    PlayerManager *pm = malloc(sizeof(PlayerManager));
+    *pm = (PlayerManager){i, 500, 0, 500, 0, 1.0, 1.0, 1.0, 1.0};
+    ecs_add_component(w, e, COMP_PLAYERMANAGER, pm);
+  }
 }
