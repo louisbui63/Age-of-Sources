@@ -240,6 +240,8 @@ int main() {
           spawn_defeat(&w, renderer, window);
       } else if (slow_tick == 45) {
         ai_defends_itself(&w);
+      } else if (slow_tick == 50) {
+        deghost(&w);
       }
     }
 

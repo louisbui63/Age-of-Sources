@@ -69,9 +69,44 @@ void reconsider_ai_state(World *w, AiState *ais) {
   }
 }
 
+void deghost(World *w) {
+  // resolve the unused ghost situation :
+  Bitflag flag = COMPF_BUILDINGGHOST;
+  VEC(EntityRef) *es = world_query_mut(w, &flag);
+  for (uint i = 0; i < vec_len(*es); i++) {
+    Entity *e = get_entity(w, (*es)[i]);
+    BuildingGhost *bg = entity_get_component(w, e, COMP_BUILDINGGHOST);
+    if (!bg->construction_done) {
+      Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
+      if (o && o->owner == 1) {
+        Bitflag flag = COMPF_UNIT;
+        VEC(EntityRef) es2 = world_query(w, &flag);
+        char is_ok = 0;
+
+        for (uint i = 0; i < vec_len(es2); i++) {
+          Entity *e = get_entity(w, es2[i]);
+          Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
+          if (o->owner == 1) {
+            Unit *u = entity_get_component(w, e, COMP_UNIT);
+            if (u->t == UBEAVER) {
+              Actionnable *act = entity_get_component(w, e, COMP_ACTIONNABLE);
+              if (act->act == Building && act->target == (*es)[i]) {
+                is_ok = 1;
+                break;
+              }
+            }
+          }
+        }
+
+        if (!is_ok)
+          despawn_entity(w, e);
+      }
+    }
+  }
+}
+
 void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                     SDL_Window *window) {
-
   switch (*ais) {
   case Eco:
     // here we want two builders that build as many wells and furnaces as
