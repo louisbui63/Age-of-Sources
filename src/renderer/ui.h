@@ -45,7 +45,8 @@ typedef struct {
 //! Type with this component show text when hovered
 typedef struct {
   SDL_Rect *rect;
-  char *text;
+  ActualisedText *text;
+  UnitTypes t;
 } Hoverable;
 
 //! Type used to render text that is not constant sur as hp, sound volume or
@@ -124,3 +125,7 @@ SDL_Renderer *get_renderer(World *w);
 
 //! Self explanatory.
 SDL_Window *get_window(World *w);
+
+//! This function is used to get the text that will appear when the button to
+//! create an unit is hovered.
+char *unit_hover_text(World *w, Entity *e);

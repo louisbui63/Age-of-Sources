@@ -80,8 +80,24 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
   for (uint i = 0; i < vec_len(er); i++) {
     Entity *e = get_entity(w, er[i]);
     Hoverable *h = entity_get_component(w, e, COMP_HOVERABLE);
-    if (mouse_in_rect(rdr, h->rect))
-      render_hoverable(h->rect, h->text);
+    if (mouse_in_rect(rdr, h->rect)) {
+      ActualisedText *t = h->text;
+      TTF_Font *font = get_font("asset/fonts/FiraCodeNerdFont-Retina.ttf", 99);
+      SDL_Rect r = *(t->rect);
+      char *text = (t->get_text)(w, e);
+      TTF_SizeUTF8(font, text, &(r.w), &(r.h));
+      SDL_Surface *surf =
+          TTF_RenderUTF8_Blended_Wrapped(font, text, *(t->color), 0);
+      SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
+      SDL_Rect t_rect;
+      TTF_SizeUTF8(font, text, &(t_rect.w), &(t_rect.h));
+      biggest_possible_rectangle_centered(t->rect, &t_rect, 0);
+      free(text);
+
+      SDL_RenderCopy(rdr, text_texture, NULL, &t_rect);
+      SDL_FreeSurface(surf);
+      SDL_DestroyTexture(text_texture);
+    }
   }
 
   mask = COMPF_ACTUALISEDTEXT;
@@ -137,7 +153,7 @@ void render_hoverable(SDL_Rect *rect, char *text) {
 
 void hoverable_component_free(void *tmp) {
   Hoverable *hov = (Hoverable *)tmp;
-  text_component_free(hov->text);
+  actualised_text_component_free(hov->text);
   free(hov->rect);
   free(hov);
 }
@@ -277,4 +293,96 @@ SDL_Window *get_window(World *w) {
   Entity *e = get_entity(w, er[0]);
   Window *wi = entity_get_component(w, e, COMP_WINDOW);
   return wi->w;
+}
+
+char *unit_hover_text(World *w, Entity *e) {
+  char *r;
+  Hoverable *h = entity_get_component(w, e, COMP_HOVERABLE);
+  if (h->t != UNIT_NUMBER) {
+    UnitT *u = get_unit(h->t, get_renderer(w), get_window(w));
+    int nl = strlen(u->name);
+    int dl = strlen(u->descr);
+    char c[19];
+    c[18] = 0; // Cette ligne devrait être inutile.
+    int i = 0;
+    int wc;
+    int cc;
+    switch (u->t) {
+    case BEAVER:
+      wc = 50;
+      cc = 0;
+      break;
+
+    default:
+      wc = 0;
+      cc = 0;
+      break;
+
+      if (wc >= 1000) {
+        c[i++] = wc / 1000 + '0';
+        wc = wc % 1000;
+        c[i++] = wc / 100 + '0';
+        wc = wc % 100;
+        c[i++] = wc / 10 + '0';
+        wc = wc % 10;
+        c[i++] = wc + '0';
+      } else if (wc >= 100) {
+        c[i++] = wc / 100 + '0';
+        wc = wc % 100;
+        c[i++] = wc / 10 + '0';
+        wc = wc % 10;
+        c[i++] = wc + '0';
+      } else if (wc >= 10) {
+        c[i++] = wc / 10 + '0';
+        wc = wc % 10;
+        c[i++] = wc + '0';
+      } else {
+        c[i++] = wc + '0';
+      }
+      c[i++] = ' ';
+      c[i++] = 0xef;
+      c[i++] = 0x81;
+      c[i++] = 0x83;
+      c[i++] = ',';
+      c[i++] = ' ';
+      if (cc >= 1000) {
+        c[i++] = cc / 1000 + '0';
+        cc = cc % 1000;
+        c[i++] = cc / 100 + '0';
+        cc = cc % 100;
+        c[i++] = cc / 10 + '0';
+        cc = cc % 10;
+        c[i++] = cc + '0';
+      } else if (cc >= 100) {
+        c[i++] = cc / 100 + '0';
+        cc = cc % 100;
+        c[i++] = cc / 10 + '0';
+        cc = cc % 10;
+        c[i++] = cc + '0';
+      } else if (cc >= 10) {
+        c[i++] = cc / 10 + '0';
+        cc = cc % 10;
+        c[i++] = cc + '0';
+      } else {
+        c[i++] = cc + '0';
+      }
+      c[i++] = ' ';
+      c[i++] = 0xef;
+      c[i++] = 0x92;
+      c[i++] = 0xb7;
+      c[i] = 0;
+    }
+
+    r = malloc(nl + 1 + i + 1 + dl + 1);
+    strcpy(r, u->name);
+    r[nl] = '\n';
+    r[nl + 1] = 0;
+    strcat(r, c);
+    r[nl + 1 + i] = '\n';
+    r[nl + 1 + i + 1] = 0;
+    strcat(r, u->descr);
+  } else {
+    r[0] = 0;
+  }
+  return r;
 }
