@@ -84,7 +84,9 @@ void forum_slot_0(World *w, SDL_Renderer *renderer, SDL_Window *window) {
     char *c = malloc(sizeof(char) * (strlen("src/units/unit_tanuki.c") + 1));
     strcpy(c, "src/units/unit_tanuki.c");
     Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
-    spawn_unit(w, BASE_SOLDIER, renderer, window, *p, 0);
+    spawn_unit(w, BASE_SOLDIER, renderer, window,
+               (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
+               0);
   }
 }
 
