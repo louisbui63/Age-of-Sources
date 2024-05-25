@@ -726,7 +726,50 @@ ActualisedText *spawn_victory_text(__attribute__((unused)) World *w,
 
 char *str_victory_text(__attribute__((unused)) World *w,
                        __attribute__((unused)) Entity *e) {
+  int n = 90;
+  if (!(rand() % n)) {
+    play_audio("./asset/sfx/yahoo.wav", 0);
+  }
+
   char *v = "Victory";
+  char *t = malloc(strlen(v) + 1);
+  strcpy(t, v);
+  return t;
+}
+
+void spawn_defeat(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  RUNNING = DEFEAT;
+  despawn_from_component(w, COMPF_BACKGROUND);
+  despawn_from_component(w, COMPF_CLICKABLE);
+  despawn_from_component(w, COMPF_HOVERABLE);
+  despawn_from_component(w, COMPF_ACTUALISEDTEXT);
+  spawn_end_exit(w, renderer, window);
+  spawn_end_background(w, renderer, window);
+  spawn_defeat_text(w, renderer, window);
+}
+
+ActualisedText *spawn_defeat_text(__attribute__((unused)) World *w,
+                                  __attribute__((unused))
+                                  SDL_Renderer *renderer,
+                                  __attribute__((unused)) SDL_Window *window) {
+  Entity *e = spawn_entity(w);
+  ActualisedText *t = malloc(sizeof(ActualisedText));
+  t->color = malloc(sizeof(SDL_Color));
+  *(t->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+  t->rect = malloc(sizeof(SDL_Rect));
+  int padding = 20;
+  *(t->rect) = (SDL_Rect){.x = (WIN_W - 500) / 2 + padding,
+                          .y = (WIN_H - 200) / 2 - WIN_H / 8 + padding,
+                          .h = 200 - 2 * padding,
+                          .w = 500 - 2 * padding};
+  t->get_text = str_victory_text;
+  ecs_add_component(w, e, COMP_ACTUALISEDTEXT, t);
+  return t;
+}
+
+char *str_defeat_text(__attribute__((unused)) World *w,
+                      __attribute__((unused)) Entity *e) {
+  char *v = "Defeat";
   char *t = malloc(strlen(v) + 1);
   strcpy(t, v);
   return t;
