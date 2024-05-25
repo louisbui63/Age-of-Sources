@@ -13,6 +13,7 @@
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
 #include "data_structures/map.h"
+#include "game_manager.h"
 #include "input.h"
 #include "players.h"
 #include "renderer/camera.h"
@@ -31,22 +32,24 @@ HashMap GRID_FUNCTION_MAP;
 int main() {
   init_asset_manager();
 
+  // Init SDL stuff
   HANDLE_ERROR(SDL_Init(SDL_INIT_VIDEO) < 0, SDL_GetError(), abort());
   atexit(SDL_Quit);
   HANDLE_ERROR(TTF_Init() < 0, SDL_GetError(), abort());
   atexit(TTF_Quit);
-  SDL_Window *window = SDL_CreateWindow(
-      "test", 100, 100, WIN_W, WIN_H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+  SDL_Window *window =
+      SDL_CreateWindow("Age of Sources", 100, 100, WIN_W, WIN_H,
+                       SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
   HANDLE_ERROR(!window, SDL_GetError(), abort());
   SDL_Renderer *renderer = SDL_CreateRenderer(
       window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
+  SDL_SetWindowMinimumSize(window, WIN_W, WIN_H);
   HANDLE_ERROR(!renderer, SDL_GetError(), {
     SDL_DestroyWindow(window);
     abort();
   });
-
   HANDLE_ERROR(SDL_RenderSetLogicalSize(renderer, WIN_W, WIN_H), SDL_GetError(),
                {
                  SDL_DestroyRenderer(renderer);
@@ -69,45 +72,20 @@ int main() {
 
   atexit(Mix_Quit);
 
-  SDL_Surface *test_bmp = SDL_LoadBMP("./asset/sprites/test.bmp");
-  HANDLE_ERROR(!test_bmp, SDL_GetError(), {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    abort();
-  })
-
-  SDL_Texture *test_tex = SDL_CreateTextureFromSurface(renderer, test_bmp);
-  HANDLE_ERROR(!test_tex, SDL_GetError(), {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    abort();
-  })
-  SDL_FreeSurface(test_bmp);
-
   // yes, one could probably exploit that, but at this point I think they
   // deserve it
   srand(time(NULL));
 
+  set_volume(64);
+
   set_grid_functions();
 
   World w = world_new();
-  Camera *camcam = malloc(sizeof(Camera));
-  *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
-
   init_world(&w);
 
-  set_volume(64);
-
-  Entity *rende = spawn_entity(&w);
-  Renderer rendd = {.r = renderer};
-  ecs_add_component(&w, rende, COMP_RENDERER, &rendd);
-
-  Entity *wine = spawn_entity(&w);
-  Window wind = {.w = window};
-  KeyEvent *wink = malloc(sizeof(KeyEvent));
-  *wink = key_event_escape;
-  ecs_add_component(&w, wine, COMP_WINDOW, &wind);
-  ecs_add_component(&w, wine, COMP_KEY_EVENT, wink);
+  // create the camera
+  Camera *camcam = malloc(sizeof(Camera));
+  *camcam = (Camera){.x = 32, .y = 32, .zoom = 1};
 
   Entity *cam = spawn_entity(&w);
   KeyEvent *cammove = malloc(sizeof(KeyEvent));
@@ -115,42 +93,37 @@ int main() {
   ecs_add_component(&w, cam, COMP_CAMERA, camcam);
   ecs_add_component(&w, cam, COMP_KEY_EVENT, cammove);
 
-  // render_game_state(&w);
+  // make the renderer a part of the ecs
+  Entity *rende = spawn_entity(&w);
+  Renderer rendd = {.r = renderer};
+  ecs_add_component(&w, rende, COMP_RENDERER, &rendd);
 
-  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 100}, 0);
-  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){120, 100}, 0);
-  spawn_unit(&w, BASE_SOLDIER, renderer, window, (Position){100, 120}, 0);
-  spawn_unit(&w, BASE_FISH, renderer, window, (Position){200, 200}, 1);
+  // make the window a part of the ecs
+  Entity *wine = spawn_entity(&w);
+  Window wind = {.w = window};
+  KeyEvent *wink = malloc(sizeof(KeyEvent));
+  *wink = key_event_escape;
+  ecs_add_component(&w, wine, COMP_WINDOW, &wind);
+  ecs_add_component(&w, wine, COMP_KEY_EVENT, wink);
 
-  {
-    Entity *e = spawn_entity(&w);
-    Selector *s = malloc(sizeof(Selector));
-    *s =
-        (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0, UNIT_TEST};
-    ecs_add_component(&w, e, COMP_SELECTOR, s);
-    KeyEvent *select_events = malloc(sizeof(KeyEvent));
-    *select_events = selection_event;
-    ecs_add_component(&w, e, COMP_KEY_EVENT, select_events);
-  }
+  // create the selector
+  Entity *e = spawn_entity(&w);
+  Selector *s = malloc(sizeof(Selector));
+  *s = (Selector){Normal, {0, 0}, {0, 0}, 0, vec_new(EntityRef), 0, UNIT_TEST};
+  ecs_add_component(&w, e, COMP_SELECTOR, s);
+  KeyEvent *select_events = malloc(sizeof(KeyEvent));
+  *select_events = selection_event;
+  ecs_add_component(&w, e, COMP_KEY_EVENT, select_events);
 
+  // create the players
   for (uint i = 0; i < 2; i++) {
     Entity *e = spawn_entity(&w);
     PlayerManager *pm = malloc(sizeof(PlayerManager));
-    *pm = (PlayerManager){i, 0, 0, 0, 0, 1.0, 1.0};
+    *pm = (PlayerManager){i, 0, 0, 0, 0, 1.0, 1.0, 1.0, 1.0};
     ecs_add_component(&w, e, COMP_PLAYERMANAGER, pm);
   }
 
-  Position *test_pos = malloc(sizeof(Position));
-  *test_pos = (Position){.x = 155, .y = 250};
-  // ecs_add_component(&w, test_e, COMP_POSITION, test_pos);
-
-  spawn_main_menu(&w, renderer, window);
-  // spawn_main_quit(&w, renderer, window);
-
-  // ecs_add_component(&w, test_e, COMP_SPRITE, test_sprite);
-  // ecs_add_component(&w, test_e, COMP_BACKGROUND,
-  // test_background); ecs_add_component(&w, test_e,
-  // COMP_CLICKABLE, test_clickable);
+  // render_game_state(&w);
 
   AiState ais = Eco;
 
@@ -161,16 +134,16 @@ int main() {
   // down keys and mouse buttons
   Inputs *input_down = inputs_new();
 
-  Entity *map = spawn_entity(&w);
-  MapComponent *mc = malloc(sizeof(MapComponent));
-  *mc = (MapComponent){load_map_from_bmp("asset/map.bmp")};
-  ecs_add_component(&w, map, COMP_MAPCOMPONENT, mc);
+  spawn_main_menu(&w, renderer, window);
   Background *back = spawn_backbackground(renderer, window);
 
-  int slow_tick = 0;
-
+  // start the music
   Mix_PlayMusic(get_audio("asset/sfx/music.ogg", 1), -1);
 
+  Running previous_state = RUNNING;
+  char in_game = 0;
+
+  int slow_tick = 0;
   for (; RUNNING != STOP;) {
     Uint32 start_time = SDL_GetTicks();
 
@@ -223,7 +196,8 @@ int main() {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, back->sprite->texture, back->sprite->rect,
                    back->rect);
-    render(&w, renderer, camcam, window);
+    if (in_game)
+      render(&w, renderer, camcam, window);
     render_ui(&w, renderer, window);
     draw_selection(&w, renderer, window);
 
@@ -242,6 +216,18 @@ int main() {
       } else if (slow_tick == 45) {
         ai_defends_itself(&w);
       }
+    }
+
+    if (previous_state != RUNNING) {
+      if (previous_state == MAIN && RUNNING == IN_GAME) {
+        new_game(&w, renderer, window, camcam);
+        in_game = 1;
+      } else if (RUNNING == MAIN && previous_state == IN_GAMEMENU) {
+        revert_game(&w);
+        in_game = 0;
+      }
+
+      previous_state = RUNNING;
     }
 
     // delay before next frame

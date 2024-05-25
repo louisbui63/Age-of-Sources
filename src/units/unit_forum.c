@@ -108,7 +108,9 @@ void forum_slot_1(World *w, SDL_Renderer *renderer, SDL_Window *window) {
       char *c = malloc(sizeof(char) * (strlen("src/units/unit_beaver.c") + 1));
       strcpy(c, "src/units/unit_beaver.c");
       Position *p = entity_get_component(w, FORUM_ENTITY, COMP_POSITION);
-      spawn_unit(w, BEAVER, renderer, window, *p, 0);
+      spawn_unit(
+          w, BEAVER, renderer, window,
+          (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100}, 0);
     }
   }
 }

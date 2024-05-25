@@ -95,12 +95,21 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             continue;
           Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
           Position *p = entity_get_component(w, e, COMP_POSITION);
-          if (SDL_PointInRect(&(SDL_Point){p->x - (int)(sp->rect->w / 2),
-                                           p->y - (int)(sp->rect->h / 2)},
-                              &sel_rect) &&
-              SDL_PointInRect(&(SDL_Point){p->x + (int)(sp->rect->w / 2),
-                                           p->y + (int)(sp->rect->h / 2)},
-                              &sel_rect)) {
+          printf("%d;%d;%d;%d\n", sel_rect.x, sel_rect.y, sel_rect.h,
+                 sel_rect.w);
+          printf("%f;%f;%f;%f\n", p->x - (int)(sp->rect->w / (2 * cam->zoom)),
+                 p->y - (int)(sp->rect->h / (2 * cam->zoom)),
+                 p->x + (int)(sp->rect->w / (2 * cam->zoom)),
+                 p->y + (int)(sp->rect->h / (2 * cam->zoom)));
+          if (SDL_PointInRect(
+                  &(SDL_Point){p->x - (int)(sp->rect->w / (2 * cam->zoom)),
+                               p->y - (int)(sp->rect->h / (2 * cam->zoom))},
+                  &sel_rect) &&
+              SDL_PointInRect(
+                  &(SDL_Point){p->x + (int)(sp->rect->w / (2 * cam->zoom)),
+                               p->y + (int)(sp->rect->h / (2 * cam->zoom))},
+                  &sel_rect)) {
+            printf("uwu\n");
             vec_push(s->selected, es[i]);
           }
         }
@@ -111,8 +120,8 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
   } else if (s->type == Building && RUNNING == IN_GAME) {
     if (inputs_is_key_in(i, SDLK_ESCAPE) && st == KEY_PRESSED)
       reset_selection_type(s);
-    else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) && get_mouse_position(r).y < 270 &&
-             st == KEY_RELEASED) {
+    else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) &&
+             get_mouse_position(r).y < 270 && st == KEY_RELEASED) {
 
       SDL_Point pt = get_mouse_position(r);
       Position pworld = (Position){pt.x, pt.y};
@@ -192,9 +201,10 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         Position *p = entity_get_component(w, e, COMP_POSITION);
         if (SDL_PointInRect(
                 &(SDL_Point){mps.x, mps.y},
-                &(SDL_Rect){sp->rect->x + p->x - (int)(sp->rect->w / 2),
-                            sp->rect->y + p->y - (int)(sp->rect->h / 2),
-                            sp->rect->w, sp->rect->h}) &&
+                &(SDL_Rect){
+                    sp->rect->x + p->x - (int)(sp->rect->w / (2 * cam->zoom)),
+                    sp->rect->y + p->y - (int)(sp->rect->h / (2 * cam->zoom)),
+                    sp->rect->w, sp->rect->h}) &&
             !((BuildingGhost *)entity_get_component(w, e, COMP_BUILDINGGHOST))
                  ->construction_done) {
           action_btarget = es[i];
@@ -214,9 +224,10 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
           Position *p = entity_get_component(w, e, COMP_POSITION);
           if (SDL_PointInRect(
                   &(SDL_Point){mps.x, mps.y},
-                  &(SDL_Rect){sp->rect->x + p->x - (int)(sp->rect->w / 2),
-                              sp->rect->y + p->y - (int)(sp->rect->h / 2),
-                              sp->rect->w, sp->rect->h})) {
+                  &(SDL_Rect){
+                      sp->rect->x + p->x - (int)(sp->rect->w / (2 * cam->zoom)),
+                      sp->rect->y + p->y - (int)(sp->rect->h / (2 * cam->zoom)),
+                      sp->rect->w, sp->rect->h})) {
             action_atarget = es[i];
             break;
           }
@@ -254,7 +265,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             path_free(stm->current_path);
           stm->current_path = 0;
 
-          Unit *u = entity_get_component(w,e,COMP_UNIT);
+          Unit *u = entity_get_component(w, e, COMP_UNIT);
           Path p = pathfind_astar(mapc->map, u->t, &tpstart, &tpend);
           if (p) {
             if (vec_len(p) > 1) {
