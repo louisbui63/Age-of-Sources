@@ -377,11 +377,12 @@ void event_gamemenu_option(World *w, SDL_Renderer *renderer,
 
 void spawn_gameoption_menu(World *w, SDL_Renderer *renderer,
                            SDL_Window *window) {
+  RUNNING = IN_GAMEOPTION;
   spawn_option_background(w, renderer, window);
   spawn_option_fullscreen(w, renderer, window);
   spawn_gameoption_back(w, renderer, window);
   spawn_option_sound(w, renderer, window);
-  RUNNING = IN_GAMEOPTION;
+  spawn_option_music(w, renderer, window);
 }
 
 Clickable *spawn_gameoption_back(World *w, SDL_Renderer *renderer,
