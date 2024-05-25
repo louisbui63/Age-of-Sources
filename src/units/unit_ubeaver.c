@@ -61,10 +61,8 @@
 //! characters long.
 /*A mercenary worker that works for whoever pays them*/
 
-void ubeaver_grid(World *w, int slot) {
-  if (slot == 0) {
-    char *c = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
-    strcpy(c, "src/units/unit_well.c");
-    set_building_selection(w, c, WELL);
-  }
+void ubeaver_grid(__attribute__((unused)) World *w,
+                        __attribute__((unused)) int slot,
+                        __attribute__((unused)) Entity *e) {
+  return empty_click_event;
 }
