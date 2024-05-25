@@ -95,12 +95,6 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             continue;
           Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
           Position *p = entity_get_component(w, e, COMP_POSITION);
-          printf("%d;%d;%d;%d\n", sel_rect.x, sel_rect.y, sel_rect.h,
-                 sel_rect.w);
-          printf("%f;%f;%f;%f\n", p->x - (int)(sp->rect->w / (2 * cam->zoom)),
-                 p->y - (int)(sp->rect->h / (2 * cam->zoom)),
-                 p->x + (int)(sp->rect->w / (2 * cam->zoom)),
-                 p->y + (int)(sp->rect->h / (2 * cam->zoom)));
           if (SDL_PointInRect(
                   &(SDL_Point){p->x - (int)(sp->rect->w / (2 * cam->zoom)),
                                p->y - (int)(sp->rect->h / (2 * cam->zoom))},
@@ -109,7 +103,6 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
                   &(SDL_Point){p->x + (int)(sp->rect->w / (2 * cam->zoom)),
                                p->y + (int)(sp->rect->h / (2 * cam->zoom))},
                   &sel_rect)) {
-            printf("uwu\n");
             vec_push(s->selected, es[i]);
           }
         }
