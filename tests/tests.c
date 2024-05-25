@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include "../src/data_structures/hash_map.h"
+
 #include "ecs.h"
 #include "hash_map.h"
 #include "input.h"
@@ -12,6 +14,7 @@
 
 int RUNNING = 1;
 char IS_FULLSCREEN = 0;
+HashMap GRID_FUNCTION_MAP;
 
 #define TEST(fn, name)                                                         \
   {                                                                            \
