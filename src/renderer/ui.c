@@ -186,6 +186,7 @@ Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window) {
       get_texture("./asset/backbackground.bmp", rdr, window);
   return back;
 }
+
 void null_click_event(__attribute__((unused)) World *w,
                       __attribute__((unused)) SDL_Renderer *renderer,
                       __attribute__((unused)) SDL_Window *window) {}

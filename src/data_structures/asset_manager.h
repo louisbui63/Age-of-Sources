@@ -27,10 +27,11 @@ void *get_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
 //! unadvisable as slow. Crashes on invalid file path or texture creation.
 void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
 
-//! Returns a pointer to the audio from file `t`. Will had it to the
-//! `ASSET_STORE` if it is not in it yet
+//! Frees the texture of the file `t` in the `ASSET_STORE`.
 int drop_texture(char *t);
 
+//! Returns a pointer to the audio from file `t`. Will had it to the
+//! `ASSET_STORE` if it is not in it yet.
 void *get_audio(char *t, char is_mus);
 
 //! Loads the audio from file `t` in the `ASSET_STORE`
@@ -38,6 +39,7 @@ void *get_audio(char *t, char is_mus);
 //! unadvisable as slow. Crashes on invalid file path or audio creation.
 void *load_audio(char *t, char is_mus);
 
+//! Frees the audio of the file `t` in the `ASSET_STORE`.
 int drop_audio(char *t);
 
 void *load_font(char *t, Uint8 size);
@@ -46,11 +48,22 @@ void *load_font(char *t, Uint8 size);
 //! `ASSET_STORE` if it is not in it yet.
 void *get_font(char *t, Uint8 size);
 
+//! Frees the font with a size of `size` and the font `font` `t` in the
+//! `ASSET_STORE`.
 int drop_font(char *font, Uint8 size);
 
+//! Loads the unit of the UnitTypes `t` in the `ASSET_STORE` by parsing the file
+//! that  matches it. While calling it multiple times with the same `t`
+//! shouldn't fail, it is unadvisable as slow. Crashes on invalid file path or
+//! texture creation
 void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window);
 
+//! Returns a pointer to the UnitT of the UnitTypes `t`. Will had it to the
+//! `ASSET_STORE` if it is not in it yet.
 void *get_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window);
 
+//! Frees the unit of the file `t` in the `ASSET_STORE`.
 int drop_unit(UnitTypes *t);
+
+//! Self explanatory.
 void free_asset_store();
