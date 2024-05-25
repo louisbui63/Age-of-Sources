@@ -63,8 +63,19 @@
 //! characters long.
 /**/
 
-ClickEvent fort_grid(__attribute__((unused)) World *w,
-                     __attribute__((unused)) int slot,
-                     __attribute__((unused)) Entity *e) {
+Entity *FORT_ENTITY;
+
+slot_spawn_unit(fort_slot_0, t34, 50, 50, FORT_ENTITY, T34)
+slot_spawn_unit(fort_slot_1, maid, 50, 50, FORT_ENTITY, MAID)
+slot_spawn_unit(fort_slot_2, pingu, 50, 50, FORT_ENTITY, PINGU)
+
+ClickEvent fort_grid(__attribute__((unused)) World *w, int slot, Entity *e) {
+  FORT_ENTITY = e;
+  switch (slot) {
+  case 0:
+    return fort_slot_0;
+  case 1:
+    return fort_slot_1;
+  }
   return empty_click_event;
 }
