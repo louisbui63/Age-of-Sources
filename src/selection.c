@@ -15,14 +15,31 @@
 
 extern Running RUNNING;
 
-void reset_selection_type(Selector *s) {
-  if (s->type == Building)
+void reset_selection_type(World *w, Selector *s) {
+  if (s->type == Building) {
     free(s->building);
+
+    Bitflag flag = COMPF_PLAYERMANAGER;
+    VEC(EntityRef) ps = world_query(w, &flag);
+    PlayerManager *pm0 =
+        entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
+    PlayerManager *pm1 =
+        entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
+    if (pm0->id == 1) {
+      PlayerManager *tmp = pm0;
+      pm0 = pm1;
+      pm1 = tmp;
+    }
+
+    pm0->water += s->water_cost;
+    pm0->clay += s->clay_cost;
+  }
   s->type = Normal;
   SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
 }
 
-void set_building_selection(World *w, char *building, UnitTypes but) {
+void set_building_selection(World *w, char *building, UnitTypes but, int water,
+                            int clay) {
   Bitflag flag = COMPF_SELECTOR;
   VEC(EntityRef) es = world_query(w, &flag);
   // I'm not responsible if you somehow end up with two selectors and so it
@@ -30,13 +47,31 @@ void set_building_selection(World *w, char *building, UnitTypes but) {
   Entity *e = get_entity(w, es[0]);
   Selector *sl = entity_get_component(w, e, COMP_SELECTOR);
 
-  if (sl->type == Building)
+  if (sl->type == Building) {
     free(sl->building);
+
+    Bitflag flag = COMPF_PLAYERMANAGER;
+    VEC(EntityRef) ps = world_query(w, &flag);
+    PlayerManager *pm0 =
+        entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
+    PlayerManager *pm1 =
+        entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
+    if (pm0->id == 1) {
+      PlayerManager *tmp = pm0;
+      pm0 = pm1;
+      pm1 = tmp;
+    }
+
+    pm0->water += sl->water_cost;
+    pm0->clay += sl->clay_cost;
+  }
 
   sl->is_selecting = 0;
   sl->type = Building;
   sl->building = building;
   sl->building_utype = but;
+  sl->water_cost = water;
+  sl->clay_cost = clay;
   SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR));
 }
 
@@ -44,16 +79,10 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
                      KeyState st) {
   Selector *s = entity_get_component(w, e, COMP_SELECTOR);
 
-  if (inputs_is_key_in(i, SDLK_b)) {
-    char *un = malloc(sizeof(char) * (strlen("src/units/unit_well.c") + 1));
-    strcpy(un, "src/units/unit_well.c");
-    set_building_selection(w, un, WELL);
-  }
-
   if (inputs_is_key_in(i, SDLK_m)) {
     char *un = malloc(sizeof(char) * (strlen("src/units/unit_debug.c") + 1));
     strcpy(un, "src/units/unit_debug.c");
-    set_building_selection(w, un, DEBUG);
+    set_building_selection(w, un, DEBUG, 0, 0);
   }
 
   if (inputs_is_key_in(i, SDLK_TAB) && st == KEY_PRESSED &&
@@ -127,13 +156,13 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             vec_push(s->selected, es[i]);
           }
         }
-        if (vec_len(s->selected))
+        if (vec_len(s->selected) == 1)
           render_unit_grid(w, s->selected[0]);
       }
     }
   } else if (s->type == Building && RUNNING == IN_GAME) {
     if (inputs_is_key_in(i, SDLK_ESCAPE) && st == KEY_PRESSED)
-      reset_selection_type(s);
+      reset_selection_type(w, s);
     else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) &&
              get_mouse_position(r).y < 270 && st == KEY_RELEASED) {
 
@@ -183,7 +212,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         if (s->building_utype == DEBUG)
           finish_construction(w, e);
 
-        reset_selection_type(s);
+        reset_selection_type(w, s);
       }
     }
   }
@@ -344,7 +373,7 @@ void selector_free(void *s) {
 }
 
 void actualise_grid_coordinates(int *x, int *y, int i) {
-  int n = 6; // This is the length of a line in the ui - 1
+  int n = 7; // This is the length of a line in the ui - 1
   *x = 135 + (i % n) * 32;
   *y = 270 + 15 + (i / n) * 32;
 }
@@ -376,7 +405,7 @@ void render_unit_grid(World *w, EntityRef e) {
     //   c->text->color = malloc(1);
     //   c->sprite = malloc(sizeof(Sprite));
     //   c->sprite->rect = malloc(sizeof(SDL_Rect));
-    //   *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    //   *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 64, .w = 64};
     //   c->sprite->texture = get_texture("asset/sprites/forum.bmp", r, wi);
     //   key_event = malloc(sizeof(KeyEvent));
     //   *key_event = clickable_event;
@@ -436,7 +465,7 @@ void render_unit_grid(World *w, EntityRef e) {
     c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 64, .w = 64};
     c->sprite->texture = get_texture("asset/sprites/tanuki_casern.bmp", r, wi);
     key_event = malloc(sizeof(KeyEvent));
     *key_event = clickable_event;
@@ -447,7 +476,7 @@ void render_unit_grid(World *w, EntityRef e) {
     actualise_grid_coordinates(&x, &y, i);
     c = malloc(sizeof(Clickable));
     c->rect = malloc(sizeof(SDL_Rect));
-    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    *(c->rect) = (SDL_Rect){.x = x + 8, .y = y, .h = 32, .w = 16};
     c->is_clicked = 0;
     c->click_event = beaver_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
@@ -456,7 +485,7 @@ void render_unit_grid(World *w, EntityRef e) {
     c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 64, .w = 32};
     c->sprite->texture = get_texture("asset/sprites/tanuki_tower.bmp", r, wi);
     key_event = malloc(sizeof(KeyEvent));
     *key_event = clickable_event;
@@ -476,7 +505,7 @@ void render_unit_grid(World *w, EntityRef e) {
     c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 64, .w = 64};
     c->sprite->texture = get_texture("asset/sprites/konbini_tanuki.bmp", r, wi);
     key_event = malloc(sizeof(KeyEvent));
     *key_event = clickable_event;
@@ -502,13 +531,12 @@ void render_unit_grid(World *w, EntityRef e) {
     *key_event = clickable_event;
     spawn_clickable(w, c, key_event);
     i++;
-    break;
 
     // Fort
     actualise_grid_coordinates(&x, &y, i);
     c = malloc(sizeof(Clickable));
     c->rect = malloc(sizeof(SDL_Rect));
-    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 64, .w = 64};
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
     c->is_clicked = 0;
     c->click_event = beaver_grid(w, i, get_entity(w, e));
     c->text = malloc(sizeof(Text));
@@ -517,7 +545,7 @@ void render_unit_grid(World *w, EntityRef e) {
     c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 64, .w = 64};
     c->sprite->texture = get_texture("asset/sprites/tanuki_fort.bmp", r, wi);
     key_event = malloc(sizeof(KeyEvent));
     *key_event = clickable_event;
