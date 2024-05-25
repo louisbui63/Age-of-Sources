@@ -372,6 +372,7 @@ void render_unit_grid(World *w, Entity *e) {
     //   c->text = malloc(sizeof(Text));
     //   c->text->str = malloc(1);
     //   *(c->text->str) = '\0';
+    //   c->text->color = malloc(1);
     //   c->sprite = malloc(sizeof(Sprite));
     //   c->sprite->rect = malloc(sizeof(SDL_Rect));
     //   *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
@@ -391,6 +392,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
+    c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
     *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
@@ -410,6 +412,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
+    c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
     *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
@@ -429,6 +432,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
+    c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
     *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
@@ -448,6 +452,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
+    c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
     *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
@@ -467,6 +472,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
+    c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
     *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
@@ -486,6 +492,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
+    c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
     *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
@@ -506,6 +513,7 @@ void render_unit_grid(World *w, Entity *e) {
     c->text = malloc(sizeof(Text));
     c->text->str = malloc(1);
     *(c->text->str) = '\0';
+    c->text->color = malloc(1);
     c->sprite = malloc(sizeof(Sprite));
     c->sprite->rect = malloc(sizeof(SDL_Rect));
     *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
