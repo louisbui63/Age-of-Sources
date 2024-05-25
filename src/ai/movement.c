@@ -84,8 +84,28 @@ for (uint i = 0; i < vec_len(er); i++) {
   Entity *e = get_entity(w, ei);
   Animator *an = entity_get_component(w, e, COMP_ANIMATOR);
   SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
+  Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
+  if (ac && ac->act == Attack && stm->current_path &&
+      vec_len(stm->current_path)) { // range checking
+
+    Entity *te = get_entity(w, ac->target);
+    if (te) {
+      Unit *u1 = entity_get_component(w, e, COMP_UNIT);
+      Position *p1 = entity_get_component(w, e, COMP_POSITION);
+
+      Unit *u2 = entity_get_component(w, te, COMP_UNIT);
+      Position *p2 = entity_get_component(w, te, COMP_POSITION);
+      if (!(!u1 || !u2 || !p1 || !p2)) {
+
+        if (v2len(v2sub((Vec2){p1->x, p1->y}, (Vec2){p2->x, p2->y})) <=
+            u1->rg * 0.9) {
+          path_free(stm->current_path);
+          stm->current_path = 0;
+        }
+      }
+    }
+  }
   if (stm->velocity.x == 0 && stm->velocity.y == 0) {
-    Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
     if (ac && ac->act != Lazy) {
       if (actionnate(w, ac, e))
         advance_anim_state(an, Attacking, -1);
