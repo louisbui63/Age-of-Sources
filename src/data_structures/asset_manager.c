@@ -277,8 +277,14 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
     u = parse("src/units/unit_debug.c", renderer, window);
     u->t = t;
     break;
+
   case BEAVER:
     u = parse("src/units/unit_beaver.c", renderer, window);
+    u->t = t;
+    break;
+
+  case UCASERN:
+    u = parse("src/units/unit_ucasern.c", renderer, window);
     u->t = t;
     break;
 
