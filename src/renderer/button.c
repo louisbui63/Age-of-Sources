@@ -725,8 +725,11 @@ ActualisedText *spawn_victory_text(__attribute__((unused)) World *w,
   t->color = malloc(sizeof(SDL_Color));
   *(t->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
   t->rect = malloc(sizeof(SDL_Rect));
-  *(t->rect) =
-      (SDL_Rect){.x = soundxpos + 100, .y = soundypos + 5, .h = 20, .w = 100};
+  int padding = 20;
+  *(t->rect) = (SDL_Rect){.x = (WIN_W - 500) / 2 + padding,
+                          .y = (WIN_H - 200) / 2 - WIN_H / 8 + padding,
+                          .h = 200 - 2 * padding,
+                          .w = 500 - 2 * padding};
   t->get_text = str_victory_text;
   ecs_add_component(w, e, COMP_ACTUALISEDTEXT, t);
   return t;
@@ -734,7 +737,7 @@ ActualisedText *spawn_victory_text(__attribute__((unused)) World *w,
 
 char *str_victory_text(__attribute__((unused)) World *w,
                        __attribute__((unused)) Entity *e) {
-  int n = 90;
+  int n = 20;
   if (!(rand() % n)) {
     play_audio("./asset/sfx/yahoo.wav", 0);
   }

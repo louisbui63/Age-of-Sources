@@ -156,7 +156,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
             vec_push(s->selected, es[i]);
           }
         }
-        if (vec_len(s->selected))
+        if (vec_len(s->selected) == 1)
           render_unit_grid(w, s->selected[0]);
       }
     }
