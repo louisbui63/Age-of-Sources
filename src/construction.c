@@ -33,7 +33,6 @@ void finish_construction(World *w, Entity *e) {
 
   ecs_add_component(w, e, COMP_UNIT, u);
   if (bg->unit_type == WELL || bg->unit_type == UWELL) {
-    printf("water\n");
     WaterSource *ws = malloc(sizeof(WaterSource));
     ecs_add_component(w, e, COMP_WATERSOURCE, ws);
   } else if (bg->unit_type == FURNACE || bg->unit_type == UFURNACE) {
