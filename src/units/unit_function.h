@@ -41,6 +41,7 @@ ClickEvent fish_grid(World *w, int slot, Entity *e);
 ClickEvent frog_grid(World *w, int slot, Entity *e);
 ClickEvent forum_grid(World *w, int slot, Entity *e);
 ClickEvent debug_grid(World *w, int slot, Entity *e);
+ClickEvent debug2_grid(World *w, int slot, Entity *e);
 ClickEvent fort_grid(World *w, int slot, Entity *e);
 ClickEvent beaver_grid(World *w, int slot, Entity *e);
 ClickEvent casern_grid(World *w, int slot, Entity *e);

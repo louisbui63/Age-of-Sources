@@ -206,6 +206,33 @@ void unit_debug_slot_6(World *w, SDL_Renderer *renderer, SDL_Window *window) {
              (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
              1);
 }
+void unit_debug_slot_7(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  char *c = malloc(sizeof(char) * (strlen("src/units/unit_frog.c") + 1));
+  strcpy(c, "src/units/unit_frog.c");
+  Position *p =
+      entity_get_component(w, get_entity(w, DEBUG_ENTITY), COMP_POSITION);
+  spawn_unit(w, FROG, renderer, window,
+             (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
+             1);
+}
+void unit_debug_slot_8(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  char *c = malloc(sizeof(char) * (strlen("src/units/unit_gun_shrimp.c") + 1));
+  strcpy(c, "src/units/unit_gun_shrimp.c");
+  Position *p =
+      entity_get_component(w, get_entity(w, DEBUG_ENTITY), COMP_POSITION);
+  spawn_unit(w, SHRIMP, renderer, window,
+             (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
+             1);
+}
+void unit_debug_slot_9(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  char *c = malloc(sizeof(char) * (strlen("src/units/unit_narval.c") + 1));
+  strcpy(c, "src/units/unit_narval.c");
+  Position *p =
+      entity_get_component(w, get_entity(w, DEBUG_ENTITY), COMP_POSITION);
+  spawn_unit(w, NARVAL, renderer, window,
+             (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
+             1);
+}
 
 ClickEvent debug_grid(__attribute__((unused)) World *w,
                       __attribute__((unused)) int slot, Entity *e) {
@@ -225,6 +252,12 @@ ClickEvent debug_grid(__attribute__((unused)) World *w,
     return unit_debug_slot_5;
   case 6:
     return unit_debug_slot_6;
+  case 7:
+    return unit_debug_slot_7;
+  case 8:
+    return unit_debug_slot_8;
+  case 9:
+    return unit_debug_slot_9;
   }
   return empty_click_event;
 }
