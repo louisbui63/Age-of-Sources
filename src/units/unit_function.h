@@ -44,6 +44,7 @@ ClickEvent debug_grid(World *w, int slot, Entity *e);
 ClickEvent fort_grid(World *w, int slot, Entity *e);
 ClickEvent beaver_grid(World *w, int slot, Entity *e);
 ClickEvent casern_grid(World *w, int slot, Entity *e);
+ClickEvent konbini_grid(World *w, int slot, Entity *e);
 
 //! Returns the `PlayerManager` of player 0, i.e. the human player
 PlayerManager *get_player_0(World *w);
