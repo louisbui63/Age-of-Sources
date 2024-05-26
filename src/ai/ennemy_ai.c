@@ -74,7 +74,8 @@ void deghost(World *w) {
   Bitflag flag = COMPF_BUILDINGGHOST;
   VEC(EntityRef) *es = world_query_mut(w, &flag);
   for (uint i = 0; i < vec_len(*es); i++) {
-    Entity *e = get_entity(w, (*es)[i]);
+    EntityRef eref = (*es)[i];
+    Entity *e = get_entity(w, eref);
     BuildingGhost *bg = entity_get_component(w, e, COMP_BUILDINGGHOST);
     if (!bg->construction_done) {
       Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
@@ -90,7 +91,7 @@ void deghost(World *w) {
             Unit *u = entity_get_component(w, e, COMP_UNIT);
             if (u->t == UBEAVER) {
               Actionnable *act = entity_get_component(w, e, COMP_ACTIONNABLE);
-              if (act->act == Building && act->target == (*es)[i]) {
+              if (act->act == Build && act->target == eref) {
                 is_ok = 1;
                 break;
               }
@@ -98,8 +99,9 @@ void deghost(World *w) {
           }
         }
 
-        if (!is_ok)
+        if (!is_ok) {
           despawn_entity(w, e);
+        }
       }
     }
   }
@@ -181,7 +183,7 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
           SteerManager *stm = entity_get_component(
               w, get_entity(w, builders[i]), COMP_STEERMANAGER);
 
-          Path pa = pathfind_astar(mapc->map, BEAVER, &tpstart, &tpend);
+          Path pa = pathfind_astar(mapc->map, UBEAVER, &tpstart, &tpend);
           if (pa) {
             if (vec_len(pa) > 1) {
               free(pa[0]);
