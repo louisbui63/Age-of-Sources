@@ -91,7 +91,7 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
       SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
       SDL_Rect t_rect = (SDL_Rect){.x = t->rect->x, .y = t->rect->y};
       TTF_SizeUTF8(font, text, &(t_rect.w), &(t_rect.h));
-      t_rect.h *= 8;
+      t_rect.h *= 8; // This looked better
       biggest_possible_rectangle(t->rect, &t_rect, 0);
       // printf("%s\n", text);
       free(text);
