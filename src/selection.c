@@ -14,6 +14,7 @@
 #include <SDL2/SDL_rect.h>
 
 extern Running RUNNING;
+int ESC_COUNTER = 0;
 
 void reset_selection_type(Selector *s) {
   if (s->type == Building) {
@@ -23,8 +24,15 @@ void reset_selection_type(Selector *s) {
   SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
 }
 
+void unselect(Selector *s) {
+  ESC_COUNTER--;
+  if (!ESC_COUNTER)
+    reset_selection_type(s);
+}
+
 void set_building_selection(World *w, char *building, UnitTypes but, int water,
                             int clay) {
+  ESC_COUNTER = 2;
   Bitflag flag = COMPF_SELECTOR;
   VEC(EntityRef) es = world_query(w, &flag);
   // I'm not responsible if you somehow end up with two selectors and so it
@@ -162,7 +170,8 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
       pm0->water += s->water_cost;
       pm0->clay += s->clay_cost;
 
-      reset_selection_type(s);
+      // reset_selection_type(s);
+      unselect(s);
     } else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) &&
                get_mouse_position(r).y < 270 && st == KEY_RELEASED) {
 
