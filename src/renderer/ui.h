@@ -43,7 +43,7 @@ typedef struct {
   SDL_Rect *rect;
 } Minimap;
 
-//! Type used to render text that is not constant sur as hp, sound volume or
+//! Type used to render text that is not constant such as hp, sound volume or
 //! ressources.
 typedef struct {
   char *(*get_text)(World *w, Entity *e);
@@ -51,7 +51,7 @@ typedef struct {
   SDL_Color *color;
 } ActualisedText;
 
-//! Type with this component show text when hovered
+//! Entities with this component show text when hovered
 typedef struct {
   SDL_Rect *rect;
   ActualisedText *text;
@@ -106,16 +106,16 @@ Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
 //! function ought to be useless outside of debug.
 void null_click_event(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
-//! Change `inner` so that it becomes the biggest rectangle of same ratio that
-//! can fit into `outer` padded by `padding` pixels and center it.
+//! Changes `inner` so that it becomes the biggest rectangle of same ratio that
+//! can fit into `outer` padded by `padding` pixels and centers it.
 void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
                                          int padding);
 
-//! Change `inner` so that it becomes the biggest rectangle of same ratio that
+//! Changes `inner` so that it becomes the biggest rectangle of same ratio that
 //! can fit into `outer` padded by `padding` pixels.
 void biggest_possible_rectangle(SDL_Rect *outer, SDL_Rect *inner, int padding);
 
-//! Thiss function adds an `Actualised_Text`to the world that will show the game
+//! This function adds an `Actualised_Text`to the world that will show the game
 //! state in the upper left corner of the game.
 ActualisedText *render_game_state(World *w);
 
