@@ -24,8 +24,8 @@ More informations on the game's design can be found (in French) on: https://docs
 
 This game's code is heavily documented in the rest of this document. That being said, it still seems relevant to discuss here one of our technical choices:
 ### On the use of an ECS
-An Entity Component System (thereafter reffered to as ECS) is a data structures commonly used in game engines, that stores entities and link them to components. \
-A Component can be any data structure, and an entity is just an abstraction to which is associated a number of components. \
+An Entity Component System (thereafter reffered to as ECS) is a data structures commonly used in game engines, that stores entities and link them to components.  
+A Component can be any data structure, and an entity is just an abstraction to which is associated a number of components.  
 Not all entities have an instance of each component, and the main benefit of the ECS is that one can get all the entities that have a specific set of components in linear time.
 
 We decided to use an ECS as it is a great tool to structure a game, and as some of us had previous experience implementing them and working with them.
@@ -45,6 +45,6 @@ The html documentation is also available at https://uwu-segfault.eu/2p2doc/. If 
 
 # Acknowledgement
 
-A game by Eliott Huet, Ghislain Mounier, Louis Buisson and Maxime Soldatov \
-Main menu artwork by Sacha Banak \
+A game by Eliott Huet, Ghislain Mounier, Louis Buisson and Maxime Soldatov  
+Main menu artwork by Sacha Banak  
 Uses Fira Code Nerd Font provided under the SIL OPEN FONT LICENSE Version 1.1

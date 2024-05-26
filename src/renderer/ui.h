@@ -24,12 +24,12 @@ typedef void (*ClickEvent)(World *w, SDL_Renderer *renderer,
                            SDL_Window *window);
 
 //! Entities with this type start an action when clicked on.
-//! The value of is_clicked depends if and how it is clicked on,
-//! when is_clicked is equal to one it means the left click is pressed on over
+//! The value of `is_clicked` depends on if and how it is clicked on,
+//! when `is_clicked` is equal to one it means the left click is pressed on over
 //! the clickable and that either it was already equal to one before or that it
 //! was being clicked on.
 //! If it is equal to two, it means the value was one and the click was released
-//! while over it. It activates the clickable's click_event.
+//! while over it. It activates the `Clickable`'s `click_event`.
 typedef struct {
   Sprite *sprite;
   SDL_Rect *rect;
@@ -58,21 +58,21 @@ typedef struct {
   UnitTypes t;
 } Hoverable;
 
-//! Renders any entity that has user interface related component
+//! Renders any entity that has user interface related components
 void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi);
 
 //! Adds a clickable to the world
 Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event);
 
-//! The `KeyEvent` of the entities associated with a clickable component,
-//! there are different cases, if the mouse is out of the sprite,
+//! The `KeyEvent` of the entities associated with a clickable component.
+//! There are different cases: if the mouse is out of the sprite,
 //! it set `is_clicked` to 0 as for doing nothing,
 //! if the left click is pressed on the sprite,
 //! it will be set to 1 and if it is set to 1 and the click is released then it
-//! will be set to 2. The idea is that if set to 1
+//! will be set to 2. The idea is that if it is set to 1
 //! there will be a visual change by darkening the sprite
-//! and if it set to 2 it will start the action linked to the sprite.
-//! It must be noted that if you click on the sprite, mouve your mouse out and
+//! and if it is set to 2 it will start the action linked to the sprite.
+//! It must be noted that if you click on the sprite, move your mouse out and
 //! then release the click it will do nothing as a way to correct missclicks.
 void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
                      KeyState keystate);
@@ -119,10 +119,10 @@ void biggest_possible_rectangle(SDL_Rect *outer, SDL_Rect *inner, int padding);
 //! state in the upper left corner of the game.
 ActualisedText *render_game_state(World *w);
 
-//! This function returns the string that corresponds to the name of the value
-//! of runnning, the argument are not used but there for type consistency.
-//! The string is padded with spaces at the end so that when the text is
-//! rendered they all begin at the same place
+//! This function returns the string that represents a specific value
+//! of `RUNNING`. The argument are not used but they are there for type
+//! consistency. The string is padded with spaces at the end so that when the
+//! text is rendered they all begin at the same place
 char *running_to_str(World *w, Entity *e);
 
 //! Self explanatory.
