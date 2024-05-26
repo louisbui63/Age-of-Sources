@@ -58,7 +58,8 @@
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/*Collects and smelts the clay around it into a useable ressource*/
+/*Collects and smelts the clay
+around it into a usable ressource*/
 
 ClickEvent furnace_grid(__attribute__((unused)) World *w,
                         __attribute__((unused)) int slot,
