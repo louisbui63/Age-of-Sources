@@ -24,7 +24,7 @@ More informations on the game's design can be found (in French) on: https://docs
 
 This game's code is heavily documented in the rest of this document. That being said, it still seems relevant to discuss here one of our technical choices:
 ### On the use of an ECS
-An Entity Component System (thereafter reffered to as ECS) is a data structures commonly used in game engines, that stores entities and link them to components. \
+An Entity Component System (thereafter refered to as ECS) is a data structure commonly used in game engines, that stores entities and link them to components. \
 A Component can be any data structure, and an entity is just an abstraction to which is associated a number of components. \
 Not all entities have an instance of each component, and the main benefit of the ECS is that one can get all the entities that have a specific set of components in linear time.
 
