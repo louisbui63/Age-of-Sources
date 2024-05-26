@@ -61,7 +61,8 @@
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/*A hard worker with very little combat experience*/
+/*A hard worker with very
+little combat experience*/
 
 Entity *BEAVER_ENTITY;
 

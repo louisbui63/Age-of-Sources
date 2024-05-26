@@ -8,8 +8,8 @@
 #include "selection.h"
 #include "units/units.h"
 
-void new_game(World *w, SDL_Renderer *renderer, SDL_Window *window,
-              Camera *cam) {
+void new_game(World *w, SDL_Renderer *renderer, SDL_Window *window, Camera *cam,
+              AiState *ais) {
   // generate the map from a bmp
   Entity *map = spawn_entity(w);
   MapComponent *mc = malloc(sizeof(MapComponent));
@@ -18,6 +18,8 @@ void new_game(World *w, SDL_Renderer *renderer, SDL_Window *window,
 
   cam->x = 70 * 16;
   cam->y = 90 * 16;
+
+  *ais = Eco;
 
   // spawn stuff
   { // spawn tanuki forum

@@ -43,6 +43,7 @@ void draw_selection(World *w, SDL_Renderer *rdr, SDL_Window *window);
 void set_building_selection(World *w, char *building, UnitTypes but, int water,
                             int clay);
 
+//! Self explanatory
 void selector_free(void *s);
 
 //! This function is used to get the add right Clickables to the world to show

@@ -61,7 +61,9 @@
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/**/
+/*
+
+*/
 
 EntityRef FORT_ENTITY;
 

@@ -1,6 +1,3 @@
-//! @file unit_template.h
-#pragma once
-
 //! This file is a template for the unit files, every data about the units must
 //! be put inside multiline commentaries and nothing else will use this kind of
 //! commentary.

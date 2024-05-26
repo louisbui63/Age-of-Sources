@@ -1,5 +1,5 @@
 //! @file vec.h
-//! file This file defines a redimensionnable array, hereafter reffered to as
+//! This file defines a redimensionnable array, hereafter reffered to as
 //! `vec`. Relevent informations about the content of the `vec` are stored just
 //! before the pointer that the user manipulates
 #pragma once
