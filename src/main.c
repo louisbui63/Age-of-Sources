@@ -13,7 +13,6 @@
 #include "construction.h"
 #include "data_structures/asset_manager.h"
 #include "data_structures/ecs.h"
-#include "data_structures/map.h"
 #include "game_manager.h"
 #include "input.h"
 #include "players.h"
@@ -240,12 +239,14 @@ int main() {
           spawn_defeat(&w, renderer, window);
       } else if (slow_tick == 45) {
         ai_defends_itself(&w);
+      } else if (slow_tick == 50) {
+        deghost(&w);
       }
     }
 
     if (previous_state != RUNNING) {
       if (previous_state == MAIN && RUNNING == IN_GAME) {
-        new_game(&w, renderer, window, camcam);
+        new_game(&w, renderer, window, camcam, &ais);
         in_game = 1;
       } else if (RUNNING == MAIN &&
                  (previous_state == IN_GAMEMENU || previous_state == VICTORY ||

@@ -1,4 +1,5 @@
 //! @file ennemy_ai.h
+#pragma once
 #include "../data_structures/ecs.h"
 #include <SDL2/SDL_render.h>
 
@@ -23,4 +24,8 @@ char is_ai_attacked(World *w);
 void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                     SDL_Window *window);
 
+//! Hints the ai to fight imminent threats to its units
 void ai_defends_itself(World *w);
+
+//! Hints the ai to delete unused ghost buildings
+void deghost(World *w);

@@ -5,6 +5,7 @@
 #include "../data_structures/asset_manager.h"
 #include "../pathfinding.h"
 #include "../players.h"
+#include "../selection.h"
 #include "../units/units.h"
 #include "steering_behaviors.h"
 
@@ -68,9 +69,44 @@ void reconsider_ai_state(World *w, AiState *ais) {
   }
 }
 
+void deghost(World *w) {
+  // resolve the unused ghost situation :
+  Bitflag flag = COMPF_BUILDINGGHOST;
+  VEC(EntityRef) *es = world_query_mut(w, &flag);
+  for (uint i = 0; i < vec_len(*es); i++) {
+    Entity *e = get_entity(w, (*es)[i]);
+    BuildingGhost *bg = entity_get_component(w, e, COMP_BUILDINGGHOST);
+    if (!bg->construction_done) {
+      Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
+      if (o && o->owner == 1) {
+        Bitflag flag = COMPF_UNIT;
+        VEC(EntityRef) es2 = world_query(w, &flag);
+        char is_ok = 0;
+
+        for (uint i = 0; i < vec_len(es2); i++) {
+          Entity *e = get_entity(w, es2[i]);
+          Ownership *o = entity_get_component(w, e, COMP_OWNERSHIP);
+          if (o->owner == 1) {
+            Unit *u = entity_get_component(w, e, COMP_UNIT);
+            if (u->t == UBEAVER) {
+              Actionnable *act = entity_get_component(w, e, COMP_ACTIONNABLE);
+              if (act->act == Building && act->target == (*es)[i]) {
+                is_ok = 1;
+                break;
+              }
+            }
+          }
+        }
+
+        if (!is_ok)
+          despawn_entity(w, e);
+      }
+    }
+  }
+}
+
 void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                     SDL_Window *window) {
-
   switch (*ais) {
   case Eco:
     // here we want two builders that build as many wells and furnaces as
@@ -165,7 +201,6 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                                                   COMP_ACTIONNABLE);
 
           {
-            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -184,11 +219,11 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             Position *p = calloc(1, sizeof(Position));
             *p = (Position){target.x, target.y};
             ecs_add_component(w, e, COMP_POSITION, p);
-            ClaySource *cs = malloc(sizeof(ClaySource));
-            ecs_add_component(w, e, COMP_CLAYSOURCE, cs);
+            Selectable *sl = malloc(sizeof(Selectable));
+            ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
-            act->target = eref;
+            act->target = e->id;
           }
         }
         for (uint i = 1; i < vec_len(builders) && pm1->clay > 300; i += 2) {
@@ -218,12 +253,11 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
                             ps->y + (float)(rand() % 200 - 100) / 10};
             ecs_add_component(w, e, COMP_POSITION, p);
-            ClaySource *cs = malloc(sizeof(WaterSource));
-            ecs_add_component(w, e, COMP_WATERSOURCE, cs);
+            Selectable *sl = malloc(sizeof(Selectable));
+            ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
-            // yes, this is the ref of the entity we just created
-            act->target = vec_len(w->entities) - 1;
+            act->target = e->id;
           }
         }
       }
@@ -314,7 +348,6 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                                                   COMP_ACTIONNABLE);
 
           {
-            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -334,9 +367,11 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
                             ps->y + (float)(rand() % 200 - 100) / 10};
             ecs_add_component(w, e, COMP_POSITION, p);
+            Selectable *sl = malloc(sizeof(Selectable));
+            ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
-            act->target = eref;
+            act->target = e->id;
           }
         }
       } else {
@@ -457,7 +492,6 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
                                                   COMP_ACTIONNABLE);
 
           {
-            EntityRef eref = get_next_entity_ref(w);
             Entity *e = spawn_entity(w);
             Ownership *o = calloc(1, sizeof(Ownership));
             o->owner = 1;
@@ -477,9 +511,11 @@ void take_ai_action(World *w, AiState *ais, SDL_Renderer *renderer,
             *p = (Position){ps->x + (float)(rand() % 200 - 100) / 10,
                             ps->y + (float)(rand() % 200 - 100) / 10};
             ecs_add_component(w, e, COMP_POSITION, p);
+            Selectable *sl = malloc(sizeof(Selectable));
+            ecs_add_component(w, e, COMP_SELECTABLE, sl);
 
             act->act = Build;
-            act->target = eref;
+            act->target = e->id;
           }
         }
       } else {

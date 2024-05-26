@@ -19,6 +19,7 @@ typedef struct {
   SDL_Rect *rect;
 } Background;
 
+//! The type of the callback function called when a `Clickable` is clicked
 typedef void (*ClickEvent)(World *w, SDL_Renderer *renderer,
                            SDL_Window *window);
 
@@ -35,7 +36,6 @@ typedef struct {
   Text *text;
   Uint8 is_clicked;
   ClickEvent click_event;
-  // void (*click_event)(World *w, SDL_Renderer *renderer, SDL_Window *window);
 } Clickable;
 
 //! Type that corresponds to the minimap
