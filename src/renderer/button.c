@@ -773,7 +773,7 @@ ActualisedText *spawn_defeat_text(__attribute__((unused)) World *w,
                           .y = (WIN_H - 200) / 2 - WIN_H / 8 + padding,
                           .h = 200 - 2 * padding,
                           .w = 500 - 2 * padding};
-  t->get_text = str_victory_text;
+  t->get_text = str_defeat_text;
   ecs_add_component(w, e, COMP_ACTUALISEDTEXT, t);
   return t;
 }
