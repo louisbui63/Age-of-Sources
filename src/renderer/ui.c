@@ -438,8 +438,78 @@ char *unit_hover_text(World *w, Entity *e) {
     r[nl + 1 + i + 1] = 0;
     strcat(r, u->descr);
   } else {
-    r = malloc(1);
-    r[0] = 0;
+    char *name = "Upgrade";
+    char *descr = "Improves the production\n\n";
+    int nl = strlen(name);
+    int dl = strlen(descr);
+    char c[19];
+    c[18] = 0; // Cette ligne devrait être inutile.
+    int i = 0;
+    int wc = 500;
+    int cc = 500;
+
+    if (wc >= 1000) {
+      c[i++] = wc / 1000 + '0';
+      wc = wc % 1000;
+      c[i++] = wc / 100 + '0';
+      wc = wc % 100;
+      c[i++] = wc / 10 + '0';
+      wc = wc % 10;
+      c[i++] = wc + '0';
+    } else if (wc >= 100) {
+      c[i++] = wc / 100 + '0';
+      wc = wc % 100;
+      c[i++] = wc / 10 + '0';
+      wc = wc % 10;
+      c[i++] = wc + '0';
+    } else if (wc >= 10) {
+      c[i++] = wc / 10 + '0';
+      wc = wc % 10;
+      c[i++] = wc + '0';
+    } else {
+      c[i++] = wc + '0';
+    }
+    c[i++] = ' ';
+    c[i++] = 0xef;
+    c[i++] = 0x81;
+    c[i++] = 0x83;
+    c[i++] = ',';
+    c[i++] = ' ';
+    if (cc >= 1000) {
+      c[i++] = cc / 1000 + '0';
+      cc = cc % 1000;
+      c[i++] = cc / 100 + '0';
+      cc = cc % 100;
+      c[i++] = cc / 10 + '0';
+      cc = cc % 10;
+      c[i++] = cc + '0';
+    } else if (cc >= 100) {
+      c[i++] = cc / 100 + '0';
+      cc = cc % 100;
+      c[i++] = cc / 10 + '0';
+      cc = cc % 10;
+      c[i++] = cc + '0';
+    } else if (cc >= 10) {
+      c[i++] = cc / 10 + '0';
+      cc = cc % 10;
+      c[i++] = cc + '0';
+    } else {
+      c[i++] = cc + '0';
+    }
+    c[i++] = ' ';
+    c[i++] = 0xef;
+    c[i++] = 0x92;
+    c[i++] = 0xb7;
+    c[i] = 0;
+
+    r = malloc(nl + 1 + i + 1 + dl + 1);
+    strcpy(r, name);
+    r[nl] = '\n';
+    r[nl + 1] = 0;
+    strcat(r, c);
+    r[nl + 1 + i] = '\n';
+    r[nl + 1 + i + 1] = 0;
+    strcat(r, descr);
   }
   return r;
 }

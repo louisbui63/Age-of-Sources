@@ -354,7 +354,7 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
     break;
 
   case SHRIMP:
-    u = parse("src/units/unit_shrimp.c", renderer, window);
+    u = parse("src/units/unit_gun_shrimp.c", renderer, window);
     u->t = t;
     break;
 
