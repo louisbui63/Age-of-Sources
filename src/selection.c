@@ -1103,6 +1103,42 @@ void render_unit_grid(World *w, EntityRef e) {
     }
     break;
 
+  case KONBINI:
+    // Upgrade
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = konbini_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture = get_texture("asset/sprites/upgrade.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = UNIT_NUMBER;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
+    break;
   default:
     break;
   }
