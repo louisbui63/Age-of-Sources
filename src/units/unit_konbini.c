@@ -62,8 +62,34 @@
 
 */
 
+void konbini_slot_0(World *w, __attribute__((unused)) SDL_Renderer *renderer,
+                       __attribute__((unused)) SDL_Window *window) {
+  Bitflag flag = COMPF_PLAYERMANAGER;
+  VEC(EntityRef) ps = world_query(w, &flag);
+  PlayerManager *pm0 =
+      entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
+  PlayerManager *pm1 =
+      entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
+  if (pm0->id == 1) {
+    PlayerManager *tmp = pm0;
+    pm0 = pm1;
+    pm1 = tmp;
+  }
+
+  if (pm0->clay >= 500 && pm0->water >= 500) {
+    pm0->clay -= 500;
+    pm0->water -= 500;
+    pm0->clay_multiplier = 2;
+    pm0->water_multiplier = 2;
+  }
+}
+
 ClickEvent konbini_grid(__attribute__((unused)) World *w,
                         __attribute__((unused)) int slot,
                         __attribute__((unused)) Entity *e) {
+  switch (slot) {
+    case 0:
+      return konbini_slot_0;
+  }
   return empty_click_event;
 }
