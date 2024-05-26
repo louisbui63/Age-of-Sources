@@ -18,7 +18,7 @@ typedef enum {
   Building,
 } SelectionType;
 
-//! A componenet that manages selection
+//! A component that manages selection
 typedef struct {
   SelectionType type;
   Vec2 start;
@@ -46,8 +46,7 @@ void set_building_selection(World *w, char *building, UnitTypes but, int water,
 //! Self explanatory
 void selector_free(void *s);
 
-//! This function is used to get the add right Clickables to the world to show
-//! the option of an unit when you select it to show when you select it.
+//! Self explanatory
 void render_unit_grid(World *w, EntityRef e);
 
 //! Advances one step in the unit unselection process
