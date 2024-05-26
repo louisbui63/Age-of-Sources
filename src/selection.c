@@ -396,7 +396,8 @@ void render_unit_grid(World *w, EntityRef e) {
   case BEAVER:
 
     //   // Forum
-    //   {actualise_grid_coordinates(&x, &y, i);
+    // {
+    //   actualise_grid_coordinates(&x, &y, i);
     //   c = malloc(sizeof(Clickable));
     //   c->rect = malloc(sizeof(SDL_Rect));
     //   *(c->rect) = (SDL_Rect){.x = x, .y = 0, .h = 32, .w = 32};
@@ -412,8 +413,22 @@ void render_unit_grid(World *w, EntityRef e) {
     //   c->sprite->texture = get_texture("asset/sprites/forum.bmp", r, wi);
     //   key_event = malloc(sizeof(KeyEvent));
     //   *key_event = clickable_event;
-    // en = spawn_clickable(w, c, key_event);
-    //   i++;}
+    //   en = spawn_clickable(w, c, key_event);
+    //   i++;
+    // }
+    // {
+    //   h = malloc(sizeof(Hoverable));
+    //   h->rect = malloc(sizeof(SDL_Rect));
+    //   *(h->rect) = *(c->rect);
+    //   h->t = FORUM;
+    //   h->text = malloc(sizeof(ActualisedText));
+    //   h->text->color = malloc(sizeof(SDL_Color));
+    //   *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+    //   h->text->rect = malloc(sizeof(SDL_Rect));
+    //   *(h->text->rect) = hrect;
+    //   h->text->get_text = unit_hover_text;
+    //   ecs_add_component(w, en, COMP_HOVERABLE, h);
+    // }
 
     // Well
     {
@@ -436,6 +451,19 @@ void render_unit_grid(World *w, EntityRef e) {
       en = spawn_clickable(w, c, key_event);
       i++;
     }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = WELL;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
 
     // Furnace
     {
@@ -457,6 +485,19 @@ void render_unit_grid(World *w, EntityRef e) {
       *key_event = clickable_event;
       en = spawn_clickable(w, c, key_event);
       i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = FURNACE;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
     }
 
     // Casern
@@ -516,6 +557,19 @@ void render_unit_grid(World *w, EntityRef e) {
       en = spawn_clickable(w, c, key_event);
       i++;
     }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = TOWER;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
 
     // Konbini
     {
@@ -539,6 +593,19 @@ void render_unit_grid(World *w, EntityRef e) {
       en = spawn_clickable(w, c, key_event);
       i++;
     }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = KONBINI;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
 
     // House
     {
@@ -560,6 +627,19 @@ void render_unit_grid(World *w, EntityRef e) {
       *key_event = clickable_event;
       en = spawn_clickable(w, c, key_event);
       i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = HOUSE;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
     }
 
     // Fort
@@ -583,6 +663,19 @@ void render_unit_grid(World *w, EntityRef e) {
       en = spawn_clickable(w, c, key_event);
       i++;
     }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = FORT;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
     break;
   case FORUM:
     // Tanuki
@@ -605,6 +698,19 @@ void render_unit_grid(World *w, EntityRef e) {
       *key_event = clickable_event;
       en = spawn_clickable(w, c, key_event);
       i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = BASE_SOLDIER;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
     }
 
     // Beaver
@@ -782,127 +888,217 @@ void render_unit_grid(World *w, EntityRef e) {
   case CASERN:
 
     // Samurai
-    actualise_grid_coordinates(&x, &y, i);
-    c = malloc(sizeof(Clickable));
-    c->rect = malloc(sizeof(SDL_Rect));
-    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
-    c->is_clicked = 0;
-    c->click_event = casern_grid(w, i, get_entity(w, e));
-    c->text = malloc(sizeof(Text));
-    c->text->str = malloc(1);
-    *(c->text->str) = '\0';
-    c->text->color = malloc(1);
-    c->sprite = malloc(sizeof(Sprite));
-    c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
-    c->sprite->texture = get_texture("asset/sprites/samurai.bmp", r, wi);
-    key_event = malloc(sizeof(KeyEvent));
-    *key_event = clickable_event;
-    en = spawn_clickable(w, c, key_event);
-    i++;
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = casern_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture = get_texture("asset/sprites/samurai.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = SAMURAI;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
 
     // Security
-    actualise_grid_coordinates(&x, &y, i);
-    c = malloc(sizeof(Clickable));
-    c->rect = malloc(sizeof(SDL_Rect));
-    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
-    c->is_clicked = 0;
-    c->click_event = casern_grid(w, i, get_entity(w, e));
-    c->text = malloc(sizeof(Text));
-    c->text->str = malloc(1);
-    *(c->text->str) = '\0';
-    c->text->color = malloc(1);
-    c->sprite = malloc(sizeof(Sprite));
-    c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
-    c->sprite->texture = get_texture("asset/sprites/tanuki_secu.bmp", r, wi);
-    key_event = malloc(sizeof(KeyEvent));
-    *key_event = clickable_event;
-    en = spawn_clickable(w, c, key_event);
-    i++;
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = casern_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture = get_texture("asset/sprites/tanuki_secu.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = SECU;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
 
     // Tanuki
-    actualise_grid_coordinates(&x, &y, i);
-    c = malloc(sizeof(Clickable));
-    c->rect = malloc(sizeof(SDL_Rect));
-    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
-    c->is_clicked = 0;
-    c->click_event = casern_grid(w, i, get_entity(w, e));
-    c->text = malloc(sizeof(Text));
-    c->text->str = malloc(1);
-    *(c->text->str) = '\0';
-    c->text->color = malloc(1);
-    c->sprite = malloc(sizeof(Sprite));
-    c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
-    c->sprite->texture = get_texture("asset/sprites/tanuki.bmp", r, wi);
-    key_event = malloc(sizeof(KeyEvent));
-    *key_event = clickable_event;
-    en = spawn_clickable(w, c, key_event);
-    i++;
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = casern_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture = get_texture("asset/sprites/tanuki.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = BASE_SOLDIER;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
     break;
 
   case FORT:
 
     // T34
-    actualise_grid_coordinates(&x, &y, i);
-    c = malloc(sizeof(Clickable));
-    c->rect = malloc(sizeof(SDL_Rect));
-    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
-    c->is_clicked = 0;
-    c->click_event = fort_grid(w, i, get_entity(w, e));
-    c->text = malloc(sizeof(Text));
-    c->text->str = malloc(1);
-    *(c->text->str) = '\0';
-    c->text->color = malloc(1);
-    c->sprite = malloc(sizeof(Sprite));
-    c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
-    c->sprite->texture = get_texture("asset/sprites/tanuki_t34.bmp", r, wi);
-    key_event = malloc(sizeof(KeyEvent));
-    *key_event = clickable_event;
-    en = spawn_clickable(w, c, key_event);
-    i++;
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = fort_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture = get_texture("asset/sprites/tanuki_t34.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = T34;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
 
     // Maid
-    actualise_grid_coordinates(&x, &y, i);
-    c = malloc(sizeof(Clickable));
-    c->rect = malloc(sizeof(SDL_Rect));
-    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
-    c->is_clicked = 0;
-    c->click_event = fort_grid(w, i, get_entity(w, e));
-    c->text = malloc(sizeof(Text));
-    c->text->str = malloc(1);
-    *(c->text->str) = '\0';
-    c->text->color = malloc(1);
-    c->sprite = malloc(sizeof(Sprite));
-    c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
-    c->sprite->texture = get_texture("asset/sprites/tanuki_maid.bmp", r, wi);
-    key_event = malloc(sizeof(KeyEvent));
-    *key_event = clickable_event;
-    en = spawn_clickable(w, c, key_event);
-    i++;
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = fort_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture = get_texture("asset/sprites/tanuki_maid.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = MAID;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
 
     // Pingu
-    actualise_grid_coordinates(&x, &y, i);
-    c = malloc(sizeof(Clickable));
-    c->rect = malloc(sizeof(SDL_Rect));
-    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
-    c->is_clicked = 0;
-    c->click_event = fort_grid(w, i, get_entity(w, e));
-    c->text = malloc(sizeof(Text));
-    c->text->str = malloc(1);
-    *(c->text->str) = '\0';
-    c->text->color = malloc(1);
-    c->sprite = malloc(sizeof(Sprite));
-    c->sprite->rect = malloc(sizeof(SDL_Rect));
-    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
-    c->sprite->texture = get_texture("asset/sprites/santanuki.bmp", r, wi);
-    key_event = malloc(sizeof(KeyEvent));
-    *key_event = clickable_event;
-    en = spawn_clickable(w, c, key_event);
-    i++;
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = fort_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture = get_texture("asset/sprites/santanuki.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+    {
+      h = malloc(sizeof(Hoverable));
+      h->rect = malloc(sizeof(SDL_Rect));
+      *(h->rect) = *(c->rect);
+      h->t = PINGU;
+      h->text = malloc(sizeof(ActualisedText));
+      h->text->color = malloc(sizeof(SDL_Color));
+      *(h->text->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+      h->text->rect = malloc(sizeof(SDL_Rect));
+      *(h->text->rect) = hrect;
+      h->text->get_text = unit_hover_text;
+      ecs_add_component(w, en, COMP_HOVERABLE, h);
+    }
     break;
 
   default:
