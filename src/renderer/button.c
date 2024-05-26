@@ -4,6 +4,7 @@
 #include "../components.h"
 #include "../data_structures/asset_manager.h"
 #include "../players.h"
+#include "../selection.h"
 #include "button.h"
 
 extern Running RUNNING;
@@ -521,9 +522,15 @@ void key_event_escape(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
       event_optionmain_back(w, rdr, wind->w);
       break;
 
-    case IN_GAME:
-      event_game_menu(w, rdr, wind->w);
-      break;
+    case IN_GAME: {
+      Bitflag flag = COMPF_SELECTOR;
+      Selector *s = entity_get_component(
+          w, get_entity(w, world_query(w, &flag)[0]), COMP_SELECTOR);
+      if (s->type != Building)
+        event_game_menu(w, rdr, wind->w);
+      else
+        unselect(s);
+    } break;
 
     case IN_GAMEMENU:
       event_gamemenu_resume(w, rdr, wind->w);
@@ -773,7 +780,7 @@ ActualisedText *spawn_defeat_text(__attribute__((unused)) World *w,
                           .y = (WIN_H - 200) / 2 - WIN_H / 8 + padding,
                           .h = 200 - 2 * padding,
                           .w = 500 - 2 * padding};
-  t->get_text = str_victory_text;
+  t->get_text = str_defeat_text;
   ecs_add_component(w, e, COMP_ACTUALISEDTEXT, t);
   return t;
 }

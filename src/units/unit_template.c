@@ -1,3 +1,4 @@
+#include "unit_function.h"
 //! This file is a template for the unit files, every data about the units must
 //! be put inside multiline commentaries and nothing else will use this kind of
 //! commentary.
@@ -6,8 +7,8 @@
 //! characters long.
 /*Name*/
 
-//! The second text is the hp of the unit, it must a be positive decimal integer
-//! smaller or equal to 65535
+//! The second text is the hp of the unit, it must a be positive decimal
+//! integer smaller or equal to 65535
 /*001*/
 
 //! The third text is the b_dam of the unit, it must a be positive decimal

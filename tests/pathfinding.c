@@ -35,7 +35,7 @@ int test_pathfinding() {
   ASSERT(vec_len(p) == 2);
   path_free(p);
 
-  src = (TilePosition){.x = 0, .y = 0};
+  src = (TilePosition){.x = 2, .y = 0};
   dest = (TilePosition){.x = 1, .y = 1};
   p = pathfind_astar(m, UNIT_TEST, &src, &dest);
   ASSERT(p != 0);
