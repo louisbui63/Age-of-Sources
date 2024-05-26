@@ -438,8 +438,8 @@ char *unit_hover_text(World *w, Entity *e) {
     r[nl + 1 + i + 1] = 0;
     strcat(r, u->descr);
   } else {
-    char *name = "Uprgrade";
-    char *descr = "Improves the production\n";
+    char *name = "Upgrade";
+    char *descr = "Improves the production\n\n";
     int nl = strlen(name);
     int dl = strlen(descr);
     char c[19];
