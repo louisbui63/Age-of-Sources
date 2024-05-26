@@ -33,7 +33,7 @@
 #define WIN_W 640
 
 //! Verify that `a != 0`. Otherwise, prints an error and exits the current
-//! function with error `-1`
+//! function with error `ASSERTION_FAILED`
 #define ASSERT(a)                                                              \
   {                                                                            \
     if (!(a)) {                                                                \
@@ -72,7 +72,7 @@ typedef unsigned int uint;
 //! Self explanatory.
 #define min(a, b) ((a < b) ? (a) : (b))
 
-//! a 2d vector for use in units movement
+//! A 2d vector used for the units'movement
 typedef struct {
   float x;
   float y;
@@ -86,9 +86,9 @@ v2op_dec(sub);
 v2op_dec(add);
 //! normalizes a `Vec2`
 Vec2 v2normalize(Vec2 a);
-//! performs a scalar product between `Vec2` `b` and `a`
+//! performs a product between `Vec2` `a` and the scalar `b`
 Vec2 v2mul(float a, Vec2 b);
-//! performs a scalar product between `Vec2` `a` and `1/b`
+//! performs a product between `Vec2` `a` and the scalar `1/b`
 Vec2 v2div(Vec2 a, float b);
 //! returns the angle (in radian) between `a` and the `(0,1)` vector
 float v2angle(Vec2 a);
@@ -111,14 +111,14 @@ typedef enum {
   DEFEAT
 } Running;
 
-//! This is type that was created to be able to get the window from the world
+//! This is a type that was created to be able to get the window from the world
 //! using the ecs.
 typedef struct {
   SDL_Window *w;
 } Window;
 
-//! This is type that was created to be able to get the renderer from the world
-//! using the ecs.
+//! This is a type that was created to be able to get the renderer from the
+//! world using the ecs.
 typedef struct {
   SDL_Renderer *r;
 } Renderer;

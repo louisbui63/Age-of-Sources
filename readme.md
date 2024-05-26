@@ -12,24 +12,29 @@ To win, destroy the ennemy's forum.
 ## Design
 
 ### Economy
+
 Each player must pile up resources in the form of clay and water to build their town and army. Production of resources originates from wells and furnaces and is passive.
 Buildings can be constructed by beavers, that can be hired from the forum, which is the only building the players originally have.
 
 ### Combat
+
 Combat is based on the famous "Rock-Paper-Scissors" system, where each kind of unit is strong against one other type, and weak against one.
 
 ### Find out more
-More informations on the game's design can be found (in French) on: https://docs.google.com/document/d/1IPbxiTLj0bLq1hyJecttDWtiTuiY5Pz58Ut8i5y4QXE/edit?usp=sharing 
+
+More informations on the game's design can be found (in French) on: https://docs.google.com/document/d/1IPbxiTLj0bLq1hyJecttDWtiTuiY5Pz58Ut8i5y4QXE/edit?usp=sharing
+
 ## Technical details
 
 This game's code is heavily documented in the rest of this document. That being said, it still seems relevant to discuss here one of our technical choices:
+
 ### On the use of an ECS
-An Entity Component System (thereafter reffered to as ECS) is a data structures commonly used in game engines, that stores entities and link them to components. \
-A Component can be any data structure, and an entity is just an abstraction to which is associated a number of components. \
+
+An Entity Component System (thereafter refered to as ECS) is a data structures commonly used in game engines, that stores entities and link them to components.  
+A Component can be any data structure, and an entity is just an abstraction to which is associated a number of components.  
 Not all entities have an instance of each component, and the main benefit of the ECS is that one can get all the entities that have a specific set of components in linear time.
 
 We decided to use an ECS as it is a great tool to structure a game, and as some of us had previous experience implementing them and working with them.
-
 
 ## Compilation
 
@@ -45,6 +50,6 @@ The html documentation is also available at https://uwu-segfault.eu/2p2doc/. If 
 
 # Acknowledgement
 
-A game by Eliott Huet, Ghislain Mounier, Louis Buisson and Maxime Soldatov \
-Main menu artwork by Sacha Banak \
+A game by Eliott Huet, Ghislain Mounier, Louis Buisson and Maxime Soldatov  
+Main menu artwork by Sacha Banak  
 Uses Fira Code Nerd Font provided under the SIL OPEN FONT LICENSE Version 1.1

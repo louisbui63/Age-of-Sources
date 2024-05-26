@@ -63,7 +63,7 @@
 */
 
 void konbini_slot_0(World *w, __attribute__((unused)) SDL_Renderer *renderer,
-                       __attribute__((unused)) SDL_Window *window) {
+                    __attribute__((unused)) SDL_Window *window) {
   Bitflag flag = COMPF_PLAYERMANAGER;
   VEC(EntityRef) ps = world_query(w, &flag);
   PlayerManager *pm0 =
@@ -88,8 +88,8 @@ ClickEvent konbini_grid(__attribute__((unused)) World *w,
                         __attribute__((unused)) int slot,
                         __attribute__((unused)) Entity *e) {
   switch (slot) {
-    case 0:
-      return konbini_slot_0;
+  case 0:
+    return konbini_slot_0;
   }
   return empty_click_event;
 }

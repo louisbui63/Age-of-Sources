@@ -95,10 +95,11 @@ char actionnate(World *w, Actionnable *ac, Entity *se) {
         VEC(EntityRef) es = world_query(w, &flag_sel);
         Entity *e_sel = get_entity(w, es[0]);
         Selector *sl = entity_get_component(w, e_sel, COMP_SELECTOR);
-        uint k=0;
-        for(;k<vec_len(sl->selected) && sl->selected[k] != e->id;k++);
-        if(k<vec_len(sl->selected))
-          vec_remove(sl->selected,k);
+        uint k = 0;
+        for (; k < vec_len(sl->selected) && sl->selected[k] != e->id; k++)
+          ;
+        if (k < vec_len(sl->selected))
+          vec_remove(sl->selected, k);
         despawn_entity(w, e);
       }
       return 1;

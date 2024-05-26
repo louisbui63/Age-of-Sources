@@ -64,7 +64,7 @@ int hash_map_insert_callback(HashMap *h, void *k, void *v,
 //! Same as `hash_map_insert_callback` but uses `hash_map_entry_free` as
 //! callback
 int hash_map_insert(HashMap *h, void *k, void *v);
-//! deletes the entry with key `k` using `callback`
+//! Deletes the entry with key `k` using `callback`
 int hash_map_delete_callback(HashMap *h, void *k, void (*callback)(void *));
 //! Same as hash_map_delete_callback but uses `hash_map_entry_free` as callback
 int hash_map_delete(HashMap *h, void *k);
@@ -72,5 +72,5 @@ int hash_map_delete(HashMap *h, void *k);
 //! such pair
 void *hash_map_get(HashMap *h, void *k);
 
-//! a `hash_map_free_callback` callback that dosn't free the values
+//! A `hash_map_free_callback` callback that dosn't free the values
 void hash_map_entry_free_keys(void *u);
