@@ -6,13 +6,13 @@
 #include "../src/util.h"
 
 int test_parser() {
-  Unit *unit = parse("./tests/testunit.h", NULL, NULL);
+  UnitT *unit = parse("./tests/testunit.h", NULL, NULL);
 
   ASSERT(unit->b_dam == 100);
   ASSERT(unit->b_def == 20);
   ASSERT(!strcmp(unit->name, "testname"))
   ASSERT(!strcmp(unit->descr, "test descr"));
 
-  free(unit);
+  unitt_free(unit);
   return SUCCESS;
 }

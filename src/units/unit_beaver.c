@@ -81,7 +81,11 @@ Entity *BEAVER_ENTITY;
       pm0 = pm1;                                                               \
       pm1 = tmp;                                                               \
     }                                                                          \
-    if (pm0->clay >= cl && pm0->water >= wa) {                                 \
+    flag = COMPF_SELECTOR;                                                     \
+    Selector *s = entity_get_component(                                        \
+        w, get_entity(w, world_query(w, &flag)[0]), COMP_SELECTOR);            \
+    if (pm0->clay + (s->type == Building) * s->clay_cost >= cl &&              \
+        pm0->water + (s->type == Building) * s->water_cost >= wa) {            \
       pm0->clay -= cl;                                                         \
       pm0->water -= wa;                                                        \
       char *un =                                                               \

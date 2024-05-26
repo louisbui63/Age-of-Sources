@@ -57,7 +57,7 @@
 
 double units_get_tile_speed(UnitTypes u, TileTypes t) {
   double unit_speeds[UNIT_NUMBER][TILE_NUMBER] = {
-      {1., 1., 1., 0., 0., 1.},           // UNIT_TEST
+      {1., 0.00001, 1., 0., 0., 1.},           // UNIT_TEST
       {1, 1, 1, 0, 0, 1},                 // WELL
       {0, 0, 0, 0, 0, 1},                 // FURNACE
       {1, 1, 1, 0, 0, 1},                 // CASERN
