@@ -13,6 +13,9 @@ int test_parser() {
   ASSERT(!strcmp(unit->name, "testname"))
   ASSERT(!strcmp(unit->descr, "test descr"));
 
-  unitt_free(unit);
+  free(unit->descr);
+  free(unit->name);
+  sprite_component_free(unit->sprite);
+  free(unit);
   return SUCCESS;
 }
