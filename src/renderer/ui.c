@@ -335,14 +335,44 @@ char *unit_hover_text(World *w, Entity *e) {
       cc = 0;
       break;
 
+    case WELL:
+      wc = 300;
+      cc = 0;
+      break;
+
+    case FURNACE:
+      wc = 200;
+      cc = 100;
+      break;
+
     case CASERN:
       wc = 600;
       cc = 400;
       break;
 
+    case TOWER:
+      wc = 600;
+      cc = 400;
+      break;
+
+    case KONBINI:
+      wc = 600;
+      cc = 400;
+      break;
+
+    case HOUSE:
+      wc = 600;
+      cc = 400;
+      break;
+
+    case FORT:
+      wc = 600;
+      cc = 400;
+      break;
+
     default:
-      wc = 0;
-      cc = 0;
+      wc = 50;
+      cc = 50;
       break;
     }
     if (wc >= 1000) {
