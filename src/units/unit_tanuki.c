@@ -59,7 +59,8 @@
 
 //! The fourtennth text is the unit's description, it must be less than 1024
 //! characters long.
-/*A cute furball that can also build stuff*/
+/*A cute furball able to
+fight to protect it's country*/
 
 ClickEvent tanuki_grid(__attribute__((unused)) World *w,
                        __attribute__((unused)) int slot,

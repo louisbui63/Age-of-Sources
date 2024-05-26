@@ -89,13 +89,14 @@ void render_ui(World *w, SDL_Renderer *rdr, SDL_Window *wi) {
       SDL_Surface *surf =
           TTF_RenderUTF8_Blended_Wrapped(font, text, *(t->color), 0);
       SDL_Texture *text_texture = SDL_CreateTextureFromSurface(rdr, surf);
-      SDL_Rect t_rect;
+      SDL_Rect t_rect = (SDL_Rect){.x = t->rect->x, .y = t->rect->y};
       TTF_SizeUTF8(font, text, &(t_rect.w), &(t_rect.h));
-      biggest_possible_rectangle_centered(t->rect, &t_rect, 0);
+      t_rect.h *= 8;
+      biggest_possible_rectangle(t->rect, &t_rect, 0);
       // printf("%s\n", text);
       free(text);
 
-      SDL_RenderCopy(rdr, text_texture, NULL, &t_rect);
+      SDL_RenderCopy(rdr, text_texture, NULL, /*t->rect*/ &t_rect);
       SDL_FreeSurface(surf);
       SDL_DestroyTexture(text_texture);
     }
@@ -229,6 +230,26 @@ void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
   inner->y = (oh + 2 * (outer->y + padding) - ih) / 2;
 }
 
+void biggest_possible_rectangle(SDL_Rect *outer, SDL_Rect *inner, int padding) {
+  int ow = outer->w - 2 * padding;
+  int oh = outer->h - 2 * padding;
+  int iw = inner->w;
+  int ih = inner->h;
+  if ((1.0 * ow) / oh > (1.0 * iw) / ih) {
+    inner->h = oh;
+    inner->w = (oh * iw) / ih;
+  } else if ((1.0 * ow) / oh > (1.0 * iw) / ih) {
+    *inner = *outer;
+  } else {
+    inner->w = ow;
+    inner->h = (ow * ih) / iw;
+  }
+  iw = inner->w;
+  ih = inner->h;
+  inner->x = outer->x + padding;
+  inner->y = outer->y + padding;
+}
+
 ActualisedText *render_game_state(World *w) {
   Entity *e = spawn_entity(w);
   ActualisedText *t = malloc(sizeof(ActualisedText));
@@ -312,6 +333,11 @@ char *unit_hover_text(World *w, Entity *e) {
     case BEAVER:
       wc = 50;
       cc = 0;
+      break;
+
+    case CASERN:
+      wc = 600;
+      cc = 400;
       break;
 
     default:

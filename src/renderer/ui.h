@@ -107,9 +107,13 @@ Background *spawn_backbackground(SDL_Renderer *rdr, SDL_Window *window);
 void null_click_event(World *w, SDL_Renderer *renderer, SDL_Window *window);
 
 //! Change `inner` so that it becomes the biggest rectangle of same ratio that
-//! can fit into `outer` padded by `padding` pixels.
+//! can fit into `outer` padded by `padding` pixels and center it.
 void biggest_possible_rectangle_centered(SDL_Rect *outer, SDL_Rect *inner,
                                          int padding);
+
+//! Change `inner` so that it becomes the biggest rectangle of same ratio that
+//! can fit into `outer` padded by `padding` pixels.
+void biggest_possible_rectangle(SDL_Rect *outer, SDL_Rect *inner, int padding);
 
 //! Thiss function adds an `Actualised_Text`to the world that will show the game
 //! state in the upper left corner of the game.
