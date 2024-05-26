@@ -2,7 +2,6 @@
 #pragma once
 
 #include "data_structures/map.h"
-#include "renderer/camera.h"
 #include "units/units.h"
 
 //! stores the position of a tile

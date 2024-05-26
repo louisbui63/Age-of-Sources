@@ -1,8 +1,7 @@
-//! @file butt`on.h
+//! @file button.h
 #pragma once
 
 #include "../data_structures/ecs.h"
-#include "../util.h"
 #include "ui.h"
 
 //! This function is used to add clickable in the world with the `click_event`

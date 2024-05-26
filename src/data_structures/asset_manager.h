@@ -14,8 +14,11 @@ extern HashMap ASSET_STORE;
 //! `get_texture` or `load_texture`
 void init_asset_manager();
 
+//! Change the locked status of an asset to `locked`. A locked asset isn't
+//! dropped by the `drop_*` functions even when it is not used anymore.
 Error lock_asset(char *t, char locked);
 
+//! Returns true iff an asset is locked. See `lock_asset` for more details
 char is_asset_locked(char *t);
 
 //! Returns a pointer to the texture from file `t`. Will had it to the
@@ -42,6 +45,9 @@ void *load_audio(char *t, char is_mus);
 //! Frees the audio of the file `t` in the `ASSET_STORE`.
 int drop_audio(char *t);
 
+//! Loads the font from file `t` in the `ASSET_STORE` with size `size`.
+//! While calling it multiple times with the same `t` shouldn't fail, it is
+//! unadvisable as slow. Crashes on invalid file path or font creation.
 void *load_font(char *t, Uint8 size);
 
 //! Returns a pointer to the font from file `t`. Will add it to the
