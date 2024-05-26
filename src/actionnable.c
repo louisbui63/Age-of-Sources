@@ -4,6 +4,7 @@
 #include "construction.h"
 #include "pathfinding.h"
 #include "players.h"
+#include "selection.h"
 
 void apply_damage(Unit *u1, Unit *u2, float multiplier) {
   u2->hp -= multiplier * (pow((double)u1->b_dam / (u2->b_def + 1), 4. / 3) +
@@ -90,7 +91,14 @@ char actionnate(World *w, Actionnable *ac, Entity *se) {
           if (act->target == ac->target)
             act->act = Lazy;
         }
-
+        Bitflag flag_sel = COMPF_SELECTOR;
+        VEC(EntityRef) es = world_query(w, &flag_sel);
+        Entity *e_sel = get_entity(w, es[0]);
+        Selector *sl = entity_get_component(w, e_sel, COMP_SELECTOR);
+        uint k=0;
+        for(;k<vec_len(sl->selected) && sl->selected[k] != e->id;k++);
+        if(k<vec_len(sl->selected))
+          vec_remove(sl->selected,k);
         despawn_entity(w, e);
       }
       return 1;
