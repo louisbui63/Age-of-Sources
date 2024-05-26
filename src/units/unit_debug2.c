@@ -89,6 +89,8 @@ void unit_debug2_slot_0(World *w,
   Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
   sp->texture = get_texture("asset/sprites/tour_poisson.bmp", get_renderer_l(w),
                             get_window_l(w));
+  sp->rect->w = 32;
+  sp->rect->h = 64;
 }
 void unit_debug2_slot_1(World *w,
                         __attribute__((unused)) SDL_Renderer *renderer,
@@ -97,6 +99,8 @@ void unit_debug2_slot_1(World *w,
   Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
   sp->texture = get_texture("asset/sprites/unectas_casern.bmp",
                             get_renderer_l(w), get_window_l(w));
+  sp->rect->w = 64;
+  sp->rect->h = 64;
 }
 void unit_debug2_slot_2(World *w,
                         __attribute__((unused)) SDL_Renderer *renderer,
@@ -105,6 +109,8 @@ void unit_debug2_slot_2(World *w,
   Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
   sp->texture = get_texture("asset/sprites/unectas_fort.bmp", get_renderer_l(w),
                             get_window_l(w));
+  sp->rect->w = 64;
+  sp->rect->h = 64;
 }
 void unit_debug2_slot_3(World *w,
                         __attribute__((unused)) SDL_Renderer *renderer,
@@ -113,6 +119,8 @@ void unit_debug2_slot_3(World *w,
   Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
   sp->texture = get_texture("asset/sprites/poisson_konbini.bmp",
                             get_renderer_l(w), get_window_l(w));
+  sp->rect->w = 64;
+  sp->rect->h = 64;
 }
 void unit_debug2_slot_4(World *w,
                         __attribute__((unused)) SDL_Renderer *renderer,
@@ -121,9 +129,11 @@ void unit_debug2_slot_4(World *w,
   Sprite *sp = entity_get_component(w, e, COMP_SPRITE);
   sp->texture = get_texture("asset/sprites/poisson_maison.bmp",
                             get_renderer_l(w), get_window_l(w));
+  sp->rect->w = 32;
+  sp->rect->h = 32;
 }
 
-ClickEvent debug_grid2(__attribute__((unused)) World *w,
+ClickEvent debug2_grid(__attribute__((unused)) World *w,
                        __attribute__((unused)) int slot, Entity *e) {
   DEBUG2_ENTITY = e->id;
   switch (slot) {
