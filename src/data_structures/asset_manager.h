@@ -21,7 +21,7 @@ Error lock_asset(char *t, char locked);
 //! Returns true iff an asset is locked. See `lock_asset` for more details
 char is_asset_locked(char *t);
 
-//! Returns a pointer to the texture from file `t`. Will had it to the
+//! Returns a pointer to the texture from file `t`. Will add it to the
 //! `ASSET_STORE` if it is not in it yet
 void *get_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
 
@@ -33,7 +33,7 @@ void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window);
 //! Remove a texture from the `ASSET_STORE` and free it.
 int drop_texture(char *t);
 
-//! Returns a pointer to the audio from file `t`. Will had it to the
+//! Returns a pointer to the audio from file `t`. Will add it to the
 //! `ASSET_STORE` if it is not in it yet.
 void *get_audio(char *t, char is_mus);
 
@@ -63,7 +63,7 @@ int drop_font(char *font, Uint8 size);
 //! texture creation
 void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window);
 
-//! Returns a pointer to the UnitT of the UnitTypes `t`. Will had it to the
+//! Returns a pointer to the UnitT of the UnitTypes `t`. Will add it to the
 //! `ASSET_STORE` if it is not in it yet.
 void *get_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window);
 
