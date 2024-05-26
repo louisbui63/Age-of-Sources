@@ -217,7 +217,7 @@ void unit_debug_slot_7(World *w, SDL_Renderer *renderer, SDL_Window *window) {
 }
 void unit_debug_slot_8(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   char *c = malloc(sizeof(char) * (strlen("src/units/unit_gun_shrimp.c") + 1));
-  strcpy(c, "src/units/unit_shrimp.c");
+  strcpy(c, "src/units/unit_gun_shrimp.c");
   Position *p =
       entity_get_component(w, get_entity(w, DEBUG_ENTITY), COMP_POSITION);
   spawn_unit(w, SHRIMP, renderer, window,

@@ -41,6 +41,7 @@ typedef enum {
   SECU,
   T34,
   DEBUG,
+  DEBUG2,
   UNIT_NUMBER
 } UnitTypes;
 

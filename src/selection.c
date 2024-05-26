@@ -77,6 +77,11 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
     strcpy(un, "src/units/unit_debug.c");
     set_building_selection(w, un, DEBUG, 0, 0);
   }
+  if (inputs_is_key_in(i, SDLK_p)) {
+    char *un = malloc(sizeof(char) * (strlen("src/units/unit_debug2.c") + 1));
+    strcpy(un, "src/units/unit_debug2.c");
+    set_building_selection(w, un, DEBUG2, 0, 0);
+  }
 
   if (inputs_is_key_in(i, SDLK_TAB) && st == KEY_PRESSED &&
       vec_len(s->selected) > 1) {
@@ -218,7 +223,7 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         sbis->is_ghost = 1;
         ecs_add_component(w, e, COMP_SELECTABLE, sbis);
 
-        if (s->building_utype == DEBUG)
+        if (s->building_utype == DEBUG || s->building_utype == DEBUG2)
           finish_construction(w, e);
 
         s->water_cost = 0;
@@ -1169,6 +1174,111 @@ void render_unit_grid(World *w, EntityRef e) {
     }
     break;
 
+  case DEBUG2: //
+  {
+    actualise_grid_coordinates(&x, &y, i);
+    c = malloc(sizeof(Clickable));
+    c->rect = malloc(sizeof(SDL_Rect));
+    *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+    c->is_clicked = 0;
+    c->click_event = debug2_grid(w, i, get_entity(w, e));
+    c->text = malloc(sizeof(Text));
+    c->text->str = malloc(1);
+    *(c->text->str) = '\0';
+    c->text->color = malloc(1);
+    c->sprite = malloc(sizeof(Sprite));
+    c->sprite->rect = malloc(sizeof(SDL_Rect));
+    *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+    c->sprite->texture = get_texture("asset/sprites/tour_poisson.bmp", r, wi);
+    key_event = malloc(sizeof(KeyEvent));
+    *key_event = clickable_event;
+    en = spawn_clickable(w, c, key_event);
+    i++;
+  }
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = debug2_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture =
+          get_texture("asset/sprites/unectas_casern.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = debug2_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture = get_texture("asset/sprites/unectas_fort.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = debug2_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture =
+          get_texture("asset/sprites/poisson_konbini.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
+    {
+      actualise_grid_coordinates(&x, &y, i);
+      c = malloc(sizeof(Clickable));
+      c->rect = malloc(sizeof(SDL_Rect));
+      *(c->rect) = (SDL_Rect){.x = x, .y = y, .h = 32, .w = 32};
+      c->is_clicked = 0;
+      c->click_event = debug2_grid(w, i, get_entity(w, e));
+      c->text = malloc(sizeof(Text));
+      c->text->str = malloc(1);
+      *(c->text->str) = '\0';
+      c->text->color = malloc(1);
+      c->sprite = malloc(sizeof(Sprite));
+      c->sprite->rect = malloc(sizeof(SDL_Rect));
+      *(c->sprite->rect) = (SDL_Rect){.x = 0, .y = 0, .h = 32, .w = 32};
+      c->sprite->texture =
+          get_texture("asset/sprites/poisson_maison.bmp", r, wi);
+      key_event = malloc(sizeof(KeyEvent));
+      *key_event = clickable_event;
+      en = spawn_clickable(w, c, key_event);
+      i++;
+    }
   default:
     break;
   }

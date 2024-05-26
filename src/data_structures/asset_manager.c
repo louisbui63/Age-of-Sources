@@ -68,7 +68,7 @@ char is_asset_locked(char *t) {
 }
 
 void *load_texture(char *t, SDL_Renderer *renderer, SDL_Window *window) {
-  // printf("%s\n", t);
+  printf("%s\n", t);
   SDL_Surface *surf = SDL_LoadBMP(t);
   HANDLE_ERROR(!surf, SDL_GetError(), {
     SDL_DestroyRenderer(renderer);
@@ -390,6 +390,11 @@ void *load_unit(UnitTypes t, SDL_Renderer *renderer, SDL_Window *window) {
 
   case DEBUG:
     u = parse("src/units/unit_debug.c", renderer, window);
+    u->t = t;
+    break;
+
+  case DEBUG2:
+    u = parse("src/units/unit_debug2.c", renderer, window);
     u->t = t;
     break;
 
