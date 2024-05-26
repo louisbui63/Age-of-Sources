@@ -15,24 +15,9 @@
 
 extern Running RUNNING;
 
-void reset_selection_type(World *w, Selector *s) {
+void reset_selection_type(Selector *s) {
   if (s->type == Building) {
     free(s->building);
-
-    Bitflag flag = COMPF_PLAYERMANAGER;
-    VEC(EntityRef) ps = world_query(w, &flag);
-    PlayerManager *pm0 =
-        entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
-    PlayerManager *pm1 =
-        entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
-    if (pm0->id == 1) {
-      PlayerManager *tmp = pm0;
-      pm0 = pm1;
-      pm1 = tmp;
-    }
-
-    pm0->water += s->water_cost;
-    pm0->clay += s->clay_cost;
   }
   s->type = Normal;
   SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW));
@@ -161,10 +146,25 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
       }
     }
   } else if (s->type == Building && RUNNING == IN_GAME) {
-    if (inputs_is_key_in(i, SDLK_ESCAPE) && st == KEY_PRESSED)
-      reset_selection_type(w, s);
-    else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) &&
-             get_mouse_position(r).y < 270 && st == KEY_RELEASED) {
+    if (inputs_is_key_in(i, SDLK_ESCAPE) && st == KEY_PRESSED) {
+      Bitflag flag = COMPF_PLAYERMANAGER;
+      VEC(EntityRef) ps = world_query(w, &flag);
+      PlayerManager *pm0 =
+          entity_get_component(w, get_entity(w, ps[0]), COMP_PLAYERMANAGER);
+      PlayerManager *pm1 =
+          entity_get_component(w, get_entity(w, ps[1]), COMP_PLAYERMANAGER);
+      if (pm0->id == 1) {
+        PlayerManager *tmp = pm0;
+        pm0 = pm1;
+        pm1 = tmp;
+      }
+
+      pm0->water += s->water_cost;
+      pm0->clay += s->clay_cost;
+
+      reset_selection_type(s);
+    } else if (inputs_is_mouse_button_in(i, SDL_BUTTON_LEFT) &&
+               get_mouse_position(r).y < 270 && st == KEY_RELEASED) {
 
       SDL_Point pt = get_mouse_position(r);
       Position pworld = (Position){pt.x, pt.y};
@@ -212,7 +212,9 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         if (s->building_utype == DEBUG)
           finish_construction(w, e);
 
-        reset_selection_type(w, s);
+        s->water_cost = 0;
+        s->clay_cost = 0;
+        reset_selection_type(s);
       }
     }
   }
@@ -285,9 +287,9 @@ void selection_event(World *w, SDL_Renderer *r, Entity *e, Inputs *i,
         SteerManager *stm = entity_get_component(w, e, COMP_STEERMANAGER);
         Position *p = entity_get_component(w, e, COMP_POSITION);
         if (stm != 0) {
-
+          Unit *un = entity_get_component(w, e, COMP_UNIT);
           Actionnable *ac = entity_get_component(w, e, COMP_ACTIONNABLE);
-          if (ac && action_btarget != UINT64_MAX) {
+          if (ac && action_btarget != UINT64_MAX && un && un->t == BEAVER) {
             ac->act = Build;
             ac->target = action_btarget;
           } else if (ac && action_atarget != UINT64_MAX) {
