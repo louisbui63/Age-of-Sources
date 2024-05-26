@@ -10,8 +10,8 @@
 // adapted from another project of mine.
 extern HashMap ASSET_STORE;
 
-//! Initializes the `ASSET_STORE`; must be called before any call to
-//! `get_texture` or `load_texture`
+//! Initializes the `ASSET_STORE`; must be called before any call to a
+//! `get_*` function or a `load_*` function.
 void init_asset_manager();
 
 //! Change the locked status of an asset to `locked`. A locked asset isn't

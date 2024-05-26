@@ -45,38 +45,57 @@ typedef enum {
   UNIT_NUMBER
 } UnitTypes;
 
-//! The body type describes every unit and building in the game.
-//! Name matches the body's name, it must not be more than 255 characters long
-//! not including '\0', it must not contain '*'.
+//! The Unit type describes every unit and building in the game.
 //! Every number type data must be smaller or equal than 65535.
-//! HP corresponds to the body's Health Points. BDam
-//! corresponds to the body's Blunt Damage. PDam corresponds to the body's
-//! Piercing Damage. SDam corresponds to the body's Special Defence. BDef
-//! corresponds to the body's Blunt Defence. PDef corresponds to the body's
-//! Piercing Defence. SDef corresponds to the body's Special defence. Sp
-//! corresponds to the body's Speed. Rg corresponds to the body's Range. w and h
-//! corresponds respectively to the body's width and heigth. A building is
-//! differentiated from a unit because a building's SP is 0.
-//! Descr matches the body's description, it must not be more than 65535
-//! characters long not including '\0', it must not contain '*'.
+//! A building is differentiated from a soldier/builder because a building's sp
+//! is 0.
 typedef struct {
+  //! name matches the unit's name, it must not be more than 255 characters long
+  //! not including '\0', it must not contain '*'.
   char *name;
-  double hp;            // Health Point
-  uint16_t max_hp;      // Maximum Health Point
-  uint16_t b_dam;       // Blunt damage
-  uint16_t p_dam;       // Piercing damage
-  uint16_t s_dam;       // Special damage
-  uint16_t b_def;       // Blunt defence
-  uint16_t p_def;       // Piecing defence
-  uint16_t s_def;       // Special defence
-  uint16_t rg;          // Range
-  uint16_t sp;          // Speed
-  Sprite *sprite;       // Sprite of the unit
+
+  //! hp corresponds to the unit's current Health Points.
+  double hp;
+  uint16_t max_hp; // Maximum Health Point
+
+  //! b_dam corresponds to the unit's Blunt Damage.
+  uint16_t b_dam; // Blunt damage
+
+  //! p_dam corresponds to the unit's Piercing Damage.
+  uint16_t p_dam; // Piercing damage
+
+  //! s_dam corresponds to the unit's Special Defence
+  uint16_t s_dam; // Special damage
+
+  //! b_def corresponds to the unit's Blunt Defence.
+  uint16_t b_def; // Blunt defence
+
+  //! p_def corresponds to the unit's Piercing Defence.
+  uint16_t p_def; // Piecing defence
+
+  //! s_def corresponds to the unit's Special defence.
+  uint16_t s_def; // Special defence
+
+  //! rg corresponds to the unit's Range.
+  uint16_t rg; // Range
+
+  //! sp corresponds to the unit's Speed.
+  uint16_t sp; // Speed
+
+  //! sprite corresponds to the unit's Sprite
+  Sprite *sprite; // Sprite of the unit
+
+  //! Self explanatory
   char *path_to_sprite; // Path to the sprite of the unit
-  char *descr;          // Description
+
+  //! descr matches the unit's description, it must not be more than 65535
+  //! characters long not including '\0', it must not contain '*'.
+  char *descr; // Description
   UnitTypes t;
 } Unit;
 
+//! A type similar to `Unit`, it's use is to be stored in the asset manager and
+//! be copied to create a `Unit`.
 typedef struct {
   char *name;
   uint16_t hp;          // Health Point
