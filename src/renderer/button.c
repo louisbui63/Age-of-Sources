@@ -426,7 +426,7 @@ void spawn_game_ressources(World *w,
   wa->color = malloc(sizeof(SDL_Color));
   *(wa->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
   wa->rect = malloc(sizeof(SDL_Rect));
-  *(wa->rect) = (SDL_Rect){.x = 15, .y = 285, .h = 16, .w = 100};
+  *(wa->rect) = (SDL_Rect){.x = 15, .y = 285, .h = 17, .w = 100};
   wa->get_text = get_water;
   Entity *ew = spawn_entity(w);
   ecs_add_component(w, ew, COMP_ACTUALISEDTEXT, wa);
@@ -435,7 +435,7 @@ void spawn_game_ressources(World *w,
   cl->color = malloc(sizeof(SDL_Color));
   *(cl->color) = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
   cl->rect = malloc(sizeof(SDL_Rect));
-  *(cl->rect) = (SDL_Rect){.x = 15, .y = 285 + 22, .h = 16, .w = 100};
+  *(cl->rect) = (SDL_Rect){.x = 15, .y = 285 + 24, .h = 16, .w = 100};
   cl->get_text = get_clay;
   Entity *ec = spawn_entity(w);
   ecs_add_component(w, ec, COMP_ACTUALISEDTEXT, cl);
