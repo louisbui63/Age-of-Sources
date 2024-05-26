@@ -2,7 +2,7 @@
 
 #include "data_structures/ecs.h"
 
-//! the action performed by a unit
+//! The action performed by a unit
 typedef enum {
   //! The unit does nothing
   Lazy,
