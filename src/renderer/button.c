@@ -181,6 +181,39 @@ Clickable *spawn_button(World *w, SDL_Renderer *renderer, SDL_Window *window,
   return click;
 }
 
+Clickable *spawn_button_mute(World *w, SDL_Renderer *renderer,
+                             SDL_Window *window,
+                             void (*event)(World *w, SDL_Renderer *renderer,
+                                           SDL_Window *window),
+                             char *t, int xp, int yp) {
+  Clickable *click = malloc(sizeof(Clickable));
+  click->sprite = malloc(sizeof(Sprite));
+  click->rect = malloc(sizeof(SDL_Rect));
+  click->sprite->rect = malloc(sizeof(SDL_Rect));
+  click->text = malloc(sizeof(Text));
+  click->text->color = malloc(sizeof(SDL_Color));
+  click->is_clicked = 0;
+  click->click_event = event;
+  *click->text->color = (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255};
+  click->text->str = malloc(strlen(t) + 1);
+  strcpy(click->text->str, t);
+  click->text->padding = 5;
+  click->rect->x = xp;
+  click->rect->y = yp;
+  click->rect->w = 100;
+  click->rect->h = 30;
+  click->sprite->rect->x = 0;
+  click->sprite->rect->y = 0;
+  click->sprite->rect->w = 100;
+  click->sprite->rect->h = 30;
+  click->sprite->texture =
+      get_texture("./asset/sprites/button.bmp", renderer, window);
+  KeyEvent *key_event = malloc(sizeof(KeyEvent));
+  *key_event = clickable_event_mute;
+  spawn_clickable(w, click, key_event);
+  return click;
+}
+
 void spawn_main_menu(World *w, SDL_Renderer *renderer, SDL_Window *window) {
   spawn_main_quit(w, renderer, window);
   spawn_main_option(w, renderer, window);
@@ -670,8 +703,8 @@ Background *spawn_sound_levelbg(World *w, SDL_Renderer *renderer,
 
 Clickable *spawn_sound_test(World *w, SDL_Renderer *renderer,
                             SDL_Window *window) {
-  return spawn_button(w, renderer, window, event_sound_test, "Test son",
-                      soundxpos + 100, soundypos + 30);
+  return spawn_button_mute(w, renderer, window, event_sound_test, "Test son",
+                           soundxpos + 100, soundypos + 30);
 }
 
 void event_sound_test(__attribute__((unused)) World *w,
