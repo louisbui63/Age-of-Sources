@@ -47,4 +47,5 @@ The html documentation is also available at https://uwu-segfault.eu/2p2doc/. If 
 
 A game by Eliott Huet, Ghislain Mounier, Louis Buisson and Maxime Soldatov \
 Main menu artwork by Sacha Banak \
+Base tanuki's sprite (asset/sprites/tanuki.bmp) Chloé Huet \
 Uses Fira Code Nerd Font provided under the SIL OPEN FONT LICENSE Version 1.1
