@@ -77,6 +77,10 @@ Entity *spawn_clickable(World *w, Clickable *object, KeyEvent *event);
 void clickable_event(World *w, SDL_Renderer *rdr, Entity *entity, Inputs *in,
                      KeyState keystate);
 
+//! This functon is the same as `clickable_event` but it does not make sound.
+void clickable_event_mute(World *w, SDL_Renderer *rdr, Entity *entity,
+                          Inputs *in, KeyState keystate);
+
 //! This function is used to render the entities associated with a hoverable
 //! component
 void render_hoverable(SDL_Rect *rect, char *text);
