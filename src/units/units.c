@@ -89,6 +89,7 @@ double units_get_tile_speed(UnitTypes u, TileTypes t) {
       {1., 1., 1., 0., 0., 1.},           // T34
       {1., 1., 1., 1., 1., 1.},           // DEBUG
       {1., 1., 1., 1., 1., 1.},           // DEBUG2
+      {1., 1., 1., 1., 1., 1.},           // JELLYFISH
   };
   return unit_speeds[u][t];
 }

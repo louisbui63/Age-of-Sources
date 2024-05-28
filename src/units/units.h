@@ -42,6 +42,7 @@ typedef enum {
   T34,
   DEBUG,
   DEBUG2,
+  JELLYFISH,
   UNIT_NUMBER
 } UnitTypes;
 

@@ -233,6 +233,15 @@ void unit_debug_slot_9(World *w, SDL_Renderer *renderer, SDL_Window *window) {
              (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
              1);
 }
+void unit_debug_slot_10(World *w, SDL_Renderer *renderer, SDL_Window *window) {
+  char *c = malloc(sizeof(char) * (strlen("src/units/unit_jellyfish.c") + 1));
+  strcpy(c, "src/units/unit_jellyfish.c");
+  Position *p =
+      entity_get_component(w, get_entity(w, DEBUG_ENTITY), COMP_POSITION);
+  spawn_unit(w, JELLYFISH, renderer, window,
+             (Position){p->x + rand() % 200 - 100, p->y + rand() % 200 - 100},
+             1);
+}
 
 ClickEvent debug_grid(__attribute__((unused)) World *w,
                       __attribute__((unused)) int slot, Entity *e) {
@@ -258,6 +267,8 @@ ClickEvent debug_grid(__attribute__((unused)) World *w,
     return unit_debug_slot_8;
   case 9:
     return unit_debug_slot_9;
+  case 10:
+    return unit_debug_slot_10;
   }
   return empty_click_event;
 }
