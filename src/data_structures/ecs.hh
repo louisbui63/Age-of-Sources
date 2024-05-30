@@ -1,6 +1,7 @@
 //! @file ecs.hh
 #pragma once
 #include <cstdint>
+#include <functional>
 #include <unordered_map>
 #include <vector>
 
@@ -41,7 +42,7 @@ struct World {
 
   //! A vector of functions used to free each of the compontents (one
   //! function per type)
-  std::vector<void (*)(void *)> component_free;
+  std::vector<std::function<void(void *)>> component_free;
 
   //! A vector of `ComponentWrapper` containing all the components
   std::vector<ComponentWrapper> components;
@@ -72,27 +73,19 @@ struct World {
   World();
   //! Frees a `World` structure created using `world_new`
   ~World();
+
+  //! Registers a new component using free function to free it, the size
+  //! of the component's type needs to be passed instead of the type itself
+  template <typename T> Error register_component();
+  //! Registers a new component using a callback function to free it, the size
+  //! of the component's type needs to be passed instead of the type itself
+  template <typename T>
+  Error register_component_callback(std::function<void(void *)> callback);
 };
 
 //! Returns a normalized boolean (0 or 1) indicating if the two arguments are
 //! equal when both interpreted as `uint64_t`
 char eq_u64(void *a, void *b);
-
-//! `register_component(World*, type)` where type is the type of the component.
-//! Registers a new component that uses `free` as a way to free it
-#define register_component(w, tp)                                              \
-  register_component_inner_callback((w), sizeof(tp), free)
-
-//! `register_component(World*, type, void (*callback)(void *))` where type is
-//! the type of the component. Registers a new component using a callback
-//! function to free it
-#define register_component_callback(w, tp, callback)                           \
-  register_component_inner_callback((w), sizeof(tp), (callback))
-
-//! Registers a new component using a callback function to free it, the size of
-//! the component's type needs to be passed instead of the type itself
-int register_component_inner_callback(World *w, int size,
-                                      void (*callback)(void *));
 
 //! Updates the entity_map of the world to take into account the system
 //! represented by the `Bitflag` argument. Please not that single-component
@@ -121,13 +114,7 @@ Entity *get_entity(World *w, EntityRef ref);
 //! `World` based on the return value of this function, use `world_query_mut`
 //! instead. The system needs to be registered using
 //! `register_system_requirement` before using this function
-VEC(EntityRef) world_query(World *w, Bitflag *b);
-
-//! Returns a pointer to a vector of `EntityRef` referencing entities
-//! corresponding to the system described by the `Bitflag` argument. The system
-//! needs to be registered using `register_system_requirement` before using this
-//! function
-VEC(EntityRef) * world_query_mut(World *w, Bitflag *b);
+std::vector<EntityRef> world_query(World *w, Bitflag *b);
 
 //! Returns a pointer to the component of type `type` linked to the `Entity`, if
 //! no component of this type is linked the the `Entity` the NULL pointer is

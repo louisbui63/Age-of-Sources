@@ -15,33 +15,30 @@ World::~World() {
   }
 }
 
-char eq_u64(void *a, void *b) { return *(uint64_t *)a == *(uint64_t *)b; }
-
-int register_component_inner_callback(World *w, int size,
-                                      void (*callback)(void *)) {
-  if (w->last_component >= sizeof(Bitflag) * 8) {
-    return -1;
+template <typename T>
+Error World::register_component_callback(std::function<void(void *)> callback) {
+  int size = sizeof(T);
+  if (this->last_component >= sizeof(Bitflag) * 8) {
+    return OUT_OF_COMPONENTS;
   }
-  vec_push(w->component_sizes, size);
-  vec_push(w->component_free, callback);
-  Bitflag *u = malloc(sizeof(Bitflag));
-  *u = 1 << w->last_component;
-  void **v = malloc(sizeof(uintptr_t));
-  *v = vec_new(uint64_t);
-  hash_map_insert_callback(&w->entity_map, u, v, hash_map_entry_free_vecptr);
-  w->last_component++;
+  this->component_sizes.push_back(size);
+  this->component_free.push_back(callback);
+  // potential memory leak, not sure how c++ manages this kind of thing
+  this->entity_map.emplace(1 << this->last_component,
+                           new std::vector<uint64_t>);
+  this->last_component++;
 
-  uint64_t x = UINT64_MAX;
-  for (uint i = 0; i < vec_len(w->entities); i++) {
-    vec_push(w->entities[i].components, x);
+  for (uint i = 0; i < this->entities.size(); i++) {
+    this->entities[i].components.push_back(UINT64_MAX);
   }
 
   return SUCCESS;
 }
-
-int register_component_inner(World *w, int size) {
-  return register_component_inner_callback(w, size, free);
+template <typename T> Error World::register_component() {
+  this->register_component_callback<T>(free);
 }
+
+// translation ends here
 
 void register_system_requirement(World *w, Bitflag b) {
   uint64_t *g = vec_new(uint64_t);

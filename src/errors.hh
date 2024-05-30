@@ -16,5 +16,7 @@ typedef enum {
   //! self explanatory
   ASSERTION_FAILED,
   //! self explanatory
-  COULD_NOT_MIX_SOUND
+  COULD_NOT_MIX_SOUND,
+  //! the length of a `Bitflag` is to short to accomodate one more component
+  OUT_OF_COMPONENTS
 } Error;
