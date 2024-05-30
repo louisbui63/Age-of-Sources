@@ -72,53 +72,53 @@ void render(World *w, SDL_Renderer *rdr, Camera *cam, SDL_Window *window) {
   mask = COMPF_POSITION | COMPF_SPRITE;
   er = world_query(w, &mask);
   _Pragma("omp parallel") {
-    _Pragma("omp for ordered schedule(static, 1)") {
-      for (uint i = 0; i < vec_len(er); i++) {
-        EntityRef ei = er[i];
-        Entity *e = get_entity(w, ei);
-        Sprite *s = entity_get_component(w, e, COMP_SPRITE);
-        Position *p = entity_get_component(w, e, COMP_POSITION);
-        Position tr;
-        tr.x = s->rect->w - s->rect->x;
-        tr.y = s->rect->h - s->rect->y;
-        Position wtl = world2screenspace(p, cam);
-        Position wtr = world2screenspace(
-            &(Position){.x = p->x + tr.x, .y = p->y + tr.y}, cam);
-        SDL_Rect r = {.x = wtl.x - (int)(s->rect->w / (2 * cam->zoom)),
-                      .y = wtl.y - (int)(s->rect->h / (2 * cam->zoom)),
-                      .w = wtr.x - wtl.x,
-                      .h = wtr.y - wtl.y};
-        // occludes offscreen sprites
-        if (wtl.x < WIN_W && wtl.y < WIN_H && wtr.x > 0 && wtr.y > 0) {
-          _Pragma("omp ordered") {
-            for (uint j = 0; j < vec_len(selecteds); j++) {
-              if (selecteds[j] == ei) {
-                SDL_RenderCopy(rdr, bck, 0, &r);
-                break;
-              }
+    _Pragma("omp for ordered schedule(static, 1)") for (uint i = 0;
+                                                        i < vec_len(er); i++) {
+      EntityRef ei = er[i];
+      Entity *e = get_entity(w, ei);
+      Sprite *s = entity_get_component(w, e, COMP_SPRITE);
+      Position *p = entity_get_component(w, e, COMP_POSITION);
+      Position tr;
+      tr.x = s->rect->w - s->rect->x;
+      tr.y = s->rect->h - s->rect->y;
+      Position wtl = world2screenspace(p, cam);
+      Position wtr = world2screenspace(
+          &(Position){.x = p->x + tr.x, .y = p->y + tr.y}, cam);
+      SDL_Rect r = {.x = wtl.x - (int)(s->rect->w / (2 * cam->zoom)),
+                    .y = wtl.y - (int)(s->rect->h / (2 * cam->zoom)),
+                    .w = wtr.x - wtl.x,
+                    .h = wtr.y - wtl.y};
+      // occludes offscreen sprites
+      if (wtl.x < WIN_W && wtl.y < WIN_H && wtr.x > 0 && wtr.y > 0) {
+        _Pragma("omp ordered") {
+          for (uint j = 0; j < vec_len(selecteds); j++) {
+            if (selecteds[j] == ei) {
+              SDL_RenderCopy(rdr, bck, 0, &r);
+              break;
             }
-
-            BuildingGhost *g = entity_get_component(w, e, COMP_BUILDINGGHOST);
-            char is_ghost = g && !g->construction_done;
-            if (is_ghost)
-              SDL_SetTextureColorMod(s->texture, (Uint8)200, (Uint8)100,
-                                     (Uint8)100);
-
-            Animator *a = entity_get_component(w, e, COMP_ANIMATOR);
-            char flip = (a && a->flipped) ? 1 : 0;
-
-            // the documentation refuses to tell us if it is safe but as far
-            // as I can tell it is (in fact, we might not even need omp
-            // critical, who knows ? (not me !))
-            SDL_RenderCopyEx(rdr, s->texture, a ? &a->current : s->rect, &r, 0,
-                             0, flip);
-            if (is_ghost)
-              SDL_SetTextureColorMod(s->texture, (Uint8)255, (Uint8)255,
-                                     (Uint8)255);
           }
+
+          BuildingGhost *g = entity_get_component(w, e, COMP_BUILDINGGHOST);
+          char is_ghost = g && !g->construction_done;
+          if (is_ghost)
+            SDL_SetTextureColorMod(s->texture, (Uint8)200, (Uint8)100,
+                                   (Uint8)100);
+
+          Animator *a = entity_get_component(w, e, COMP_ANIMATOR);
+          char flip = (a && a->flipped) ? 1 : 0;
+
+          // the documentation refuses to tell us if it is safe but as far
+          // as I can tell it is (in fact, we might not even need omp
+          // critical, who knows ? (not me !))
+          SDL_RenderCopyEx(rdr, s->texture, a ? &a->current : s->rect, &r, 0, 0,
+                           flip);
+          if (is_ghost)
+            SDL_SetTextureColorMod(s->texture, (Uint8)255, (Uint8)255,
+                                   (Uint8)255);
         }
       }
     }
+
     _Pragma("omp barrier")
   }
 }
