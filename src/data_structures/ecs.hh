@@ -81,49 +81,41 @@ struct World {
   //! of the component's type needs to be passed instead of the type itself
   template <typename T>
   Error register_component_callback(std::function<void(void *)> callback);
+
+  //! Updates the entity_map of the world to take into account the system
+  //! represented by the `Bitflag` argument. Please not that single-component
+  //! requirements SHOULD NOT be registered. This is considered undefined
+  //! behavior, as well as registering the same requirements more than once.
+  void register_system_requirement(Bitflag b);
+
+  //! Spawns an `Entity` into the world and returns a pointer to it
+  Entity *spawn_entity();
+
+  //! Links a component to an `Entity`. The component itself need to live as
+  //! long as the world does (beware of scopes)
+  void ecs_add_component(Entity *e, int cid, void *c);
+
+  //! Despawns an `Entity`
+  void despawn_entity(Entity *e);
+
+  //! Returns an `Entity` pointer corresponding to the passed reference
+  Entity *get_entity(EntityRef ref);
+
+  //! Returns a vector of `EntityRef` referencing entities corresponding to the
+  //! system described by the `Bitflag` argument. If you want to modify the
+  //! `World` based on the return value of this function, use `world_query_mut`
+  //! instead. The system needs to be registered using
+  //! `register_system_requirement` before using this function
+  std::vector<EntityRef> world_query(Bitflag b);
+
+  //! Despawns every `Entity` with this `Bitflag`
+  void despawn_from_component(Bitflag b);
+
+  //! Returns a pointer to the component of type `type` linked to the `Entity`,
+  //! if no component of this type is linked the the `Entity` the NULL pointer
+  //! is returned
+  void *entity_get_component(Entity *e, int type);
 };
-
-//! Returns a normalized boolean (0 or 1) indicating if the two arguments are
-//! equal when both interpreted as `uint64_t`
-char eq_u64(void *a, void *b);
-
-//! Updates the entity_map of the world to take into account the system
-//! represented by the `Bitflag` argument. Please not that single-component
-//! requirements SHOULD NOT be registered. This is considered undefined
-//! behavior, as well as registering the same requirements more than once.
-void register_system_requirement(World *w, Bitflag b);
-
-//! Spawns an `Entity` into the world and returns a pointer to it
-Entity *spawn_entity(World *w);
-
-//! Links a component to an `Entity`. The component itself need to live as long
-//! as the world does (beware of scopes)
-void ecs_add_component(World *w, Entity *e, int cid, void *c);
-
-//! Despawns an `Entity`
-void despawn_entity(World *w, Entity *e);
-
-//! Despawns every `Entity` with this `Bitflag`
-void despawn_from_component(World *w, Bitflag b);
-
-//! Returns an `Entity` pointer corresponding to the passed reference
-Entity *get_entity(World *w, EntityRef ref);
-
-//! Returns a vector of `EntityRef` referencing entities corresponding to the
-//! system described by the `Bitflag` argument. If you want to modify the
-//! `World` based on the return value of this function, use `world_query_mut`
-//! instead. The system needs to be registered using
-//! `register_system_requirement` before using this function
-std::vector<EntityRef> world_query(World *w, Bitflag *b);
-
-//! Returns a pointer to the component of type `type` linked to the `Entity`, if
-//! no component of this type is linked the the `Entity` the NULL pointer is
-//! returned
-void *entity_get_component(World *w, Entity *e, int type);
-
-//! Returns the `EntityRef` of an entity that would be created just after the
-//! call to this function
-EntityRef get_next_entity_ref(World *w);
 
 //! Expands to a parallel query on the elements of `erefs`. `erefs` is expected
 //! to be the return value of `world_query`, and must be a glvalue. Commands are
