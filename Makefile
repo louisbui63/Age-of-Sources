@@ -21,7 +21,7 @@ build/%.o: %.c
 add_flag:
 	$(eval CFLAGS += -DIS_TEST)
 
-test: add_flag $(SRC) $(TEST_SRC)
+test: clean add_flag $(SRC) $(TEST_SRC)
 	$(CC) $(CFLAGS) $(LIBS) -o test $(subst build/src/main.o,,$(SRC)) $(TEST_SRC)
 
 format:
