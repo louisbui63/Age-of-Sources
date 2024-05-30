@@ -1,9 +1,9 @@
-CC = clang
+CC = clang++
 
-ifeq ($(CC), gcc)
-CFLAGS = -std=gnu2x -Wall -Wextra -pedantic -O2 -fopenmp
+ifeq ($(CC), g++)
+CFLAGS = -std=gnu++2b -Wall -Wextra -pedantic -O2 -fopenmp
 else # we assume it's clang
-CFLAGS = -std=gnu2x -Wall -Wextra -pedantic -O2 -fopenmp=libomp -Wno-gnu-empty-struct
+CFLAGS = -std=gnu++2b -Wall -Wextra -pedantic -O2 -fopenmp=libomp
 endif
 
 CFLAGS += $(shell pkg-config --cflags sdl2 SDL2_mixer SDL2_ttf)

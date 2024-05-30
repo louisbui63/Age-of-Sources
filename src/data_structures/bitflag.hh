@@ -1,7 +1,7 @@
 //! @file bitflag.h
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 
 //! expands to the `r`th least significant bit of `b`
 #define bitflag_get(b, r) (((b) >> (r)) & 1)

@@ -1,13 +1,13 @@
-//! @file util.h
+//! @file util.hh
 #pragma once
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
-#include "errors.h"
-#include <stdint.h>
-#include <stdio.h>
-#include <time.h>
+#include "errors.hh"
+#include <cstdint>
+#include <cstdio>
+#include <ctime>
 
 //! prints `message` as a warning
 #define WARN(message)                                                          \
@@ -73,31 +73,30 @@ typedef unsigned int uint;
 #define min(a, b) ((a < b) ? (a) : (b))
 
 //! A 2d vector used for the units'movement
-typedef struct {
+struct Vec2 {
   float x;
   float y;
-} Vec2;
 
-#define v2op_dec(name) Vec2 v2##name(Vec2 a, Vec2 b)
-
-//! substracts two `Vec2`
-v2op_dec(sub);
-//! adds two `Vec2`
-v2op_dec(add);
-//! normalizes a `Vec2`
-Vec2 v2normalize(Vec2 a);
-//! performs a product between `Vec2` `a` and the scalar `b`
-Vec2 v2mul(float a, Vec2 b);
-//! performs a product between `Vec2` `a` and the scalar `1/b`
-Vec2 v2div(Vec2 a, float b);
-//! returns the angle (in radian) between `a` and the `(0,1)` vector
-float v2angle(Vec2 a);
-//! returns the length of a `Vec2`
-float v2len(Vec2 a);
-//! returns a vector of same direction than `a` and of length `max(v2len(a), b)`
-Vec2 v2truncate(Vec2 a, float b);
-//! performs a dot product between two `Vec2`
-float v2dot(Vec2 a, Vec2 b);
+  //! substracts two `Vec2`
+  Vec2 operator-(Vec2);
+  //! adds two `Vec2`
+  Vec2 operator+(Vec2);
+  //! performs a product between `Vec2` `a` and the scalar `b`
+  Vec2 operator*(float);
+  //! performs a dot product between two `Vec2`
+  float operator*(Vec2);
+  //! performs a product between `Vec2` `a` and the scalar `1/b`
+  Vec2 operator/(float);
+  //! returns the angle (in radian) between `a` and the `(0,1)` vector
+  float angle();
+  //! returns the length of a `Vec2`
+  float len();
+  //! returns a vector of same direction than `a` and of length `max(v2len(a),
+  //! b)`
+  Vec2 truncate(float);
+  //! normalizes a `Vec2`
+  Vec2 normalize();
+};
 
 //! This enum is used to know the state of the game.
 typedef enum {

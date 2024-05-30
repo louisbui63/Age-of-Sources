@@ -1,56 +1,21 @@
-#include "ecs.h"
-#include "../errors.h"
-#include "bitflag.h"
-#include "hash_map.h"
-#include "vec.h"
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
+#include "ecs.hh"
+#include "../errors.hh"
+#include "bitflag.hh"
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
 
-char eq_u64(void *a, void *b) { return *(uint64_t *)a == *(uint64_t *)b; }
-
-void hash_map_entry_free_vecptr(void *u) {
-  HashMapEntry *w = u;
-  free(w->key);
-  vec_free(*(void **)w->value);
-  free(w->value);
-  free(u);
-}
-
-World world_new() {
-  World a = {vec_new(int),
-             vec_new(void (*)(void *)),
-             vec_new(ComponentWrapper),
-             vec_new(Entity),
-             hash_map_create(hash_u64, eq_u64),
-             hash_map_create(hash_u64, eq_u64),
-             0,
-             vec_new(uint64_t),
-             vec_new(uint64_t)};
-  return a;
-}
-
-void world_free(World *w) {
-  for (uint i = 0; i < vec_len(w->components); i++) {
-    if (w->components[i].component) {
-      uint id = w->components[i].type_id;
-      (w->component_free[id])(w->components[i].component);
+World::World() { last_component = 0; }
+World::~World() {
+  for (uint i = 0; i < this->components.size(); i++) {
+    if (this->components[i].component) {
+      uint id = this->components[i].type_id;
+      (this->component_free[id])(this->components[i].component);
     }
   }
-  vec_free(w->component_sizes);
-  vec_free(w->component_free);
-  vec_free(w->components);
-  Entity *u = w->entities;
-  for (uint i = 0; i < vec_len(w->entities); i++) {
-    if (u[i].components)
-      vec_free(u[i].components);
-  }
-  vec_free(w->entities);
-  hash_map_free_callback(&w->entity_map, hash_map_entry_free_vecptr);
-  hash_map_free(&w->component2entity);
-  vec_free(w->entity_sparsity);
-  vec_free(w->component_sparsity);
 }
+
+char eq_u64(void *a, void *b) { return *(uint64_t *)a == *(uint64_t *)b; }
 
 int register_component_inner_callback(World *w, int size,
                                       void (*callback)(void *)) {
