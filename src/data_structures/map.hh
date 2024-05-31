@@ -1,7 +1,8 @@
-//! @file map.h
+//! @file map.hh
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
+#include <vector>
 
 //! an `enum` containing all the tiles for the game
 typedef enum {
@@ -15,18 +16,20 @@ typedef enum {
   TILE_NUMBER
 } TileTypes;
 
+//! `TILE_SIZE` is the ingame length of a tile's edge (tiles being squares)
+#define TILE_SIZE 16
+
 //! used to store a map as a matrix of `TileTypes` (each value designates a
 //! specific type of tile, ex: water, plain...)
-typedef TileTypes **Map;
+struct Map {
+  std::vector<std::vector<TileTypes>> tiles;
+};
 
 //! A component that contains a `Map`, for rendering purposes. Having more than
 //! one such component is undefined behabior.
 typedef struct {
   Map map;
 } MapComponent;
-
-//! `TILE_SIZE` is the ingame length of a tile's edge (tiles being squares)
-#define TILE_SIZE 16
 
 //! frees a `MapComponent`, for use in the ecs.
 void map_component_free(void *a);
