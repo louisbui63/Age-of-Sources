@@ -1,10 +1,10 @@
-//! @file util.hh
+//! @file util.hpp
 #pragma once
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
-#include "errors.hh"
+#include "errors.hpp"
 #include <cstdint>
 #include <cstdio>
 #include <ctime>
@@ -97,6 +97,7 @@ struct Vec2 {
   //! normalizes a `Vec2`
   Vec2 normalize();
 };
+Vec2 operator*(float, const Vec2 &);
 
 //! This enum is used to know the state of the game.
 typedef enum {

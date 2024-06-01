@@ -1,4 +1,4 @@
-#include "util.hh"
+#include "util.hpp"
 
 #include <math.h>
 #include <string.h>
@@ -35,3 +35,4 @@ Vec2 Vec2::truncate(float b) {
 Vec2 Vec2::normalize() {
   return {this->x / this->len(), this->y / this->len()};
 }
+Vec2 operator*(float a, const Vec2 &b) { return {a * b.x, a * b.y}; }

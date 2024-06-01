@@ -1,12 +1,12 @@
-//! @file ecs.hh
+//! @file ecs.hpp
 #pragma once
 #include <cstdint>
 #include <functional>
 #include <unordered_map>
 #include <vector>
 
-#include "../util.hh"
-#include "bitflag.hh"
+#include "../util.hpp"
+#include "bitflag.hpp"
 
 //! A representation of an `Entity`. this note was left in its implementation :
 //! "Note that this reference is only valid until the number of entities
@@ -73,14 +73,33 @@ struct World {
   World();
   //! Frees a `World` structure created using `world_new`
   ~World();
-
-  //! Registers a new component using free function to free it, the size
-  //! of the component's type needs to be passed instead of the type itself
-  template <typename T> Error register_component();
   //! Registers a new component using a callback function to free it, the size
   //! of the component's type needs to be passed instead of the type itself
   template <typename T>
-  Error register_component_callback(std::function<void(void *)> callback);
+  Error register_component_callback(std::function<void(void *)> callback) {
+    int size = sizeof(T);
+    if (this->last_component >= sizeof(Bitflag) * 8) {
+      return OUT_OF_COMPONENTS;
+    }
+    this->component_sizes.push_back(size);
+    this->component_free.push_back(callback);
+    // potential memory leak, not sure how c++ manages this kind of thing
+    std::vector<uint64_t> u;
+    this->entity_map.emplace(1 << this->last_component, u);
+    this->last_component++;
+
+    for (uint i = 0; i < this->entities.size(); i++) {
+      this->entities[i].components.push_back(UINT64_MAX);
+    }
+
+    return SUCCESS;
+  }
+  //! Registers a new component using free function to free it, the size
+  //! of the component's type needs to be passed instead of the type itself
+  template <typename T> Error register_component() {
+    return this->register_component_callback<T>(
+        [](void *a) { delete reinterpret_cast<T *>(a); });
+  }
 
   //! Updates the entity_map of the world to take into account the system
   //! represented by the `Bitflag` argument. Please not that single-component
@@ -93,7 +112,7 @@ struct World {
 
   //! Links a component to an `Entity`. The component itself need to live as
   //! long as the world does (beware of scopes)
-  void ecs_add_component(Entity *e, int cid, void *c);
+  void add_component(Entity *e, int cid, void *c);
 
   //! Despawns an `Entity`
   void despawn_entity(Entity *e);
@@ -106,7 +125,7 @@ struct World {
   //! `World` based on the return value of this function, use `world_query_mut`
   //! instead. The system needs to be registered using
   //! `register_system_requirement` before using this function
-  std::vector<EntityRef> world_query(Bitflag b);
+  std::vector<EntityRef> query(Bitflag b);
 
   //! Despawns every `Entity` with this `Bitflag`
   void despawn_from_component(Bitflag b);
@@ -114,7 +133,11 @@ struct World {
   //! Returns a pointer to the component of type `type` linked to the `Entity`,
   //! if no component of this type is linked the the `Entity` the NULL pointer
   //! is returned
-  void *entity_get_component(Entity *e, int type);
+  template <typename T> T get_component(Entity *e, int type) {
+    if (e->components[type] == UINT64_MAX)
+      return 0;
+    return reinterpret_cast<T>(this->components[e->components[type]].component);
+  }
 };
 
 //! Expands to a parallel query on the elements of `erefs`. `erefs` is expected
@@ -130,7 +153,7 @@ struct World {
   {                                                                            \
     _Pragma("omp parallel") {                                                  \
       _Pragma("omp for") {                                                     \
-        for (uint i = 0; i < vec_len(erefs); i++) {                            \
+        for (uint i = 0; i < erefs.size(); i++) {                              \
           EntityRef ei = erefs[i];                                             \
           commands;                                                            \
         }                                                                      \

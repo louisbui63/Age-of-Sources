@@ -11,23 +11,23 @@ CFLAGS += -g -fno-omit-frame-pointer #-fsanitize=address
 
 LIBS = $(shell pkg-config --libs sdl2 SDL2_mixer SDL2_ttf) -lm
 
-SRC=$(subst src,build/src,$(subst .c,.o,$(shell find src/ -type f -name '*.c')))
-TEST_SRC=$(subst tests/,build/tests/,$(subst .c,.o,$(wildcard tests/*.c)))
+SRC=$(subst src,build/src,$(subst .cpp,.o,$(shell find src/ -type f -name '*.cpp')))
+TEST_SRC=$(subst tests/,build/tests/,$(subst .cpp,.o,$(wildcard tests/*.cpp)))
 
 .PHONY: all test format clean run test_run doc
 
 all: $(SRC)
 	$(CC) -o main $(SRC) $(CFLAGS) $(LIBS)
 
-build/%.o: %.c
+build/%.o: %.cpp
 	mkdir -p $(shell dirname $@)
-	$(CC) -c $< -o $@ $(CFLAGS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 add_test_flag:
 	$(eval CFLAGS += -DIS_TEST)
 
-test: clean add_test_flag $(SRC) $(TEST_SRC)
-	$(CC) $(CFLAGS) $(LIBS) -o test $(subst build/src/main.o,,$(SRC)) $(TEST_SRC)
+test: add_test_flag $(SRC) $(TEST_SRC)
+	$(CC) $(CFLAGS) $(subst build/src/main.o,,$(SRC)) $(TEST_SRC) $(LIBS) -o test
 
 format:
 	./format.sh

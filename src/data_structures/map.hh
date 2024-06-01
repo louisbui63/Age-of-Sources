@@ -13,7 +13,8 @@ typedef enum {
   TILE_MOUNTAIN,
   TILE_GIGEMENT,
 
-  TILE_NUMBER
+  TILE_NUMBER,
+  TILE_INVALID = -1,
 } TileTypes;
 
 //! `TILE_SIZE` is the ingame length of a tile's edge (tiles being squares)
@@ -23,6 +24,9 @@ typedef enum {
 //! specific type of tile, ex: water, plain...)
 struct Map {
   std::vector<std::vector<TileTypes>> tiles;
+
+  Map(int w, int h);
+  ~Map();
 };
 
 //! A component that contains a `Map`, for rendering purposes. Having more than

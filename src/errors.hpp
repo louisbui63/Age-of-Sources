@@ -1,4 +1,4 @@
-//! @file errors.hh
+//! @file errors.hpp
 #pragma once
 
 //! a general error return type

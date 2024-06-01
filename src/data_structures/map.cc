@@ -1,28 +1,22 @@
 #include <SDL2/SDL.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
-#include "../util.h"
-#include "hash_map.h"
-#include "map.h"
-#include "vec.h"
+#include "../util.hh"
+#include "map.hh"
 
-Map map_create(int w, int h) {
-  Map m = malloc(sizeof(int *) * w + 2 * sizeof(int));
-  ((int *)m)[0] = w;
-  ((int *)m)[1] = h;
-  m = (Map)(((int *)m) + 2);
+Map::Map(int w, int h) {
+  std::vector<std::vector<TileTypes>> m(w);
   for (int i = 0; i < w; i++) {
-    m[i] = calloc(h, sizeof(int));
+    std::vector<TileTypes> c(h);
+    for (int j = 0; j < h; j++)
+      c.push_back(TILE_INVALID);
+    m.push_back(c);
   }
-  // abort();
-  return m;
+
+  tiles = m;
 }
-void map_free(Map m) {
-  for (int i = 0; i < map_width(m); i++)
-    free(m[i]);
-  free((int *)m - 2);
-}
+Map::~Map() {}
 
 void map_component_free(void *a) {
   map_free(((MapComponent *)a)->map);

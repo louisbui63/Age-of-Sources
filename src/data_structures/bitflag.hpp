@@ -1,4 +1,4 @@
-//! @file bitflag.h
+//! @file bitflag.hpp
 #pragma once
 
 #include <cstdint>
